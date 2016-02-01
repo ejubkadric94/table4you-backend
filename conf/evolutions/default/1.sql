@@ -9,6 +9,7 @@ create table users (
   name                      varchar(255),
   password                  varchar(255),
   token                     varchar(255),
+  is_confirmed              boolean,
   constraint pk_users primary key (email))
 ;
 

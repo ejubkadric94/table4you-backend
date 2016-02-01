@@ -15,6 +15,7 @@ libraryDependencies ++= Seq(
 libraryDependencies += "org.postgresql" % "postgresql" % "9.4.1207.jre7"
 libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.38"
 libraryDependencies += "org.apache.commons" % "commons-email" % "1.4"
+libraryDependencies += "org.glassfish.jersey.media" % "jersey-media-json-jackson" % "2.22.1"
 
 
 // Play provides two styles of routers, one expects its actions to be injected, the
