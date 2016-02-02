@@ -5,11 +5,17 @@
 
 create table users (
   email                     varchar(255) not null,
-  surname                   varchar(255),
-  name                      varchar(255),
+  last_name                 varchar(255),
+  first_name                varchar(255),
   password                  varchar(255),
-  token                     varchar(255),
+  auth_token                varchar(255),
   is_confirmed              boolean,
+  phone                     integer,
+  gender                    varchar(255),
+  birthdate                 timestamp,
+  street_name               varchar(255),
+  city                      varchar(255),
+  country                   varchar(255),
   constraint pk_users primary key (email))
 ;
 

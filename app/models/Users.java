@@ -3,22 +3,26 @@ package models;
 /**
  * Created by Ejub on 31.1.2016.
  */
-import java.util.List;
+import java.util.Date;
 import javax.persistence.*;
 
-import com.avaje.ebean.*;
-import play.data.validation.*;
-import play.db.ebean.*;
-
 @Entity
+@Table(name = "abh_user")
 public class Users extends com.avaje.ebean.Model {
     @Id
     public String email;
-    public String surname;
-    public String name;
+    public String lastName;
+    public String firstName;
     public String password;
-    public String token;
+    public String authToken;
     public boolean isConfirmed;
+    public int phone;
+    public String gender;
+    public Date birthdate;
+    public String streetName;
+    public String city;
+    public String country;
+
 
     public static Finder<String, Users> find = new Finder<String, Users>(String.class, Users.class);
 }
