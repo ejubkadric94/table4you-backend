@@ -8,7 +8,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "abh_user")
-public class Users extends com.avaje.ebean.Model {
+public class User extends com.avaje.ebean.Model {
     @Id
     public String email;
     public String lastName;
@@ -24,6 +24,6 @@ public class Users extends com.avaje.ebean.Model {
     public String country;
 
 
-    public static Finder<String, Users> find = new Finder<String, Users>(String.class, Users.class);
+    public static Finder<String, User> find = new Finder<String, User>(String.class, User.class);
 }
 //{"name":"John","surname":"Johnson","email":"ejubkadric@gmail.com","password":"test"}

@@ -3,7 +3,7 @@
 
 # --- !Ups
 
-create table users (
+create table abh_user (
   email                     varchar(255) not null,
   last_name                 varchar(255),
   first_name                varchar(255),
@@ -16,7 +16,7 @@ create table users (
   street_name               varchar(255),
   city                      varchar(255),
   country                   varchar(255),
-  constraint pk_users primary key (email))
+  constraint pk_abh_user primary key (email))
 ;
 
 
@@ -24,5 +24,5 @@ create table users (
 
 # --- !Downs
 
-drop table if exists users cascade;
+drop table if exists abh_user cascade;
 

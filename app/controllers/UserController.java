@@ -10,16 +10,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
+import models.User;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import play.api.libs.json.Json;
 import play.mvc.*;
 import utilities.Resources;
 import views.html.*;
 import utilities.Email;
 import com.fasterxml.jackson.databind.JsonNode;
 import play.mvc.BodyParser;
-import models.Users;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -34,7 +33,7 @@ public class UserController extends Controller {
      * @return the authorization token in JSON format
      */
     @BodyParser.Of(BodyParser.Json.class)
-    public Result register(User user) {
+    public Result register() {
         JsonNode json2 = request().body().asJson();
 
         String firstName = json2.findPath("name").textValue();
@@ -66,7 +65,7 @@ public class UserController extends Controller {
         DateTime dt = formatter.parseDateTime(json2.findPath("birthdate").textValue());
         Date birthdate = dt.toDate();
 
-        Users user = new Users();
+        User user = new User();
 
         user.email = email;
         user.firstName = firstName;
@@ -97,7 +96,7 @@ public class UserController extends Controller {
 
     public Result confirm(String registrationToken){
 
-        Users user = Users.find.where().eq("authToken", registrationToken).findUnique();
+        User user = User.find.where().eq("authToken", registrationToken).findUnique();
         user.isConfirmed = true;
         return null;
     }

@@ -5,8 +5,8 @@
 # Home page
 GET     /api.table4you/v1.0/                                controllers.Application.index()
 
-# Users
-POST    /api.table4you/v1.0/register                            controllers.UserController.register
+# User
+POST    /api.table4you/v1.0/register                            controllers.UserController.register()
 GET     /api.table4you/v1.0/registration/confirm/:registrationToken        controllers.UserController.confirm(registrationToken: String)
 
 
