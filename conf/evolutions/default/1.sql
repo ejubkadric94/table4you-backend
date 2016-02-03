@@ -13,9 +13,6 @@ create table abh_user (
   phone                     integer,
   gender                    varchar(255),
   birthdate                 timestamp,
-  street_name               varchar(255),
-  city                      varchar(255),
-  country                   varchar(255),
   constraint pk_abh_user primary key (email))
 ;
 
