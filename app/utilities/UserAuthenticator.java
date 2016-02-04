@@ -15,7 +15,7 @@ public class UserAuthenticator extends Security.Authenticator{
         if (token != null) {
             User user = User.find.where().eq("authToken", token).findUnique();
             if (user != null) {
-                return user.email;
+                return user.getEmail();
             }
         }
         return null;
