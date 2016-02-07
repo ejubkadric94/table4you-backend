@@ -3,6 +3,7 @@ package models;
 /**
  * Created by Ejub on 31.1.2016.
  */
+import com.avaje.ebean.annotation.Encrypted;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import play.data.format.Formats;
@@ -26,8 +27,8 @@ public class User extends com.avaje.ebean.Model {
     private String firstName;
     @Column(name = "lastName", length = 25)
     private String lastName;
-    @OneToOne(cascade =  CascadeType.ALL, mappedBy = "user")
-   // @JoinColumn(name="email")
+    @OneToOne
+    @PrimaryKeyJoinColumn(referencedColumnName = "userEmail")
     private Address address;
     private int phone;
     @Column(length = 6)
@@ -35,30 +36,27 @@ public class User extends com.avaje.ebean.Model {
     @Column(columnDefinition = "date")
     @JsonFormat(pattern = "dd/mm/yyyy")
     private Date birthdate;
-    @OneToOne()
-    //@JoinColumn(name = "email")
-    @JsonIgnore
+    @OneToOne
+    @PrimaryKeyJoinColumn(referencedColumnName = "userEmail")
     private Token authToken;
     @Column(name = "isConfirmed")
     @JsonIgnore
     private boolean isConfirmed;
 
 
-    public User(String email, String password, String firstName, String lastName, Address address, int phone,
-                String gender, Date birthdate){
-        this.email = email;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.address = new Address(address);
-        this.phone = phone;
-        this.gender = gender;
-        this.birthdate = birthdate;
+    public User(User user){
+        this.setEmail(user.email);
+        this.setPassword(user.password);
+        this.setFirstName(user.firstName);
+        this.setLastName(user.lastName);
+        this.setAddress(new Address(user.address));
+        this.setPhone(user.phone);
+        this.setGender(user.gender);
+        this.setBirthdate(user.birthdate);
 
-        this.authToken = new Token();
-        this.authToken.generateToken();
+        this.setAuthToken(new Token(user.authToken));
 
-        this.isConfirmed = false;
+        this.setConfirmed(user.isConfirmed);
     }
 
     public static Finder<String, User> find = new Finder<String, User>(String.class, User.class);
@@ -151,4 +149,3 @@ public class User extends com.avaje.ebean.Model {
         this.passwordConfirmation = passwordConfirmation;
     }
 }
-//{"name":"John","surname":"Johnson","email":"ejubkadric@gmail.com","password":"test"}

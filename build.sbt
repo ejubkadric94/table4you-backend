@@ -19,6 +19,7 @@ libraryDependencies += "org.glassfish.jersey.media" % "jersey-media-json-jackson
 libraryDependencies += "joda-time" % "joda-time" % "2.9.2"
 libraryDependencies += "commons-codec" % "commons-codec" % "1.10"
 libraryDependencies += "commons-validator" % "commons-validator" % "1.5.0"
+libraryDependencies += "com.google.code.gson" % "gson" % "2.5"
 
 
 

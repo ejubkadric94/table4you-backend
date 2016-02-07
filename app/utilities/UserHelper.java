@@ -1,18 +1,15 @@
 package utilities;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import models.Address;
 import models.Token;
 import models.User;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.http.ParseException;
 import play.libs.Json;
 
 
@@ -22,10 +19,11 @@ import play.libs.Json;
 public class UserHelper {
 
     private User user;
+    private JsonNode json;
 
     public UserHelper(JsonNode json){
-        System.out.println(">>>>>>json " + json);
         user = Json.fromJson(json, User.class);
+        this.json = json;
     }
 
     /**
@@ -33,46 +31,16 @@ public class UserHelper {
      * Finally, confirmation mail is sent to specified email address.
      */
     public void createUser(){
-        user.setPassword(DigestUtils.md5Hex(user.getPassword()));
-        user.setPasswordConfirmation(DigestUtils.md5Hex(user.getPasswordConfirmation()));
-        Email.sendConfirmationEmail(user.getEmail(), Resources.SERVER_NAME + "/" + Resources.VERSION
-                + "/registration/confirm/" + encodeToken(user.getAuthToken().getToken()));
-        user.save();
-    }
+        if(user != null){
+            user.setPassword(DigestUtils.md5Hex(user.getPassword()));
+            user.setPasswordConfirmation(DigestUtils.md5Hex(user.getPasswordConfirmation()));
+            Email.sendConfirmationEmail(user.getEmail(), Resources.SERVER_NAME + "/" + Resources.VERSION
+                    + "/registration/confirm/" + encodeToken(user.getAuthToken().getToken()));
 
-    /**
-     * Confirms the user after the link in confirmation email is opened.
-     * @param encodedToken encoded authToken of user
-     * @return returns true
-     */
-    public boolean confirmUser(String encodedToken){
-        String token = decodeToken(encodedToken);
-        User user = User.find.where().like("abh_user_token", token).findUnique();
-        if(user == null)
-            return false;
-
-        user.setConfirmed(true);
-        return true;
-    }
-
-    /**
-     * Decodes data using BASE64 decoding
-     * @param token is the string to be decoded
-     * @return decoded string
-     */
-    public String decodeToken(String token){
-        byte[] valueDecoded= Base64.decodeBase64(token.getBytes());
-        return new String(valueDecoded);
-    }
-
-    /**
-     * encode data  using BASE64 hashing
-     * @param token is string to be encoded
-     * @return encoded string
-     */
-    private String encodeToken(String token){
-        byte[]   bytesEncoded = Base64.encodeBase64(token .getBytes());
-        return new String(bytesEncoded );
+            user.getAddress().save();
+            user.getAuthToken().save();
+            user.save();
+        }
     }
 
     /**
@@ -84,12 +52,91 @@ public class UserHelper {
         if(user != null){
             user.setAuthToken(new Token());
             user.getAuthToken().generateToken();
+            user.getAuthToken().setEmail(user.getEmail());
+            user.getAddress().setEmail(user.getEmail());
             user.setConfirmed(false);
             return true;
         }
         return false;
     }
 
+    /**
+     * Confirms the user after the link in confirmation email is opened.
+     * @param encodedToken encoded authToken of user
+     * @return returns true
+     */
+    public static boolean confirmUser(String encodedToken){
+        String token = decodeToken(encodedToken);
+
+        System.out.println(">>>>>>TOKEN IS \n" + token);
+
+        Token tempToken = Token.find.where().eq("token", token).findUnique();
+        User userWithToken = User.find.where().eq("email", tempToken.getEmail()).findUnique();
+
+        if(userWithToken == null)
+            return false;
+
+        userWithToken.setConfirmed(true);
+        userWithToken.save();
+        return true;
+    }
+
+    /**
+     * Check if email already exist in database
+     * @param json - request body in as json
+     * @return true if user exists, and false otherwise
+     */
+    public static boolean ifEmailExists(JsonNode json){
+        List<User> oldUsers = User.find.where().eq("email", json.path("email").asText()).findList();
+        if( oldUsers.size() >1){
+            return true;
+        }
+        for(User temp : oldUsers){
+            temp.getAddress().setEmail("");
+            temp.getAuthToken().setEmail("");
+            temp.setEmail("");
+        }
+        return false;
+    }
+
+    /**
+     * Check if email and password match
+     * @param email email of the user
+     * @param password password of the user
+     * @return true if email and password match, false otherwise
+     */
+    public static boolean isValidLoginInfo(String email, String password){
+        String md5password = DigestUtils.md5Hex(password);
+        User user = User.find.where().eq("email", email).eq("password", md5password).findUnique();
+        if(user != null)
+            return true;
+        return false;
+    }
+
+    /**
+     * Decodes data using BASE64 decoding
+     * @param token is the string to be decoded
+     * @return decoded string
+     */
+    public static String decodeToken(String token){
+        byte[] valueDecoded= Base64.decodeBase64(token.getBytes());
+        return new String(valueDecoded);
+    }
+
+    /**
+     * encode data  using BASE64 hashing
+     * @param token is string to be encoded
+     * @return encoded string
+     */
+    public static String encodeToken(String token){
+        byte[]   bytesEncoded = Base64.encodeBase64(token .getBytes());
+        return new String(bytesEncoded );
+    }
+
+    /**
+     * Validate user information during the registration
+     * @return true if everything is valid, false otherwise
+     */
     public boolean validateUser(){
         if(validateEmail(user.getEmail()) && validateFirstName(user.getFirstName()) && validateLastName(user.getLastName())
                 && validateGender(user.getGender()) && validatePasswords()){
@@ -129,19 +176,6 @@ public class UserHelper {
     public void setUser(User user) {
         this.user = user;
     }
-
-
-
-
-/*
-    public static boolean isValidLoginInfo(JsonNode json){
-        User user = User.find.where().eq("email", userEmail).findUnique();
-        if(user != null && DigestUtils.md5Hex(userPassword).equals(user.password))
-            return true;
-        return false;
-    }
-    */
-
 }
 
 

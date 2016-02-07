@@ -4,18 +4,18 @@
 # --- !Ups
 
 create table abh_user_address (
-  email                     varchar(80),
+  userEmail                 VARCHAR(80) DEFAULT 'test@test.com' not null,
   streetName                varchar(100),
   city                      varchar(100),
   country                   varchar(100),
-  constraint uq_abh_user_address_email unique (email))
+  constraint pk_abh_user_address primary key (userEmail))
 ;
 
 create table abh_user_token (
-  email                     varchar(80) not null,
-  token                     varchar(32),
-  expirationDate            timestamp,
-  constraint pk_abh_user_token primary key (email))
+  userEmail                 VARCHAR(80) DEFAULT 'test@test.com' not null,
+  token                     varchar(100),
+  expirationDate            datetime(6),
+  constraint pk_abh_user_token primary key (userEmail))
 ;
 
 create table abh_user (
@@ -24,27 +24,33 @@ create table abh_user (
   passwordConfirmation      varchar(100),
   firstName                 varchar(25),
   lastName                  varchar(25),
+  address_userEmail         VARCHAR(80) DEFAULT 'test@test.com',
   phone                     integer,
   gender                    varchar(6),
   birthdate                 date,
-  auth_token_email          varchar(80),
-  isConfirmed               boolean,
-  constraint uq_abh_user_auth_token_email unique (auth_token_email),
+  auth_token_userEmail      VARCHAR(80) DEFAULT 'test@test.com',
+  isConfirmed               tinyint(1) default 0,
+  constraint uq_abh_user_address_userEmail unique (address_userEmail),
+  constraint uq_abh_user_auth_token_userEmail unique (auth_token_userEmail),
   constraint pk_abh_user primary key (email))
 ;
 
-alter table abh_user_address add constraint fk_abh_user_address_user_1 foreign key (email) references abh_user (email);
-create index ix_abh_user_address_user_1 on abh_user_address (email);
-alter table abh_user add constraint fk_abh_user_authToken_2 foreign key (auth_token_email) references abh_user_token (email);
-create index ix_abh_user_authToken_2 on abh_user (auth_token_email);
+alter table abh_user add constraint fk_abh_user_address_1 foreign key (address_userEmail) references abh_user_address (userEmail) on delete restrict on update restrict;
+create index ix_abh_user_address_1 on abh_user (address_userEmail);
+alter table abh_user add constraint fk_abh_user_authToken_2 foreign key (auth_token_userEmail) references abh_user_token (userEmail) on delete restrict on update restrict;
+create index ix_abh_user_authToken_2 on abh_user (auth_token_userEmail);
 
 
 
 # --- !Downs
 
-drop table if exists abh_user_address cascade;
+SET FOREIGN_KEY_CHECKS=0;
 
-drop table if exists abh_user_token cascade;
+drop table abh_user_address;
 
-drop table if exists abh_user cascade;
+drop table abh_user_token;
+
+drop table abh_user;
+
+SET FOREIGN_KEY_CHECKS=1;
 

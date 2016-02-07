@@ -1,5 +1,6 @@
 package utilities;
 
+import models.Token;
 import models.User;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -13,7 +14,8 @@ public class UserAuthenticator extends Security.Authenticator{
     public String getUsername(Http.Context ctx) {
         String token = getTokenFromHeader(ctx);
         if (token != null) {
-            User user = User.find.where().eq("authToken", token).findUnique();
+            Token tempToken = Token.find.where().eq("token", token).findUnique();
+            User user = User.find.where().eq("email", tempToken.getEmail()).findUnique();
             if (user != null) {
                 return user.getEmail();
             }

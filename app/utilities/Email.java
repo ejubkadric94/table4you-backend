@@ -7,16 +7,14 @@ package utilities;
 
 import org.apache.commons.mail.*;
 
-public class Email {
-    public static String activationMailText;
+public final class Email {
     /**
      * Send confirmation email to newlz registered user, containing link for activation.
      * @param emailAddress email address of user for whom the email is dedicated.
      */
     public static void sendConfirmationEmail(String emailAddress, String link){
-
-        activationMailText = "<h3>Welcome to table4you.<br>" +
-                "Please follow this link to finish your registration: <a href=\"" + link + "\">" + link + "</a>" +
+        String activationMailText = "<h3>Welcome to table4you.<br>" +
+                "Please follow this link to finish your registration:<br> <a href=\"http://" + link + "\">" + link + "</a>" +
                 "<br>Do not reply on this email. If you have any quesions, please visit our website.</h3>";
 
         org.apache.commons.mail.HtmlEmail email = new HtmlEmail();
@@ -33,8 +31,7 @@ public class Email {
         } catch (EmailException e) {
             e.printStackTrace();
         }
-
     }
 
-
+    public Email(){}
 }

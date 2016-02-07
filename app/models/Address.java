@@ -1,6 +1,7 @@
 package models;
 
 import com.avaje.ebean.Model;
+import com.avaje.ebean.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -11,24 +12,16 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "abh_user_address")
-public class Address {
- //   @Id
- //   @Column(length = 80)
- //   @JsonIgnore
-  //  private String email;
- // @Id
- @OneToOne()
- @JoinColumn(name = "email")
- private User user;
-
+public class Address extends Model{
+    @Id
+    @Column(name="userEmail", columnDefinition = "VARCHAR(80) DEFAULT 'test@test.com'")
+    private String email;
     @Column(name = "streetName", length = 100)
     private String streetName;
     @Column(length = 100)
     private String city;
     @Column(length = 100)
     private String country;
-
-
 
     public Address(Address address){
         this.streetName = address.streetName;
@@ -37,14 +30,6 @@ public class Address {
     }
 
     public static Model.Finder<String, Address> find = new Model.Finder<String, Address>(String.class, Address.class);
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     public String getCity() {
         return city;
@@ -62,13 +47,13 @@ public class Address {
         this.country = country;
     }
 
-   /* public String getEmail() {
+    public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
-    }*/
+    }
 
     public String getStreetName() {
         return streetName;

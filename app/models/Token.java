@@ -1,7 +1,6 @@
 package models;
 
 import com.avaje.ebean.Model;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import play.data.format.Formats;
 
 import javax.persistence.*;
@@ -14,27 +13,22 @@ import java.util.UUID;
  */
 @Entity
 @Table(name = "abh_user_token")
-public class Token {
-  //  @Id
-   // @Column(length = 80)
-  //  @JsonIgnore
- //   private String email;
+public class Token extends Model {
+    @Id
+    @Column(name="userEmail", columnDefinition = "VARCHAR(80) DEFAULT 'test@test.com'")
+    private String email;
 
-    @OneToOne()
-    @JoinColumn(name = "email")
-    @JsonIgnore
-    private User user;
-
-    @Column(name = "token",length = 32)
+    @Column(name = "token",length = 100)
     private String token;
     @Column(name = "expirationDate")
     @Formats.DateTime(pattern="dd/MM/yyyy")
     private Date expirationDate;
 
-    public Token(){
-      //  email = "";
-        token = "";
-        expirationDate = new Date();
+    public Token(){}
+
+    public Token(Token authToken){
+        token = authToken.token;
+        expirationDate = authToken.expirationDate;
     }
 
     public static Model.Finder<String, Token> find = new Model.Finder<String, Token>(String.class, Token.class);
@@ -66,21 +60,13 @@ public class Token {
         this.token = token;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-  /*  public String getEmail() {
+    public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
-    }*/
+    }
 
     public Date getExpirationDate() {
         return expirationDate;

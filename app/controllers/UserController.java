@@ -4,10 +4,10 @@ package controllers;
  * Created by Ejub on 31.1.2016.
  */
 
-
 import models.User;
 import play.libs.Json;
 import play.mvc.*;
+import utilities.JsonOutput;
 import utilities.Resources;
 import utilities.UserHelper;
 import views.html.*;
@@ -22,38 +22,39 @@ public class UserController extends Controller {
      */
     @BodyParser.Of(BodyParser.Json.class)
     public Result register() {
+        if(UserHelper.ifEmailExists(request().body().asJson())){
+            return badRequest(jsonOutput.render(JsonOutput.getError(Resources.BAD_REQUEST_EMAIL_EXISTS)));
+        }
         UserHelper userHelper = new UserHelper(request().body().asJson());
-
         if(!userHelper.initializeUser()){
-            return badRequest(index.render(Resources.BAD_REQUEST_COULD_NOT_INITIALIZE));
+            return badRequest(jsonOutput.render(JsonOutput.getError(Resources.BAD_REQUEST_COULD_NOT_INITIALIZE)));
         }
         if(!userHelper.validateUser()){
-            return badRequest(index.render(Resources.BAD_REQUEST_INVALID_DATA));
+            return badRequest(jsonOutput.render(JsonOutput.getError(Resources.BAD_REQUEST_INVALID_DATA)));
         }
-
         userHelper.createUser();
-
-        //response().setContentType("application/json");
-        return ok(index.render( "{\"authToken\":\"" + userHelper.getUser().getAuthToken().getToken() + "\"}"));
+        return ok(jsonOutput.render(JsonOutput.getAuthToken(userHelper)));
     }
 
 
     public Result confirm(String registrationToken){
-
-        //UserHelper userHelper = new UserHelper();
-        //if(!userHelper.confirmUser(registrationToken))
-        //    return badRequest(index.render(Resources.BAD_REQUEST_WRONG_CONFIRMATION_TOKEN));
-
-        User user = User.find.where().eq("authToken", registrationToken).findUnique();
-        return ok(index.render("{\"authToken\":\"" + user.getAuthToken().getToken()));
+        if(UserHelper.confirmUser(registrationToken)) {
+            return ok(jsonOutput.render(JsonOutput.getAuthToken(registrationToken)));
+        }
+        return badRequest(jsonOutput.render(JsonOutput.getError(Resources.BAD_REQUEST_WRONG_CONFIRMATION_TOKEN)));
     }
 
     public Result login(){
-        JsonNode json = Json.parse(request().body().asJson().asText());
-
-
-        //if(UserHelper.isValidLoginInfo(json))
-        return ok();
+        String email = request().body().asJson().path("email").asText();
+        String password = request().body().asJson().path("password").asText();
+        if( email == "" ||
+                password == "") {
+            return badRequest(jsonOutput.render(JsonOutput.getError(Resources.BAD_REQUEST_INSUFFICIENT_DATA)));
+        }
+        if( UserHelper.isValidLoginInfo(email, password)) {
+            return ok(jsonOutput.render(JsonOutput.getAuthToken(email, password)));
+        }
+        return unauthorized(jsonOutput.render(JsonOutput.getError(Resources.UNAUTHORIZED_INPUT_DOES_NOT_MATCH)));
     }
 }
 

@@ -10,7 +10,6 @@ POST    /v1/register                                      controllers.UserContro
 GET     /v1/registration/confirm/:registrationToken       controllers.UserController.confirm(registrationToken: String)
 POST    /v1/login                                         controllers.UserController.login()
 
-
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 
