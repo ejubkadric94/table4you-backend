@@ -1,13 +1,13 @@
 package models;
 
 import com.avaje.ebean.Model;
-import com.avaje.ebean.annotation.EnumValue;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
 /**
- * Created by test on 04/02/16.
+ * Created by Ejub on 04/02/16.
+ * Class Address represents abh_user_address table from database.
+ * It contains all needed fields and methods needed for their manipulation.
  */
 
 @Entity

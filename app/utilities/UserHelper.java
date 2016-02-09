@@ -14,41 +14,37 @@ import play.libs.Json;
 
 
 /**
- * Created by test on 03/02/16.
+ * Created by Ejub on 03/02/16.
+ * Provides useful methods for manipulating User class.
  */
 public class UserHelper {
 
     private User user;
     private JsonNode json;
 
+
+    public UserHelper() {
+
+    }
+
+    /**
+     * Constructs the class with a JsonNode object.
+     *
+     * @param json the json containing all the info about user
+     */
     public UserHelper(JsonNode json){
         user = Json.fromJson(json, User.class);
         this.json = json;
     }
 
-    /**
-     * Creates a User with specified information. Password is hashed using MD5.
-     * Finally, confirmation mail is sent to specified email address.
-     */
-    public void createUser(){
-        if(user != null){
-            user.setPassword(DigestUtils.md5Hex(user.getPassword()));
-            user.setPasswordConfirmation(DigestUtils.md5Hex(user.getPasswordConfirmation()));
-            Email.sendConfirmationEmail(user.getEmail(), Resources.SERVER_NAME + "/" + Resources.VERSION
-                    + "/registration/confirm/" + encodeToken(user.getAuthToken().getToken()));
-
-            user.getAddress().save();
-            user.getAuthToken().save();
-            user.save();
-        }
-    }
 
     /**
      * Creates a token object and initializes it.
      * Authentication authToken is created randomly and expiration day is set to one day ahead.
+     *
      * @return true if successful, false if unsuccessful
      */
-    public boolean initializeUser(){
+    public boolean initializeUser(User user){
         if(user != null){
             user.setAuthToken(new Token());
             user.getAuthToken().generateToken();
@@ -61,60 +57,18 @@ public class UserHelper {
     }
 
     /**
-     * Confirms the user after the link in confirmation email is opened.
-     * @param encodedToken encoded authToken of user
-     * @return returns true
+     * Check if email already exist in database.
+     *
+     * @return true if user getUserFromSession, and false otherwise
      */
-    public static boolean confirmUser(String encodedToken){
-        String token = decodeToken(encodedToken);
-
-        System.out.println(">>>>>>TOKEN IS \n" + token);
-
-        Token tempToken = Token.find.where().eq("token", token).findUnique();
-        User userWithToken = User.find.where().eq("email", tempToken.getEmail()).findUnique();
-
-        if(userWithToken == null)
-            return false;
-
-        userWithToken.setConfirmed(true);
-        userWithToken.save();
-        return true;
+    public boolean ifEmailExists(User user){
+        User oldUser = User.find.where().eq("email", user.getEmail()).findUnique();
+        return oldUser != null;
     }
 
     /**
-     * Check if email already exist in database
-     * @param json - request body in as json
-     * @return true if user exists, and false otherwise
-     */
-    public static boolean ifEmailExists(JsonNode json){
-        List<User> oldUsers = User.find.where().eq("email", json.path("email").asText()).findList();
-        if( oldUsers.size() >1){
-            return true;
-        }
-        for(User temp : oldUsers){
-            temp.getAddress().setEmail("");
-            temp.getAuthToken().setEmail("");
-            temp.setEmail("");
-        }
-        return false;
-    }
-
-    /**
-     * Check if email and password match
-     * @param email email of the user
-     * @param password password of the user
-     * @return true if email and password match, false otherwise
-     */
-    public static boolean isValidLoginInfo(String email, String password){
-        String md5password = DigestUtils.md5Hex(password);
-        User user = User.find.where().eq("email", email).eq("password", md5password).findUnique();
-        if(user != null)
-            return true;
-        return false;
-    }
-
-    /**
-     * Decodes data using BASE64 decoding
+     * Decodes data using BASE64 decoding.
+     *
      * @param token is the string to be decoded
      * @return decoded string
      */
@@ -124,7 +78,8 @@ public class UserHelper {
     }
 
     /**
-     * encode data  using BASE64 hashing
+     * Encode data  using BASE64 hashing.
+     *
      * @param token is string to be encoded
      * @return encoded string
      */
@@ -133,46 +88,21 @@ public class UserHelper {
         return new String(bytesEncoded );
     }
 
+
     /**
-     * Validate user information during the registration
-     * @return true if everything is valid, false otherwise
+     * Gets the user.
+     *
+     * @return the user object
      */
-    public boolean validateUser(){
-        if(validateEmail(user.getEmail()) && validateFirstName(user.getFirstName()) && validateLastName(user.getLastName())
-                && validateGender(user.getGender()) && validatePasswords()){
-            return true;
-        }
-        return false;
-    }
-
-    private boolean validateFirstName( String firstName ){
-        return firstName.matches( "[A-Z][a-zA-Z]*" );
-    }
-    private boolean validateLastName( String lastName ) {
-        return lastName.matches( "[a-zA-z]+([ '-][a-zA-Z]+)*" );
-    }
-    private boolean validateEmail(String mail){
-        String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-                        + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-        Pattern pattern = Pattern.compile(EMAIL_PATTERN);
-        Matcher matcher = pattern.matcher(mail);
-        return  matcher.matches();
-    }
-    private boolean validateGender(String gender) {
-        if (gender.equals("male") || gender.equals("female") || gender.equals("MALE") || gender.equals("FEMALE")
-                || gender.equals("Male") || gender.equals("Female")) {
-            return true;
-        }
-        return false;
-    }
-    public boolean validatePasswords(){
-        return user.getPassword().equals(user.getPasswordConfirmation());
-    }
-
     public User getUser() {
         return user;
     }
 
+    /**
+     * Sets the user.
+     *
+     * @param user the user object to be set.
+     */
     public void setUser(User user) {
         this.user = user;
     }

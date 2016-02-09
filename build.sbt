@@ -27,3 +27,5 @@ libraryDependencies += "com.google.code.gson" % "gson" % "2.5"
 // other, legacy style, accesses its actions statically.
 routesGenerator := InjectedRoutesGenerator
 lazy val myProject = (project in file(".")).enablePlugins(PlayJava, PlayEbean)
+
+jacoco.settings

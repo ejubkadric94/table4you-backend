@@ -8,9 +8,12 @@ package utilities;
 import org.apache.commons.mail.*;
 
 public final class Email {
+
+    private Email(){}
+
     /**
-     * Send confirmation email to newlz registered user, containing link for activation.
-     * @param emailAddress email address of user for whom the email is dedicated.
+     * Send confirmation email to newly registered user, containing link for activation.
+     * @param emailAddress email address of user for whom the email is dedicated
      */
     public static void sendConfirmationEmail(String emailAddress, String link){
         String activationMailText = "<h3>Welcome to table4you.<br>" +
@@ -33,5 +36,5 @@ public final class Email {
         }
     }
 
-    public Email(){}
+
 }

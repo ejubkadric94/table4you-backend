@@ -15,9 +15,15 @@ public class UserAuthenticator extends Security.Authenticator{
         String token = getTokenFromHeader(ctx);
         if (token != null) {
             Token tempToken = Token.find.where().eq("token", token).findUnique();
+            if (tempToken == null) {
+                return null;
+            }
             User user = User.find.where().eq("email", tempToken.getEmail()).findUnique();
             if (user != null) {
                 return user.getEmail();
+            }
+            if(!user.isConfirmed()) {
+                return null;
             }
         }
         return null;

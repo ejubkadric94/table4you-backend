@@ -1,6 +1,8 @@
 package models;
 
 import com.avaje.ebean.Model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.gson.annotations.SerializedName;
 import play.data.format.Formats;
 
 import javax.persistence.*;
@@ -9,16 +11,20 @@ import java.util.Date;
 import java.util.UUID;
 
 /**
- * Created by test on 04/02/16.
+ * Created by Ejub on 04/02/16.
+ * Class Token represents abh_user_token table from database.
+ * It contains all needed fields and methods needed for their manipulation.
  */
 @Entity
 @Table(name = "abh_user_token")
 public class Token extends Model {
     @Id
     @Column(name="userEmail", columnDefinition = "VARCHAR(80) DEFAULT 'test@test.com'")
+    @JsonIgnore
     private String email;
 
-    @Column(name = "token",length = 100)
+    @Column(name = "token",length = 200)
+    @SerializedName("authToken")
     private String token;
     @Column(name = "expirationDate")
     @Formats.DateTime(pattern="dd/MM/yyyy")
@@ -37,7 +43,7 @@ public class Token extends Model {
      * Creates a date which is one day ahead of current date
      * @return returns newly created date
      */
-    public static Date createExpirationDate(){
+    public static Date generateExpirationDate(){
         Date newDate = new Date();
 
         Calendar date = Calendar.getInstance();
@@ -47,9 +53,12 @@ public class Token extends Model {
         return newDate;
     }
 
+    /**
+     * Generates the token randomly, and sets the expiration date to one day ahead in the same time.
+     */
     public void generateToken(){
         this.token =  UUID.randomUUID().toString();
-        this.expirationDate = Token.createExpirationDate();
+        this.expirationDate = Token.generateExpirationDate();
     }
 
     public String getToken() {
@@ -59,6 +68,7 @@ public class Token extends Model {
     public void setToken(String token) {
         this.token = token;
     }
+
 
     public String getEmail() {
         return email;

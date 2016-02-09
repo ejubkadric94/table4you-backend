@@ -4,57 +4,82 @@ package controllers;
  * Created by Ejub on 31.1.2016.
  */
 
+import com.google.gson.Gson;
 import models.User;
 import play.libs.Json;
 import play.mvc.*;
-import utilities.JsonOutput;
-import utilities.Resources;
-import utilities.UserHelper;
+import utilities.*;
+import utilities.Error;
 import views.html.*;
-import com.fasterxml.jackson.databind.JsonNode;
 import play.mvc.BodyParser;
 
-
+/**
+ * Controller for User model.
+ */
 public class UserController extends Controller {
     /**
-     * Registers the user
+     * Registers the user after validating the input.
+     *
      * @return the authorization authToken in JSON format
      */
+    private PersistenceManager manager = new PersistenceManager();
+    private UserHelper userHelper = new UserHelper();
+
+
     @BodyParser.Of(BodyParser.Json.class)
     public Result register() {
-        if(UserHelper.ifEmailExists(request().body().asJson())){
-            return badRequest(jsonOutput.render(JsonOutput.getError(Resources.BAD_REQUEST_EMAIL_EXISTS)));
+        User user = Json.fromJson(request().body().asJson(), User.class);
+
+        if(userHelper.ifEmailExists(user)){
+            return badRequest(new Gson().toJson(new Error(Resources.BAD_REQUEST_EMAIL_EXISTS)));
         }
-        UserHelper userHelper = new UserHelper(request().body().asJson());
-        if(!userHelper.initializeUser()){
-            return badRequest(jsonOutput.render(JsonOutput.getError(Resources.BAD_REQUEST_COULD_NOT_INITIALIZE)));
+        if(!userHelper.initializeUser(user)){
+            return badRequest(new Gson().toJson(new Error(Resources.BAD_REQUEST_COULD_NOT_INITIALIZE)));
         }
-        if(!userHelper.validateUser()){
-            return badRequest(jsonOutput.render(JsonOutput.getError(Resources.BAD_REQUEST_INVALID_DATA)));
+        if(!user.isValid()){
+            return badRequest(new Gson().toJson(new Error(Resources.BAD_REQUEST_INVALID_DATA)));
         }
-        userHelper.createUser();
-        return ok(jsonOutput.render(JsonOutput.getAuthToken(userHelper)));
+
+        manager.createUser(user);
+        return ok(jsonOutput.render(new Gson().toJson(new TokenHelper(user.getAuthToken().getToken()))));
     }
 
-
+    /**
+     * Confirms the user with specified registration token.
+     * Method checks if specified token is valid, and if it is, the user is confirmed.
+     *
+     * @param registrationToken The encoded registration token
+     * @return The authorization token in JSON format, or badRequest if token is not valid.
+     */
     public Result confirm(String registrationToken){
-        if(UserHelper.confirmUser(registrationToken)) {
-            return ok(jsonOutput.render(JsonOutput.getAuthToken(registrationToken)));
+        User user = new User(registrationToken);
+        if(!user.confirmUser(registrationToken)) {
+            return badRequest(new Gson().toJson(new Error(Resources.BAD_REQUEST_WRONG_CONFIRMATION_TOKEN)));
         }
-        return badRequest(jsonOutput.render(JsonOutput.getError(Resources.BAD_REQUEST_WRONG_CONFIRMATION_TOKEN)));
+
+        return ok(jsonOutput.render(new Gson().toJson(new TokenHelper(user.getAuthToken().getToken()))));
     }
 
+    /**
+     * Provides the authToken when user logs in.
+     * If the input information are related to existing user, and if information is valid, the authToken will be
+     * returned.
+     *
+     * @return JSON which contains authToken is returned if successful.
+     */
     public Result login(){
-        String email = request().body().asJson().path("email").asText();
-        String password = request().body().asJson().path("password").asText();
-        if( email == "" ||
-                password == "") {
-            return badRequest(jsonOutput.render(JsonOutput.getError(Resources.BAD_REQUEST_INSUFFICIENT_DATA)));
+         UserSession userSession = play.libs.Json.fromJson(request().body().asJson(), UserSession.class);
+
+        User user = manager.getUserFromSession(userSession);
+
+        if(user == null){
+            return unauthorized(new Gson().toJson(new Error(Resources.UNAUTHORIZED_NO_EMAIL)));
         }
-        if( UserHelper.isValidLoginInfo(email, password)) {
-            return ok(jsonOutput.render(JsonOutput.getAuthToken(email, password)));
+        if( !user.isValidLoginInfo()) {
+            return unauthorized(new Gson().toJson(new Error(Resources.UNAUTHORIZED_INPUT_DOES_NOT_MATCH)));
         }
-        return unauthorized(jsonOutput.render(JsonOutput.getError(Resources.UNAUTHORIZED_INPUT_DOES_NOT_MATCH)));
+
+        return ok(jsonOutput.render(new Gson().toJson(new TokenHelper(user.getAuthToken().getToken()))));
     }
 }
 

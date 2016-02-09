@@ -13,7 +13,7 @@ create table abh_user_address (
 
 create table abh_user_token (
   userEmail                 VARCHAR(80) DEFAULT 'test@test.com' not null,
-  token                     varchar(100),
+  token                     varchar(200),
   expirationDate            datetime(6),
   constraint pk_abh_user_token primary key (userEmail))
 ;
