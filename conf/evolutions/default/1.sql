@@ -25,7 +25,7 @@ create table abh_user (
   firstName                 varchar(25),
   lastName                  varchar(25),
   address_userEmail         VARCHAR(80) DEFAULT 'test@test.com',
-  phone                     integer,
+  phone                     BIGINT,
   gender                    varchar(6),
   birthdate                 date,
   auth_token_userEmail      VARCHAR(80) DEFAULT 'test@test.com',

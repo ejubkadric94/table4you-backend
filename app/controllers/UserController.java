@@ -30,12 +30,15 @@ public class UserController extends Controller {
     public Result register() {
         User user = Json.fromJson(request().body().asJson(), User.class);
 
+        if(!userHelper.isSetForRegistration(user)){
+            return badRequest(new Gson().toJson(new Error(Resources.BAD_REQUEST_INSUFFICIENT_DATA)));
+        }
         if(userHelper.ifEmailExists(user)){
             return badRequest(new Gson().toJson(new Error(Resources.BAD_REQUEST_EMAIL_EXISTS)));
         }
-        if(!userHelper.initializeUser(user)){
-            return badRequest(new Gson().toJson(new Error(Resources.BAD_REQUEST_COULD_NOT_INITIALIZE)));
-        }
+
+        userHelper.initializeUser(user);
+
         if(!user.isValid()){
             return badRequest(new Gson().toJson(new Error(Resources.BAD_REQUEST_INVALID_DATA)));
         }
@@ -56,7 +59,6 @@ public class UserController extends Controller {
         if(!user.confirmUser(registrationToken)) {
             return badRequest(new Gson().toJson(new Error(Resources.BAD_REQUEST_WRONG_CONFIRMATION_TOKEN)));
         }
-
         return ok(jsonOutput.render(new Gson().toJson(new TokenHelper(user.getAuthToken().getToken()))));
     }
 
@@ -68,16 +70,20 @@ public class UserController extends Controller {
      * @return JSON which contains authToken is returned if successful.
      */
     public Result login(){
-         UserSession userSession = play.libs.Json.fromJson(request().body().asJson(), UserSession.class);
+        UserSession userSession = play.libs.Json.fromJson(request().body().asJson(), UserSession.class);
 
+        if(!userSession.isReadyForLogin()){
+            return badRequest(new Gson().toJson(new Error(Resources.BAD_REQUEST_INSUFFICIENT_DATA)));
+        }
         User user = manager.getUserFromSession(userSession);
 
-        if(user == null){
+        if(!user.exists()){
             return unauthorized(new Gson().toJson(new Error(Resources.UNAUTHORIZED_NO_EMAIL)));
         }
         if( !user.isValidLoginInfo()) {
             return unauthorized(new Gson().toJson(new Error(Resources.UNAUTHORIZED_INPUT_DOES_NOT_MATCH)));
         }
+        user = manager.matchTheUser(userSession);
 
         return ok(jsonOutput.render(new Gson().toJson(new TokenHelper(user.getAuthToken().getToken()))));
     }

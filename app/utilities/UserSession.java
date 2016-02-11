@@ -7,6 +7,10 @@ public class UserSession {
     private String email;
     private String password;
 
+    public boolean isReadyForLogin() {
+        return email != null && password != null;
+    }
+
     public String getEmail() {
         return email;
     }

@@ -29,6 +29,10 @@ public class Address extends Model{
         this.country = address.country;
     }
 
+    public Address() {
+
+    }
+
     public static Model.Finder<String, Address> find = new Model.Finder<String, Address>(String.class, Address.class);
 
     public String getCity() {

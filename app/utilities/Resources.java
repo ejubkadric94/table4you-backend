@@ -7,7 +7,8 @@ package utilities;
  */
 public final class Resources {
     public static final String BAD_REQUEST_INVALID_DATA = "Invalid input data";
-    public static final String BAD_REQUEST_EMAIL_EXISTS = "Email already getUserFromSession";
+    public static final String BAD_REQUEST_INSUFFICIENT_DATA = "Insufficient input data";
+    public static final String BAD_REQUEST_EMAIL_EXISTS = "Email already exists";
     public static final String BAD_REQUEST_WRONG_CONFIRMATION_TOKEN = "Wrong confirmation authToken";
     public static final String BAD_REQUEST_COULD_NOT_INITIALIZE = "Could not initialize user";
     public static final String UNAUTHORIZED_INPUT_DOES_NOT_MATCH = "Email and password do not match";

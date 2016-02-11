@@ -42,7 +42,8 @@ public class User extends com.avaje.ebean.Model implements Validation {
     @OneToOne
     @PrimaryKeyJoinColumn(referencedColumnName = "userEmail")
     private Address address;
-    private int phone;
+    @Column(columnDefinition = "BIGINT")
+    private long phone;
     @Column(length = 6)
     private String gender;
     @Column(columnDefinition = "date")
@@ -56,7 +57,7 @@ public class User extends com.avaje.ebean.Model implements Validation {
     private boolean isConfirmed;
 
 
-    public User(JsonNode json){
+    public User(){
     }
 
     public User(String decodedToken){
@@ -97,12 +98,14 @@ public class User extends com.avaje.ebean.Model implements Validation {
      * @return true if email and password match, false otherwise
      */
     public boolean isValidLoginInfo(){
-        User user = User.find.where().eq("email", email).eq("password", DigestUtils.md5Hex(password)).findUnique();
-        return user == null;
+        User user = User.find.where().eq("email", email).findUnique();
+        return this.password.equals(user.password);
     }
 
 
-
+    public boolean exists(){
+        return User.find.where().eq("email",this.email).findUnique() != null;
+    }
 
 
     public String getEmail() {
@@ -113,11 +116,11 @@ public class User extends com.avaje.ebean.Model implements Validation {
         this.email = email;
     }
 
-    public int getPhone() {
+    public long getPhone() {
         return phone;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(long phone) {
         this.phone = phone;
     }
 
@@ -195,14 +198,10 @@ public class User extends com.avaje.ebean.Model implements Validation {
 
     @Override
     public boolean isValid() {
-        if(email == null || firstName == null ||  lastName == null || gender == null){
-            return false;
-        }
         if(validateEmail(getEmail()) && validateFirstName(getFirstName()) && validateLastName(getLastName())
-                && validateGender(getGender()) && validatePasswords()){
+                && validateGender(getGender()) && validatePasswords() ){
             return true;
         }
-
         return false;
     }
 

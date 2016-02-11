@@ -42,18 +42,15 @@ public class UserHelper {
      * Creates a token object and initializes it.
      * Authentication authToken is created randomly and expiration day is set to one day ahead.
      *
-     * @return true if successful, false if unsuccessful
      */
-    public boolean initializeUser(User user){
+    public void initializeUser(User user){
         if(user != null){
             user.setAuthToken(new Token());
             user.getAuthToken().generateToken();
             user.getAuthToken().setEmail(user.getEmail());
             user.getAddress().setEmail(user.getEmail());
             user.setConfirmed(false);
-            return true;
         }
-        return false;
     }
 
     /**
@@ -64,6 +61,28 @@ public class UserHelper {
     public boolean ifEmailExists(User user){
         User oldUser = User.find.where().eq("email", user.getEmail()).findUnique();
         return oldUser != null;
+    }
+
+
+    /*
+    "email":"ejubkadric@gmail.com",
+"password":"test",
+"passwordConfirmation":"test",
+"firstName":"Ejub342",
+"lastName":"Kadric",
+"address":{
+"streetName":"ulica",
+"city":"Sarajevo",
+"country":"BiH"},
+"phone":"062292868",
+"gender":"male",
+"birthdate":"16/01/1994"
+     */
+    public boolean isSetForRegistration(User user){
+        return user.getEmail() != null && user.getPassword() != null && user.getPasswordConfirmation() != null
+                && user.getFirstName() != null && user.getLastName() != null && user.getAddress().getCity() != null
+                && user.getAddress().getCountry() != null && user.getAddress().getStreetName() != null
+                && user.getPhone() != 0 && user.getGender() != null  && user.getBirthdate() != null;
     }
 
     /**

@@ -34,8 +34,14 @@ public class PersistenceManager {
      * @return the user if it getUserFromSession, or null if it does not exist
      */
     public User getUserFromSession(UserSession userSession){
-        User newUser = User.find.where().eq("email", userSession.getEmail()).findUnique();
+        User newUser = new User();
+        newUser.setEmail(userSession.getEmail());
+        newUser.setPassword(DigestUtils.md5Hex(userSession.getPassword()));
         return newUser;
+    }
+
+    public User matchTheUser(UserSession userSession){
+        return User.find.where().eq("email", userSession.getEmail()).findUnique();
     }
 }
 
@@ -44,4 +50,9 @@ public class PersistenceManager {
 DELETE FROM abh_user;
 DELETE FROM abh_user_address;
 DELETE FROM abh_user_token;
+ */
+
+/*
+&& validateFirstName(getFirstName()) && validateLastName(getLastName())
+                && validateGender(getGender()) && validatePasswords()
  */
