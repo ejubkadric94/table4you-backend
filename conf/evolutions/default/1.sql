@@ -14,7 +14,7 @@ create table abh_user_address (
 create table abh_user_token (
   userEmail                 VARCHAR(80) DEFAULT 'test@test.com' not null,
   token                     varchar(200),
-  expirationDate            datetime(6),
+  expirationDate            timestamp,
   constraint pk_abh_user_token primary key (userEmail))
 ;
 
@@ -29,11 +29,17 @@ create table abh_user (
   gender                    varchar(6),
   birthdate                 date,
   auth_token_userEmail      VARCHAR(80) DEFAULT 'test@test.com',
-  isConfirmed               tinyint(1) default 0,
+  isConfirmed               BOOLEAN,
   constraint uq_abh_user_address_userEmail unique (address_userEmail),
   constraint uq_abh_user_auth_token_userEmail unique (auth_token_userEmail),
   constraint pk_abh_user primary key (email))
 ;
+
+create sequence abh_user_address_seq;
+
+create sequence abh_user_token_seq;
+
+create sequence abh_user_seq;
 
 alter table abh_user add constraint fk_abh_user_address_1 foreign key (address_userEmail) references abh_user_address (userEmail) on delete restrict on update restrict;
 create index ix_abh_user_address_1 on abh_user (address_userEmail);
@@ -44,13 +50,19 @@ create index ix_abh_user_authToken_2 on abh_user (auth_token_userEmail);
 
 # --- !Downs
 
-SET FOREIGN_KEY_CHECKS=0;
+SET REFERENTIAL_INTEGRITY FALSE;
 
-drop table abh_user_address;
+drop table if exists abh_user_address;
 
-drop table abh_user_token;
+drop table if exists abh_user_token;
 
-drop table abh_user;
+drop table if exists abh_user;
 
-SET FOREIGN_KEY_CHECKS=1;
+SET REFERENTIAL_INTEGRITY TRUE;
+
+drop sequence if exists abh_user_address_seq;
+
+drop sequence if exists abh_user_token_seq;
+
+drop sequence if exists abh_user_seq;
 

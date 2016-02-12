@@ -14,13 +14,14 @@ import play.mvc.Result;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static play.test.Helpers.*;
 
 /**
  * Created by root on 11/02/16.
  */
 public class UserRegistrationTest {
+
     @Test
     public void testRegistrationWithValidInfo() {
         running(fakeApplication(), () -> {
@@ -49,6 +50,8 @@ public class UserRegistrationTest {
             Http.RequestBuilder rb = new Http.RequestBuilder().method(POST).uri("/v1/register").bodyJson(json);
             Result result = route(rb);
             assertEquals(Http.Status.OK, result.status());
+            User user = User.find.where().eq("email", "test@test.com").findUnique();
+            assertTrue(contentAsString(result).contains(user.getAuthToken().getToken()));
         });
     }
 
@@ -77,6 +80,7 @@ public class UserRegistrationTest {
             Http.RequestBuilder rb = new Http.RequestBuilder().method(POST).uri("/v1/register").bodyJson(json);
             Result result = route(rb);
             assertEquals(Http.Status.BAD_REQUEST, result.status());
+            assertTrue(contentAsString(result).contains("error"));
         });
     }
 
@@ -133,6 +137,7 @@ public class UserRegistrationTest {
             Http.RequestBuilder rb2 = new Http.RequestBuilder().method(POST).uri("/v1/register").bodyJson(json2);
             Result result2 = route(rb2);
             assertEquals(Http.Status.BAD_REQUEST, result2.status());
+            assertTrue(contentAsString(result2).contains("error"));
 
         });
     }
@@ -165,6 +170,7 @@ public class UserRegistrationTest {
             Http.RequestBuilder rb = new Http.RequestBuilder().method(POST).uri("/v1/register").bodyJson(json);
             Result result = route(rb);
             assertEquals(Http.Status.BAD_REQUEST, result.status());
+            assertTrue(contentAsString(result).contains("error"));
         });
     }
 
@@ -179,20 +185,5 @@ public class UserRegistrationTest {
             }
         });
     }
+
 }
-/*
-{
-"email":"ejubkadric@gmail.com",
-"password":"test",
-"passwordConfirmation":"test",
-"firstName":"Ejub342",
-"lastName":"Kadric",
-"address":{
-"streetName":"ulica",
-"city":"Sarajevo",
-"country":"BiH"},
-"phone":"062292868",
-"gender":"male",
-"birthdate":"16/01/1994"
-}
- */

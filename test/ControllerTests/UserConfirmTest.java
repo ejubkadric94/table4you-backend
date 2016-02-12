@@ -4,6 +4,7 @@ import models.Address;
 import models.Token;
 import models.User;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -13,11 +14,13 @@ import utilities.UserHelper;
 
 import static org.junit.Assert.assertEquals;
 import static play.test.Helpers.*;
+import static org.junit.Assert.*;
 
 /**
  * Created by root on 11/02/16.
  */
 public class UserConfirmTest {
+
     @BeforeClass
     public static void prepareUser() {
         running(fakeApplication(),()-> {
@@ -37,8 +40,9 @@ public class UserConfirmTest {
             token.setExpirationDate(Token.generateExpirationDate());
             token.setToken("TESTtestTESTtest");
             token.save();
-
             user.setConfirmed(false);
+
+            //System.out.println("CONFIRM    "+user.isConfirmed());
 
             user.setAuthToken(token);
             user.setAddress(address);
@@ -50,11 +54,15 @@ public class UserConfirmTest {
     public void testConfirmationWithValidToken() {
         running(fakeApplication(),()-> {
             User user = User.find.where().eq("email", "test@test.com").findUnique();
+            assertFalse(user.isConfirmed());
+
             String link = "/v1/registration/confirm/" + UserHelper.encodeToken(user.getAuthToken().getToken());
             Http.RequestBuilder rb = new Http.RequestBuilder().method(GET).uri(link);
 
             Result result = route(rb);
             assertEquals(Http.Status.OK, result.status());
+            user = User.find.where().eq("email", "test@test.com").findUnique();
+            assertTrue( user.isConfirmed());
         });
     }
 
@@ -80,4 +88,5 @@ public class UserConfirmTest {
             user.getAuthToken().delete();
         });
     }
+
 }
