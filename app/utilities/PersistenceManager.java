@@ -53,8 +53,3 @@ DELETE FROM abh_user;
 DELETE FROM abh_user_address;
 DELETE FROM abh_user_token;
  */
-
-/*
-&& validateFirstName(getFirstName()) && validateLastName(getLastName())
-                && validateGender(getGender()) && validatePasswords()
- */

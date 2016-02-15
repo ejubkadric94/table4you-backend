@@ -23,6 +23,9 @@ public class Address extends Model{
     @Column(length = 100)
     private String country;
 
+    @Column(name = "restaurantId", columnDefinition = "BIGINT")
+    private long restaurantId;
+
     public Address(Address address){
         this.streetName = address.streetName;
         this.city = address.city;

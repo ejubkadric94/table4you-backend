@@ -7,12 +7,10 @@ package utilities;
  */
 public final class Resources {
     public static final String BAD_REQUEST_INVALID_DATA = "Invalid input data";
-    public static final String BAD_REQUEST_INSUFFICIENT_DATA = "Insufficient input data";
     public static final String BAD_REQUEST_EMAIL_EXISTS = "Email already exists";
     public static final String BAD_REQUEST_WRONG_CONFIRMATION_TOKEN = "Wrong confirmation authToken";
-    public static final String BAD_REQUEST_COULD_NOT_INITIALIZE = "Could not initialize user";
     public static final String UNAUTHORIZED_INPUT_DOES_NOT_MATCH = "Email and password do not match";
-    public static final String UNAUTHORIZED_NO_EMAIL = "Email does not exist";
+    public static final String BAD_REQUEST_NO_RESTAURANT = "No restaurant found with specicified restaurant Id";
     public static final String SERVER_NAME = "localhost:9000"; //"api.table4you" when deployed
     public static final String VERSION = "v1";
 
