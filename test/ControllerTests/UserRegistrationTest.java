@@ -55,34 +55,6 @@ public class UserRegistrationTest {
         });
     }
 
-    @Test
-    public void testRegistrationWithInsufficientData() {
-        running(fakeApplication(), () -> {
-            ObjectNode node = JsonNodeFactory.instance.objectNode();
-            ObjectNode child = JsonNodeFactory.instance.objectNode(); // the child
-            child.put("streetName", "Test Street");
-            child.put("city", "Test City");
-            node.put("email", "test@test.com");
-            node.put("firstName", "Test");
-            node.put("lastName", "Test");
-            node.set("address", child);
-            node.put("phone", "062292868");
-            node.put("gender", "male");
-            node.put("birthdate", "01/01/1990");
-
-            JsonNode json = null;
-            try {
-                json = (JsonNode) new ObjectMapper().readTree(node.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            Http.RequestBuilder rb = new Http.RequestBuilder().method(POST).uri("/v1/register").bodyJson(json);
-            Result result = route(rb);
-            assertEquals(Http.Status.BAD_REQUEST, result.status());
-            assertTrue(contentAsString(result).contains("error"));
-        });
-    }
 
     @Test
     public void testRegistrationWithTakenEmail() {

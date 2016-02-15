@@ -17,6 +17,9 @@ public class PersistenceManager {
      */
     public void createUser(User user){
         if(user != null){
+
+            UserHelper.initializeUser(user);
+
             user.setPassword(DigestUtils.md5Hex(user.getPassword()));
             user.setPasswordConfirmation(DigestUtils.md5Hex(user.getPasswordConfirmation()));
             Email.sendConfirmationEmail(user.getEmail(), Resources.SERVER_NAME + "/" + Resources.VERSION
@@ -34,15 +37,14 @@ public class PersistenceManager {
      * @return the user if it getUserFromSession, or null if it does not exist
      */
     public User getUserFromSession(UserSession userSession){
-        User newUser = new User();
-        newUser.setEmail(userSession.getEmail());
-        newUser.setPassword(DigestUtils.md5Hex(userSession.getPassword()));
-        return newUser;
+        User user = User.find.where().eq("email", userSession.getEmail()).findUnique();
+        if(user.getPassword().equals(DigestUtils.md5Hex(userSession.getPassword()))) {
+            return user;
+        }
+        return null;
     }
 
-    public User matchTheUser(UserSession userSession){
-        return User.find.where().eq("email", userSession.getEmail()).findUnique();
-    }
+
 }
 
 

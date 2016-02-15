@@ -74,7 +74,7 @@ public class UserLoginTest {
             Http.RequestBuilder rb = new Http.RequestBuilder().method(POST).uri("/v1/login").bodyJson(json);
 
             Result result = route(rb);
-            assertEquals(Http.Status.UNAUTHORIZED, result.status());
+            assertEquals(Http.Status.BAD_REQUEST, result.status());
             assertTrue(contentAsString(result).contains("error"));
         });
     }

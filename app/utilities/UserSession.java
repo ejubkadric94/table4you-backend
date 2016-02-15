@@ -1,11 +1,22 @@
 package utilities;
 
+import models.User;
+
 /**
  * Created by root on 09/02/16.
  */
 public class UserSession {
     private String email;
     private String password;
+
+    public boolean isValid(){
+        System.out.println("email "+email);
+        System.out.println("pass  "+password);
+        if(email == null || password == null || User.find.where().eq("email", email).findUnique() == null){
+            return false;
+        }
+        return true;
+    }
 
     public boolean isReadyForLogin() {
         return email != null && password != null;

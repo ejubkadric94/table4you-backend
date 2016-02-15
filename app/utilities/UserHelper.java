@@ -43,7 +43,7 @@ public class UserHelper {
      * Authentication authToken is created randomly and expiration day is set to one day ahead.
      *
      */
-    public void initializeUser(User user){
+    public static void initializeUser(User user){
         if(user != null){
             user.setAuthToken(new Token());
             user.getAuthToken().generateToken();

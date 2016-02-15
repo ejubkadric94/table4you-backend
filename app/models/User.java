@@ -198,6 +198,10 @@ public class User extends com.avaje.ebean.Model implements Validation {
 
     @Override
     public boolean isValid() {
+        if(password == null || passwordConfirmation == null || firstName == null || lastName == null || address == null
+                || phone == 0 || gender == null || birthdate == null){
+            return false;
+        }
         if(validateEmail(getEmail()) && validateFirstName(getFirstName()) && validateLastName(getLastName())
                 && validateGender(getGender()) && validatePasswords() ){
             return true;
