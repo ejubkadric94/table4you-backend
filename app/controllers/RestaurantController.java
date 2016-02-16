@@ -17,7 +17,7 @@ public class RestaurantController extends Controller{
     public Result getRestaurantDetails(int id) {
         Restaurant restaurant = RestaurantHelper.getRestaurantById(id);
         if(restaurant == null){
-            return badRequest(JsonSerializer.serializeError(Resources.BAD_REQUEST_INVALID_DATA));
+            return badRequest(JsonSerializer.serializeError(Resources.BAD_REQUEST_NO_RESTAURANT));
         }
         return ok(JsonSerializer.serializeRestaurantDetails(restaurant));
     }
@@ -29,11 +29,14 @@ public class RestaurantController extends Controller{
 
     @Security.Authenticated(UserAuthenticator.class)
     public Result makeReservation(int id){
-        Restaurant restaurant = RestaurantHelper.getRestaurantById(id);
         Reservation reservation = (Reservation) JsonSerializer.deserialize(request(), Reservation.class);
-
-        if(restaurant == null || reservation == null || !reservation.isValid()) {
+        if(reservation == null || !reservation.isValid()) {
             return badRequest(JsonSerializer.serializeError(Resources.BAD_REQUEST_INVALID_DATA));
+        }
+
+        Restaurant restaurant = RestaurantHelper.getRestaurantById(id);
+        if(restaurant == null){
+            return badRequest(JsonSerializer.serializeError(Resources.BAD_REQUEST_NO_RESTAURANT));
         }
 
         manager.createReservation(reservation);
