@@ -20,7 +20,7 @@ public class UserAuthenticator extends Security.Authenticator{
             }
             User user = User.find.where().eq("email", tempToken.getEmail()).findUnique();
             if (user != null) {
-                return user.getEmail();
+                return user.isConfirmed() ? user.getEmail() : null;
             }
             if(!user.isConfirmed()) {
                 return null;
@@ -35,7 +35,7 @@ public class UserAuthenticator extends Security.Authenticator{
     }
 
     private String getTokenFromHeader(Http.Context ctx) {
-        String[] authTokenHeaderValues = ctx.request().headers().get("X-AUTH-TOKEN");
+        String[] authTokenHeaderValues = ctx.request().headers().get("USER-ACCESS-TOKEN");
         if ((authTokenHeaderValues != null) && (authTokenHeaderValues.length == 1) && (authTokenHeaderValues[0] != null)) {
             return authTokenHeaderValues[0];
         }

@@ -2,6 +2,7 @@ package utilities;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.deser.std.StringArrayDeserializer;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.gson.Gson;
@@ -55,5 +56,9 @@ public class JsonSerializer {
         restaurantJson.set("coordinates", coordinates);
 
         return restaurantJson.toString();
+    }
+
+    public static String serializeAllRestaurants(){
+        return null;
     }
 }
