@@ -32,11 +32,6 @@ public class Token extends Model {
 
     public Token(){}
 
-    public Token(Token authToken){
-        token = authToken.token;
-        expirationDate = authToken.expirationDate;
-    }
-
     public static Model.Finder<String, Token> find = new Model.Finder<String, Token>(String.class, Token.class);
 
     /**

@@ -19,6 +19,15 @@ create table abh_coordinates (
   constraint pk_abh_coordinates primary key (restaurantId))
 ;
 
+create table abh_reservation (
+  reservationId             BIGINT auto_increment not null,
+  restaurantId              BIGINT,
+  dateTime                  DATETIME,
+  guestCount                integer,
+  note                      varchar(300),
+  constraint pk_abh_reservation primary key (reservationId))
+;
+
 create table abh_restaurant (
   restaurantId              BIGINT auto_increment not null,
   name                      varchar(100),
@@ -76,6 +85,8 @@ SET FOREIGN_KEY_CHECKS=0;
 drop table abh_user_address;
 
 drop table abh_coordinates;
+
+drop table abh_reservation;
 
 drop table abh_restaurant;
 

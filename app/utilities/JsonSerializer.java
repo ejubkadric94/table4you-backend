@@ -2,6 +2,7 @@ package utilities;
 
 
 import com.google.gson.*;
+import models.Reservation;
 import models.Restaurant;
 import play.libs.Json;
 import play.mvc.Http.Request;
@@ -15,12 +16,22 @@ public class JsonSerializer {
         return Json.fromJson(request.body().asJson(), classname);
     }
 
-    public static String serialize(Error error){
-        return new Gson().toJson(error);
+    public static String serializeError(String error){
+        JsonObject object = new JsonObject();
+        object.addProperty("error", error);
+        return new Gson().toJson(object);
     }
 
-    public static String serialize(TokenHelper token){
-        return new Gson().toJson(token);
+    public static String serializeReservation(long reservation){
+        JsonObject object = new JsonObject();
+        object.addProperty("reservationId", reservation);
+        return new Gson().toJson(object);
+    }
+
+    public static String serializeToken(String token){
+        JsonObject object = new JsonObject();
+        object.addProperty("authToken", token);
+        return new Gson().toJson(object);
     }
 
     public static String serializeRestaurantDetails(Restaurant restaurant) {

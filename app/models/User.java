@@ -11,8 +11,6 @@ package models;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import org.apache.commons.codec.digest.DigestUtils;
 import play.data.validation.Constraints;
 import utilities.UserHelper;
 import utilities.Validation;

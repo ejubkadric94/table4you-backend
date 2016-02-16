@@ -42,8 +42,6 @@ public class UserConfirmTest {
             token.save();
             user.setConfirmed(false);
 
-            //System.out.println("CONFIRM    "+user.isConfirmed());
-
             user.setAuthToken(token);
             user.setAddress(address);
             user.save();

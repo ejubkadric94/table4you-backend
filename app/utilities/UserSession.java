@@ -10,8 +10,6 @@ public class UserSession {
     private String password;
 
     public boolean isValid(){
-        System.out.println("email "+email);
-        System.out.println("pass  "+password);
         if(email == null || password == null || User.find.where().eq("email", email).findUnique() == null){
             return false;
         }

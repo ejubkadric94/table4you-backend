@@ -64,20 +64,6 @@ public class UserHelper {
     }
 
 
-    /*
-    "email":"ejubkadric@gmail.com",
-"password":"test",
-"passwordConfirmation":"test",
-"firstName":"Ejub342",
-"lastName":"Kadric",
-"address":{
-"streetName":"ulica",
-"city":"Sarajevo",
-"country":"BiH"},
-"phone":"062292868",
-"gender":"male",
-"birthdate":"16/01/1994"
-     */
     public boolean isSetForRegistration(User user){
         return user.getEmail() != null && user.getPassword() != null && user.getPasswordConfirmation() != null
                 && user.getFirstName() != null && user.getLastName() != null && user.getAddress().getCity() != null

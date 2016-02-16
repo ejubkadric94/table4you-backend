@@ -1,8 +1,6 @@
 package models;
 
 import com.avaje.ebean.Model;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import utilities.RestaurantSerializer;
 
 import javax.persistence.*;
 

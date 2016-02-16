@@ -1,5 +1,7 @@
 package utilities;
 
+import models.Reservation;
+import models.Restaurant;
 import models.User;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -44,7 +46,9 @@ public class PersistenceManager {
         return null;
     }
 
-
+    public void createReservation(Reservation reservation) {
+        reservation.save();
+    }
 }
 
 
