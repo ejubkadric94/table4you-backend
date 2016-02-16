@@ -1,6 +1,7 @@
 package models;
 
 import com.avaje.ebean.Model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
@@ -15,6 +16,7 @@ import javax.persistence.*;
 public class Address extends Model{
     @Id
     @Column(name="userEmail", columnDefinition = "VARCHAR(80) DEFAULT 'test@test.com'")
+    @JsonIgnore
     private String email;
     @Column(name = "streetName", length = 100)
     private String streetName;

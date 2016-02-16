@@ -22,6 +22,7 @@ libraryDependencies += "commons-validator" % "commons-validator" % "1.5.0"
 libraryDependencies += "com.google.code.gson" % "gson" % "2.5"
 libraryDependencies += "org.mockito" % "mockito-all" % "1.10.19"
 libraryDependencies += "org.apache.commons" % "commons-lang3" % "3.4"
+libraryDependencies += "com.fasterxml.jackson.core" % "jackson-core" % "2.7.1"
 
 
 

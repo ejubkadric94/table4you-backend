@@ -51,6 +51,7 @@ public class User extends com.avaje.ebean.Model implements Validation {
     private Date birthdate;
     @OneToOne
     @PrimaryKeyJoinColumn(referencedColumnName = "userEmail")
+    @JsonIgnore
     private Token authToken;
     @Column(name = "isConfirmed")
     @JsonIgnore

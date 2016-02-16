@@ -23,7 +23,7 @@ public class RestaurantController extends Controller{
     }
 
     @Security.Authenticated(UserAuthenticator.class)
-    public Result getAllRestaurants(int offset) {
-        return ok(JsonSerializer.serializeAllRestaurants());
+    public Result getAllRestaurants(int offset, int limit, String filter) {
+        return ok(JsonSerializer.serializeAllRestaurants(offset, limit, filter));
     }
 }

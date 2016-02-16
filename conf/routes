@@ -12,7 +12,8 @@ POST    /v1/login                                               controllers.User
 
 # Restaurants
 GET     /v1/restaurants/:id                                     controllers.RestaurantController.getRestaurantDetails(id: Integer)
-#GET     /restaurants?offset=:offset&limit=:limit&filter=:filter controllers.RestaurantController.getAllRestaurants(offset: Integer != null )
+GET     /v1/restaurants                                         controllers.RestaurantController.getAllRestaurants(offset ?= 0, limit ?= 0, filter ?= null )
+#GET     /v1/restaurants                                         controllers.RestaurantController.getAllRestaurants()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
