@@ -2,10 +2,7 @@ package models;
 
 /**
  * Created by Ejub on 31.1.2016.
- * Class User represents and defines table abh_user in database.
- * It contains multiple instance variable which represent the basic information about the user.
- * Instance variable address references abh_user_address table.
- * Instance variable authToken references abh_user_token table.
+ * Class User can be used to store and manipulate users.
  */
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -102,11 +99,6 @@ public class User extends com.avaje.ebean.Model implements Validation {
     }
 
 
-    public boolean exists(){
-        return User.find.where().eq("email",this.email).findUnique() != null;
-    }
-
-
     public String getEmail() {
         return email;
     }
@@ -195,6 +187,11 @@ public class User extends com.avaje.ebean.Model implements Validation {
         this.passwordConfirmation = passwordConfirmation;
     }
 
+    /**
+     * Validates the user information.
+     *
+     * @return true if everything is valid, and false otherwise
+     */
     @Override
     public boolean isValid() {
         if(password == null || passwordConfirmation == null || firstName == null || lastName == null || address == null

@@ -2,7 +2,7 @@ package utilities;
 
 /**
  * Created by Ejub on 02/02/16.
- * Class contains all the needed strings for application.
+ * Class Resources contains all the needed strings for application.
  * It is an utility class and it cannot be instantiated.
  */
 public final class Resources {
@@ -16,20 +16,3 @@ public final class Resources {
 
     private Resources(){}
 }
-/*
-example of json
-{
-"email":"ejubkadric@gmail.com",
-"password":"test",
-"passwordConfirmation":"test",
-"firstName":"Ejub",
-"lastName":"Kadric",
-"address":{
-"streetName":"ulica",
-"city":"Sarajevo",
-"country":"BiH"},
-"phone":"062292868",
-"gender":"male",
-"birthdate":"16/01/1994"
-}
- */

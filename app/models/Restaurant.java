@@ -5,11 +5,12 @@ import com.avaje.ebean.Model;
 import javax.persistence.*;
 
 /**
- * Created by root on 15/02/16.
+ * Created by Ejub on 15/02/16.
+ * Class Restaurant can be used for storing restaurants.
  */
 @Entity
 @Table(name = "abh_restaurant")
-public class Restaurant {
+public class Restaurant extends Model {
     @Id
     @Column(name = "restaurantId", columnDefinition = "BIGINT")
     private long restaurantId;
@@ -107,18 +108,3 @@ public class Restaurant {
         this.deals = deals;
     }
 }
-/*
-{
-restaurantId: <restaurantId>,
-name: <name>,
-address: {
-streetName: <streetName>, city: <city>,
-country: <country>
-},
-phone: <phone>, workingHours: <workingHours>,
-rating: <rating>, reservationPrice: <price>,
-deals: <deals>, coordinates: {
-latitude : <latitude>, longitude: <longitude>
-}
-}
- */

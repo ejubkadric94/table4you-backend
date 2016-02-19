@@ -1,30 +1,27 @@
 package controllers;
 
-/**
- * Created by Ejub on 31.1.2016.
- */
-
 import models.User;
 import play.mvc.*;
 import utilities.*;
 import play.mvc.BodyParser;
 
 /**
- * Controller for User model.
+ * Created by Ejub on 31.1.2016.
+ * Controller for User routes.
+ * Routes specified in this controller do not require authentication.
  */
 public class UserController extends Controller {
-    /**
-     * Registers the user after validating the input.
-     *
-     * @return the authorization authToken in JSON format
-     */
     private PersistenceManager manager = new PersistenceManager();
     private UserHelper userHelper = new UserHelper();
 
-
+    /**
+     * Registers the user after validating the input.
+     * If validation fails, a suitable error will be returned as response.
+     *
+     * @return the authorization authToken of newly registered user in JSON format
+     */
     @BodyParser.Of(BodyParser.Json.class)
     public Result register() {
-
         User user = (User) JsonSerializer.deserialize(request(), User.class);
 
         if(!user.isValid()){
@@ -39,10 +36,11 @@ public class UserController extends Controller {
 
     /**
      * Confirms the user with specified registration token.
-     * Method checks if specified token is valid, and if it is, the user is confirmed.
+     * Method decodes the token, and checks if specified token is valid, and if it is, the user is confirmed,
+     * and otherwise, a suitable error is returned as response.
      *
      * @param registrationToken The encoded registration token
-     * @return The authorization token in JSON format, or badRequest if token is not valid.
+     * @return the authorization token in JSON format
      */
     public Result confirm(String registrationToken){
         User user = new User(registrationToken);
@@ -54,10 +52,9 @@ public class UserController extends Controller {
 
     /**
      * Provides the authToken when user logs in.
-     * If the input information are related to existing user, and if information is valid, the authToken will be
-     * returned.
+     * Method validates the input, and if the input is not valid, a suitable error will be returned as response.
      *
-     * @return JSON which contains authToken is returned if successful.
+     * @return the authorization token in JSON format
      */
     public Result login(){
         UserSession userSession = (UserSession) JsonSerializer.deserialize(request(), UserSession.class);

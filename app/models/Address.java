@@ -7,10 +7,8 @@ import javax.persistence.*;
 
 /**
  * Created by Ejub on 04/02/16.
- * Class Address represents abh_user_address table from database.
- * It contains all needed fields and methods needed for their manipulation.
+ * Contains the address manipulation data for users and restaurant.
  */
-
 @Entity
 @Table(name = "abh_user_address")
 public class Address extends Model{
@@ -70,6 +68,14 @@ public class Address extends Model{
 
     public void setStreetName(String streetName) {
         this.streetName = streetName;
+    }
+
+    public long getRestaurantId() {
+        return restaurantId;
+    }
+
+    public void setRestaurantId(long restaurantId) {
+        this.restaurantId = restaurantId;
     }
 }
 

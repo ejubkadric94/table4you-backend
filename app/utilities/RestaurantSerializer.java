@@ -1,26 +1,25 @@
 package utilities;
 
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.avaje.ebean.RawSql;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import models.Address;
 import models.Coordinates;
 import models.Restaurant;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
- * Created by root on 16/02/16.
+ * Created by Ejub on 16/02/16.
+ * Class RestaurantSerializer can be used for serializing Restaurant objects.
+ * It provides methods for restaurant serialization specifically.
  */
 public class RestaurantSerializer {
+    /**
+     * Serializes all details of a specified Restaurant.
+     *
+     * @param id the restaurantId
+     * @return the JSON string containing a serialized Restaurant
+     */
     public static String serializeAllDetails(long id){
         Restaurant restaurant = Restaurant.find.where().eq("restaurantId", id).findUnique();
         restaurant.setCoordinates(Coordinates.find.where().eq("restaurantId", restaurant.getRestaurantId()).findUnique());
@@ -49,22 +48,26 @@ public class RestaurantSerializer {
 
         return restaurantJson.toString();
     }
-    public static String serializeBasicDetails(int offset, int limit, String filter) {
-        List<Restaurant> restaurantList = null;
 
-        if(offset != 0 && limit != 0){
-            // TO DO
-            /*
-            List<News> allNews = News.find("order by date desc").from(start).fetch(size);
-             */
+    /**
+     * Serializes the basic details of all restaurants, using provided pagination offset and limit, and/or
+     * provided filter.
+     *
+     * @param offset the pagination offset
+     * @param limit the pagination limit
+     * @param filter the pagination filter
+     * @return the JSON string
+     */
+    public static String serializeBasicDetails(int offset, int limit, String filter) {
+        List<Restaurant> restaurantList = Restaurant.find.all();
+
+        if(limit != 0 ){
             restaurantList = Restaurant.find.findPagedList(offset, limit).getList();
         }
         if(filter != null){
-            // TO DO
+            //TO DO
+            //restaurantList = Restaurant.find.
         }
-
-
-        restaurantList = Restaurant.find.all();
 
         String json = "[";
 
@@ -99,9 +102,3 @@ public class RestaurantSerializer {
     }
 }
 
-/*
-[{
-restaurantId: <restaurantId2>, name: <name2>, address: { streetName: <streetName2>, city: <city2>, country: <country2> },
-phone: <phone2>, workingHours: <workingHours2>, rating: <rating2> },
-...]
- */

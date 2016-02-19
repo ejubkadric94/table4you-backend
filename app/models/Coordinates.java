@@ -8,7 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * Created by root on 15/02/16.
+ * Created by Ejub on 15/02/16.
+ * Contains the coordinates manipulation data for restaurant.
  */
 @Entity
 @Table(name = "abh_coordinates")

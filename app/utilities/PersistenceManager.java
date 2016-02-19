@@ -1,7 +1,6 @@
 package utilities;
 
 import models.Reservation;
-import models.Restaurant;
 import models.User;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -34,26 +33,27 @@ public class PersistenceManager {
     }
 
     /**
-     * Checks if there is a user in database with an email address which is same as the one stored in this user.
+     * Retrieves the user from UserSession.
+     * Validation is firstly done on UserSession object.
      *
-     * @return the user if it getUserFromSession, or null if it does not exist
+     * @param userSession the UserSession object
+     * @return The User retrieved
      */
     public User getUserFromSession(UserSession userSession){
         User user = User.find.where().eq("email", userSession.getEmail()).findUnique();
         if(user.getPassword().equals(DigestUtils.md5Hex(userSession.getPassword()))) {
+            user.extendTokenExpiration();
             return user;
         }
         return null;
     }
 
+    /**
+     * Saves the reservation into the database.
+     *
+     * @param reservation the reservation to be saved
+     */
     public void createReservation(Reservation reservation) {
         reservation.save();
     }
 }
-
-
-/*
-DELETE FROM abh_user;
-DELETE FROM abh_user_address;
-DELETE FROM abh_user_token;
- */

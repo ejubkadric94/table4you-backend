@@ -3,45 +3,26 @@ package utilities;
 import com.fasterxml.jackson.databind.JsonNode;
 import models.Token;
 import models.User;
-
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.digest.DigestUtils;
 import play.libs.Json;
-
 
 /**
  * Created by Ejub on 03/02/16.
  * Provides useful methods for manipulating User class.
  */
 public class UserHelper {
-
     private User user;
     private JsonNode json;
 
-
-    public UserHelper() {
-
-    }
-
     /**
-     * Constructs the class with a JsonNode object.
-     *
-     * @param json the json containing all the info about user
+     * Default constructor for UserHelper class.
      */
-    public UserHelper(JsonNode json){
-        user = Json.fromJson(json, User.class);
-        this.json = json;
+    public UserHelper() {
     }
-
 
     /**
      * Creates a token object and initializes it.
-     * Authentication authToken is created randomly and expiration day is set to one day ahead.
-     *
+     * Authentication token is created randomly and expiration day is set to one day ahead.
      */
     public static void initializeUser(User user){
         if(user != null){
@@ -61,14 +42,6 @@ public class UserHelper {
     public boolean ifEmailExists(User user){
         User oldUser = User.find.where().eq("email", user.getEmail()).findUnique();
         return oldUser != null;
-    }
-
-
-    public boolean isSetForRegistration(User user){
-        return user.getEmail() != null && user.getPassword() != null && user.getPasswordConfirmation() != null
-                && user.getFirstName() != null && user.getLastName() != null && user.getAddress().getCity() != null
-                && user.getAddress().getCountry() != null && user.getAddress().getStreetName() != null
-                && user.getPhone() != 0 && user.getGender() != null  && user.getBirthdate() != null;
     }
 
     /**
@@ -92,7 +65,6 @@ public class UserHelper {
         byte[]   bytesEncoded = Base64.encodeBase64(token .getBytes());
         return new String(bytesEncoded );
     }
-
 
     /**
      * Gets the user.

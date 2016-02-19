@@ -14,7 +14,8 @@ import java.sql.Timestamp;
 
 
 /**
- * Created by root on 16/02/16.
+ * Created by Ejub on 16/02/16.
+ * The Reservation class is used for storing reservations.
  */
 @Entity
 @Table(name = "abh_reservation")
@@ -34,6 +35,19 @@ public class Reservation extends Model implements Validation {
     private int guestCount;
     @Column(length = 300)
     private String note;
+
+    public static Reservation.Finder<String, Reservation> find = new Model.Finder<String, Reservation>(String.class, Reservation.class);
+
+
+    /**
+     * Validates the reservation details.
+     *
+     * @return true if everything is valid
+     */
+    @Override
+    public boolean isValid() {
+        return dateTime != null;
+    }
 
     public long getReservationId() {
         return reservationId;
@@ -75,8 +89,5 @@ public class Reservation extends Model implements Validation {
         this.note = note;
     }
 
-    @Override
-    public boolean isValid() {
-        return dateTime != null;
-    }
+
 }

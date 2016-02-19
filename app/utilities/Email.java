@@ -1,19 +1,20 @@
 package utilities;
 
-/**
- * Created by Ejub on 1.2.2016.
- * Class for dealing with emails. Everything related to emails is found in this class.
- */
-
 import org.apache.commons.mail.*;
 
+/**
+ * Created by Ejub on 1.2.2016.
+ * Class Email can be used for dealing with emails.
+ * Everything related to emails is found in this class.
+ */
 public final class Email {
 
     private Email(){}
 
     /**
      * Send confirmation email to newly registered user, containing link for activation.
-     * @param emailAddress email address of user for whom the email is dedicated
+     *
+     * @param emailAddress email address of the user for whom the email is dedicated
      */
     public static void sendConfirmationEmail(String emailAddress, String link){
         String activationMailText = "<h3>Welcome to table4you.<br>" +
