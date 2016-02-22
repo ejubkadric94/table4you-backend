@@ -6,6 +6,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.Address;
 import models.Coordinates;
 import models.Restaurant;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -21,9 +24,9 @@ public class RestaurantSerializer {
      * @return the JSON string containing a serialized Restaurant
      */
     public static String serializeAllDetails(long id){
-        Restaurant restaurant = Restaurant.find.where().eq("restaurantId", id).findUnique();
-        restaurant.setCoordinates(Coordinates.find.where().eq("restaurantId", restaurant.getRestaurantId()).findUnique());
-        restaurant.setAddress(Address.find.where().eq("restaurantId", restaurant.getRestaurantId()).findUnique());
+        Restaurant restaurant = PersistenceManager.getRestaurantById(id);
+        restaurant.setCoordinates(PersistenceManager.getCoordinatesOfRestaurant(restaurant));
+        restaurant.setAddress(PersistenceManager.getAddressOfRestaurant(restaurant));
 
         ObjectNode restaurantJson = JsonNodeFactory.instance.objectNode();
         ObjectNode address = JsonNodeFactory.instance.objectNode();
@@ -59,14 +62,14 @@ public class RestaurantSerializer {
      * @return the JSON string
      */
     public static String serializeBasicDetails(int offset, int limit, String filter) {
-        List<Restaurant> restaurantList = Restaurant.find.all();
+        List<Restaurant> restaurantList = PersistenceManager.getAllRestaurantList();
 
         if(limit != 0 ){
             restaurantList = Restaurant.find.findPagedList(offset, limit).getList();
         }
         if(filter != null){
-            //TO DO
-            //restaurantList = Restaurant.find.
+            List<String> list = new ArrayList<String>(Arrays.asList(filter.split(",")));
+
         }
 
         String json = "[";

@@ -40,7 +40,7 @@ public class RestaurantController extends Controller{
      * @param filter the optional filter for restaurants
      * @return the response with all restaurants rendered as JSON
      */
-    @Security.Authenticated(UserAuthenticator.class)
+    //@Security.Authenticated(UserAuthenticator.class)
     public Result getAllRestaurants(int offset, int limit, String filter) {
         return ok(JsonSerializer.serializeAllRestaurants(offset, limit, filter));
     }

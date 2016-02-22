@@ -1,8 +1,9 @@
 package utilities;
 
-import models.Reservation;
-import models.User;
+import models.*;
 import org.apache.commons.codec.digest.DigestUtils;
+
+import java.util.List;
 
 /**
  * Created by Ejub on 08/02/16.
@@ -55,5 +56,21 @@ public class PersistenceManager {
      */
     public void createReservation(Reservation reservation) {
         reservation.save();
+    }
+
+    public static Restaurant getRestaurantById(long id){
+        return Restaurant.find.where().eq("restaurantId", id).findUnique();
+    }
+
+    public static Coordinates getCoordinatesOfRestaurant(Restaurant restaurant){
+        return Coordinates.find.where().eq("restaurantId", restaurant.getRestaurantId()).findUnique();
+    }
+
+    public static Address getAddressOfRestaurant(Restaurant restaurant){
+        return Address.find.where().eq("restaurantId", restaurant.getRestaurantId()).findUnique();
+    }
+
+    public static List<Restaurant> getAllRestaurantList(){
+        return Restaurant.find.all();
     }
 }
