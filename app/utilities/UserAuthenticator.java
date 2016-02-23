@@ -23,11 +23,11 @@ public class UserAuthenticator extends Security.Authenticator{
     public String getUsername(Http.Context ctx) {
         String token = getTokenFromHeader(ctx);
         if (token != null) {
-            Token tempToken = Token.find.where().eq("token", token).findUnique();
+            Token tempToken = PersistenceManager.getToken(token);
             if (tempToken == null) {
                 return null;
             }
-            User user = User.find.where().eq("email", tempToken.getEmail()).findUnique();
+            User user = PersistenceManager.getUserByEmail(tempToken.getEmail());
             if (user != null) {
                 return user.isConfirmed() ? user.getEmail() : null;
             }

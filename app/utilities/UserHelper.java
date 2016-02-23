@@ -4,15 +4,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import models.Token;
 import models.User;
 import org.apache.commons.codec.binary.Base64;
-import play.libs.Json;
 
 /**
  * Created by Ejub on 03/02/16.
  * Provides useful methods for manipulating User class.
  */
 public class UserHelper {
-    private User user;
-    private JsonNode json;
 
     /**
      * Default constructor for UserHelper class.
@@ -40,7 +37,7 @@ public class UserHelper {
      * @return true if user getUserFromSession, and false otherwise
      */
     public boolean ifEmailExists(User user){
-        User oldUser = User.find.where().eq("email", user.getEmail()).findUnique();
+        User oldUser = PersistenceManager.getUserByEmail(user.getEmail());
         return oldUser != null;
     }
 
@@ -66,23 +63,6 @@ public class UserHelper {
         return new String(bytesEncoded );
     }
 
-    /**
-     * Gets the user.
-     *
-     * @return the user object
-     */
-    public User getUser() {
-        return user;
-    }
-
-    /**
-     * Sets the user.
-     *
-     * @param user the user object to be set.
-     */
-    public void setUser(User user) {
-        this.user = user;
-    }
 }
 
 

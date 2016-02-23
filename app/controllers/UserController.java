@@ -4,6 +4,7 @@ import models.User;
 import play.mvc.*;
 import utilities.*;
 import play.mvc.BodyParser;
+import utilities.Error;
 
 /**
  * Created by Ejub on 31.1.2016.
@@ -25,13 +26,13 @@ public class UserController extends Controller {
         User user = (User) JsonSerializer.deserialize(request(), User.class);
 
         if(!user.isValid()){
-            return badRequest(JsonSerializer.serializeError(Resources.BAD_REQUEST_INVALID_DATA));
+            return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_INVALID_DATA)));
         }
         if(userHelper.ifEmailExists(user)){
-            return badRequest(JsonSerializer.serializeError(Resources.BAD_REQUEST_EMAIL_EXISTS));
+            return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_EMAIL_EXISTS)));
         }
         manager.createUser(user);
-        return ok(JsonSerializer.serializeToken(user.getAuthToken().getToken()));
+        return ok(JsonSerializer.serializeObject(user.getAuthToken()));
     }
 
     /**
@@ -45,9 +46,9 @@ public class UserController extends Controller {
     public Result confirm(String registrationToken){
         User user = new User(registrationToken);
         if(!user.confirmUser(registrationToken)) {
-            return badRequest(JsonSerializer.serializeError(Resources.BAD_REQUEST_WRONG_CONFIRMATION_TOKEN));
+            return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_WRONG_CONFIRMATION_TOKEN)));
         }
-        return ok(JsonSerializer.serializeToken(user.getAuthToken().getToken()));
+        return ok(JsonSerializer.serializeObject(user.getAuthToken()));
     }
 
     /**
@@ -60,12 +61,12 @@ public class UserController extends Controller {
         UserSession userSession = (UserSession) JsonSerializer.deserialize(request(), UserSession.class);
 
         if(!userSession.isValid()){
-            return badRequest(JsonSerializer.serializeError(Resources.BAD_REQUEST_INVALID_DATA));
+            return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_INVALID_DATA)));
         }
         User user = manager.getUserFromSession(userSession);
         if(user == null){
-            return unauthorized(JsonSerializer.serializeError(Resources.UNAUTHORIZED_INPUT_DOES_NOT_MATCH));
+            return unauthorized(JsonSerializer.serializeObject(new Error(Resources.UNAUTHORIZED_INPUT_DOES_NOT_MATCH)));
         }
-        return ok(JsonSerializer.serializeToken(user.getAuthToken().getToken()));
+        return ok(JsonSerializer.serializeObject(user.getAuthToken()));
     }
 }

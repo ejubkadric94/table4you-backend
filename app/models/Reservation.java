@@ -1,6 +1,7 @@
 package models;
 
 import com.avaje.ebean.Model;
+import com.avaje.ebean.annotation.Expose;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -23,13 +24,11 @@ public class Reservation extends Model implements Validation {
     @Id
     @Column(name = "reservationId", columnDefinition = "BIGINT")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @JsonIgnore
     private long reservationId;
     @Column(name = "restaurantId", columnDefinition = "BIGINT")
     private long restaurantId;
     @Column(name = "dateTime" , columnDefinition = "DATETIME")
     @JsonFormat(pattern = "dd/mm/yyyy HH:mm:ss")
-    @Formats.DateTime( pattern = "dd/mm/yyyy HH:mm:ss")
     private Timestamp dateTime;
     @Column(name = "guestCount")
     private int guestCount;
@@ -44,10 +43,12 @@ public class Reservation extends Model implements Validation {
      *
      * @return true if everything is valid
      */
+
     @Override
     public boolean isValid() {
         return dateTime != null;
     }
+
 
     public long getReservationId() {
         return reservationId;
@@ -64,6 +65,7 @@ public class Reservation extends Model implements Validation {
     public void setRestaurantId(long restaurantId) {
         this.restaurantId = restaurantId;
     }
+
 
     public Timestamp getDateTime() {
         return dateTime;

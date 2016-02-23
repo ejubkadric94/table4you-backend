@@ -1,6 +1,7 @@
 package models;
 
 import com.avaje.ebean.Model;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -70,6 +71,7 @@ public class Address extends Model{
         this.streetName = streetName;
     }
 
+    @JsonIgnore
     public long getRestaurantId() {
         return restaurantId;
     }

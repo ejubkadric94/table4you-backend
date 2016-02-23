@@ -1,6 +1,8 @@
 package models;
 
 import com.avaje.ebean.Model;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,7 +24,7 @@ public class Coordinates extends Model {
 
     public static Model.Finder<String, Coordinates> find = new Model.Finder<String, Coordinates>(String.class, Coordinates.class);
 
-
+    @JsonIgnore
     public long getRestaurantId() {
         return restaurantId;
     }

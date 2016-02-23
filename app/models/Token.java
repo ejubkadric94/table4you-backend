@@ -2,6 +2,7 @@ package models;
 
 import com.avaje.ebean.Model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 import play.data.format.Formats;
 
@@ -72,6 +73,7 @@ public class Token extends Model {
         this.email = email;
     }
 
+    @JsonIgnore
     public Date getExpirationDate() {
         return expirationDate;
     }

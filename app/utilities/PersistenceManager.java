@@ -1,5 +1,6 @@
 package utilities;
 
+import com.avaje.ebean.Model;
 import models.*;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -55,6 +56,7 @@ public class PersistenceManager {
      * @param reservation the reservation to be saved
      */
     public void createReservation(Reservation reservation) {
+        System.out.println(reservation.getRestaurantId());
         reservation.save();
     }
 
@@ -72,5 +74,45 @@ public class PersistenceManager {
 
     public static List<Restaurant> getAllRestaurantList(){
         return Restaurant.find.all();
+    }
+
+    public static List<Restaurant> getPagedList(int offset, int limit){
+        return Restaurant.find.findPagedList(offset, limit).getList();
+    }
+
+    public static User getUserByEmail(String email) {
+        return User.find.where().eq("email", email).findUnique();
+    }
+
+    public static Token getToken(String token){
+        return Token.find.where().eq("token", token).findUnique();
+    }
+
+    public static Reservation getReservation(long id){
+        return Reservation.find.where().eq("reservationId", id).findUnique();
+    }
+
+    public static List<Restaurant> getAllRestaurants(int offset, int limit, String filter,String order){
+        List<Restaurant> list = Restaurant.find.all();
+
+        if(limit != 0 && order != null){
+            if(order.contains("-")){
+                order.replace("-", "");
+                list = Restaurant.find.where().orderBy(order + " desc").findPagedList(offset, limit).getList();
+            } else{
+                list = Restaurant.find.where().orderBy(order + " asc").findPagedList(offset, limit).getList();
+            }
+        } else if (order != null){
+            if(order.contains("-")){
+                order = order.replace("-", "");
+                list = Restaurant.find.where().orderBy(order + " desc").findList();
+            } else{
+                list = Restaurant.find.where().orderBy(order + " asc").findList();
+            }
+        } else if (limit != 0) {
+            list = Restaurant.find.findPagedList(offset, limit).getList();
+        }
+
+        return list;
     }
 }

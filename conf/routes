@@ -12,7 +12,7 @@ POST    /v1/login                                               controllers.User
 
 # Restaurants
 GET     /v1/restaurants/:id                                     controllers.RestaurantController.getRestaurantDetails(id: Integer)
-GET     /v1/restaurants                                         controllers.RestaurantController.getAllRestaurants(offset: Int ?= 0, limit: Int ?= 0, filter: String ?= null)
+GET     /v1/restaurants                                         controllers.RestaurantController.getAllRestaurants(offset: Int ?= 0, limit: Int ?= 0, filter: String ?= null, order: String ?= null)
 
 # Reservations
 POST    /v1/restaurants/:id/reservations                        controllers.RestaurantController.makeReservation(id: Integer)

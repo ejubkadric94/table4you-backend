@@ -1,7 +1,8 @@
 package models;
 
 import com.avaje.ebean.Model;
-
+import com.fasterxml.jackson.annotation.JsonView;
+import utilities.RestaurantViews;
 import javax.persistence.*;
 
 /**
@@ -10,28 +11,39 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "abh_restaurant")
-public class Restaurant extends Model {
+public class Restaurant extends Model{
     @Id
     @Column(name = "restaurantId", columnDefinition = "BIGINT")
+    @JsonView(RestaurantViews.BasicDetails.class)
     private long restaurantId;
     @Column(length = 100)
+    @JsonView(RestaurantViews.BasicDetails.class)
     private String name;
+
 
     @OneToOne
     @PrimaryKeyJoinColumn(referencedColumnName = "restaurantId")
+    @JsonView(RestaurantViews.BasicDetails.class)
     private Address address;
+
     @OneToOne
     @PrimaryKeyJoinColumn(referencedColumnName = "restaurantId")
+    @JsonView(RestaurantViews.AllDetails.class)
     private Coordinates coordinates;
 
     @Column(columnDefinition = "BIGINT")
+    @JsonView(RestaurantViews.BasicDetails.class)
     private long phone;
     @Column(name = "workingHours",length = 20)
+    @JsonView(RestaurantViews.BasicDetails.class)
     private String workingHours;
+    @JsonView(RestaurantViews.BasicDetails.class)
     private double rating;
     @Column(name = "reservationPrice")
+    @JsonView(RestaurantViews.AllDetails.class)
     private double reservationPrice;
     @Column(length = 200)
+    @JsonView(RestaurantViews.AllDetails.class)
     private String deals;
 
     public static Model.Finder<String, Restaurant> find = new Model.Finder<String, Restaurant>(String.class, Restaurant.class);
@@ -107,4 +119,6 @@ public class Restaurant extends Model {
     public void setDeals(String deals) {
         this.deals = deals;
     }
+
+
 }

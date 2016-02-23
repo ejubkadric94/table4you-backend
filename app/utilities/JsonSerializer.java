@@ -1,7 +1,9 @@
 package utilities;
 
-import com.google.gson.*;
-import models.Restaurant;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.google.gson.Gson;
 import play.libs.Json;
 import play.mvc.Http.Request;
 
@@ -24,61 +26,38 @@ public class JsonSerializer {
         return Json.fromJson(request.body().asJson(), classname);
     }
 
-    /**
-     * Serializes the error message.
-     *
-     * @param error the String containing the error
-     * @return the JSON Object containing error
-     */
-    public static String serializeError(String error){
-        JsonObject object = new JsonObject();
-        object.addProperty("error", error);
-        return new Gson().toJson(object);
+    public static String serializeObject(Object object){
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String json = null;
+        try {
+            json = ow.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return json;
     }
 
-    /**
-     * Serializes the reservation.
-     *
-     * @param reservationId the reservationdId of a Reservation object
-     * @return the JSON Object containing reservationId
-     */
-    public static String serializeReservation(long reservationId){
-        JsonObject object = new JsonObject();
-        object.addProperty("reservationId", reservationId);
-        return new Gson().toJson(object);
+    public static String serializeBasicRestaurantDetails(Object object) {
+        ObjectMapper mapper = new ObjectMapper();
+        String result = null;
+        try {
+            result = mapper.writerWithView(RestaurantViews.BasicDetails.class).withDefaultPrettyPrinter().
+                    writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
-    /**
-     * Serializes the authentication token.
-     *
-     * @param token the authentication token
-     * @return the JSON Object containing authentication token
-     */
-    public static String serializeToken(String token){
-        JsonObject object = new JsonObject();
-        object.addProperty("authToken", token);
-        return new Gson().toJson(object);
-    }
-
-    /**
-     * Serializes the restaurant details.
-     *
-     * @param restaurant the Restaurant to be serialized
-     * @return the JSON containing restaurant details
-     */
-    public static String serializeRestaurantDetails(Restaurant restaurant) {
-        return RestaurantSerializer.serializeAllDetails(restaurant.getRestaurantId());
-    }
-
-    /**
-     * Serializes all Restaurant objects.
-     *
-     * @param offset the value used for pagination offset
-     * @param limit the value used for pagination limit
-     * @param filter the filters string
-     * @return the JSON containing restaurants
-     */
-    public static String serializeAllRestaurants(int offset, int limit, String filter){
-        return RestaurantSerializer.serializeBasicDetails(offset, limit, filter);
+    public static String serializeAllRestaurantDetails(Object object) {
+        ObjectMapper mapper = new ObjectMapper();
+        String result = null;
+        try {
+            result = mapper.writerWithView(RestaurantViews.AllDetails.class).withDefaultPrettyPrinter().
+                    writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }

@@ -43,6 +43,10 @@ create table abh_restaurant (
   constraint pk_abh_restaurant primary key (restaurantId))
 ;
 
+create table test (
+  a                         integer)
+;
+
 create table abh_user_token (
   userEmail                 VARCHAR(80) DEFAULT 'test@test.com' not null,
   token                     varchar(200),
@@ -89,6 +93,8 @@ drop table abh_coordinates;
 drop table abh_reservation;
 
 drop table abh_restaurant;
+
+drop table test;
 
 drop table abh_user_token;
 
