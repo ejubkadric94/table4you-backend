@@ -45,6 +45,8 @@ public class Restaurant extends Model{
     @Column(length = 200)
     @JsonView(RestaurantViews.AllDetails.class)
     private String deals;
+    @JsonView(RestaurantViews.BasicDetails.class)
+    private String image;
 
     public static Model.Finder<String, Restaurant> find = new Model.Finder<String, Restaurant>(String.class, Restaurant.class);
 
@@ -120,5 +122,11 @@ public class Restaurant extends Model{
         this.deals = deals;
     }
 
+    public String getImage() {
+        return image;
+    }
 
+    public void setImage(String image) {
+        this.image = image;
+    }
 }

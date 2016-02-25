@@ -38,13 +38,10 @@ create table abh_restaurant (
   rating                    double,
   reservationPrice          double,
   deals                     varchar(200),
+  image                     varchar(255),
   constraint uq_abh_restaurant_address_userEmail unique (address_userEmail),
   constraint uq_abh_restaurant_coordinates_restaurantId unique (coordinates_restaurantId),
   constraint pk_abh_restaurant primary key (restaurantId))
-;
-
-create table test (
-  a                         integer)
 ;
 
 create table abh_user_token (
@@ -93,8 +90,6 @@ drop table abh_coordinates;
 drop table abh_reservation;
 
 drop table abh_restaurant;
-
-drop table test;
 
 drop table abh_user_token;
 

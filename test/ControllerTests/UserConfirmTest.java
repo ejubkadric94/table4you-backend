@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
  * Created by root on 11/02/16.
  */
 public class UserConfirmTest {
-/*
+
     @BeforeClass
     public static void prepareUser() {
         running(fakeApplication(),()-> {
@@ -86,5 +86,5 @@ public class UserConfirmTest {
             user.getAuthToken().delete();
         });
     }
-*/
+
 }

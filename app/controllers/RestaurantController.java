@@ -25,9 +25,8 @@ public class RestaurantController extends Controller{
      * @param id the restaurantId
      * @return Returns a response with restaurant details rendered as JSON
      */
-    //@Security.Authenticated(UserAuthenticator.class)
     public Result getRestaurantDetails(int id) {
-        Restaurant restaurant = RestaurantHelper.getRestaurantById(id);
+        Restaurant restaurant = PersistenceManager.getRestaurantById(id);
         if(restaurant == null){
             return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_NO_RESTAURANT)));
         }
@@ -43,10 +42,11 @@ public class RestaurantController extends Controller{
      * @param filter the optional filter for restaurants
      * @return the response with all restaurants rendered as JSON
      */
-    //@Security.Authenticated(UserAuthenticator.class)
     public Result getAllRestaurants(int offset, int limit, String filter,String order) {
+        if(!RestaurantHelper.validateRestaurantUrlParameters(filter, order)){
+            return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_INVALID_PARAMETERS)));
+        }
         List<Restaurant> restaurantList = PersistenceManager.getAllRestaurants(offset, limit, filter, order);
-
         return ok(JsonSerializer.serializeBasicRestaurantDetails(restaurantList));
     }
 
@@ -59,14 +59,14 @@ public class RestaurantController extends Controller{
      * @param id the restaurantId of a restaurant
      * @return the response containing reservation Id
      */
-    //@Security.Authenticated(UserAuthenticator.class)
+    @Security.Authenticated(UserAuthenticator.class)
     public Result makeReservation(int id){
         Reservation reservation = (Reservation) JsonSerializer.deserialize(request(), Reservation.class);
         if(reservation == null || !reservation.isValid()) {
-            //return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_INVALID_DATA)));
+            return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_INVALID_DATA)));
         }
 
-        Restaurant restaurant = RestaurantHelper.getRestaurantById(id);
+        Restaurant restaurant = PersistenceManager.getRestaurantById(id);
         if(restaurant == null){
             return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_NO_RESTAURANT)));
         }

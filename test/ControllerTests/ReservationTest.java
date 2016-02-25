@@ -55,7 +55,6 @@ public class ReservationTest {
                     .put("note", "None");
 
             Token token = Token.find.where().eq("userEmail", "test@testtest.com").findUnique();
-            if(token == null) System.out.println("NECE");
 
             Http.RequestBuilder rb = new Http.RequestBuilder().method(POST).uri("/v1/restaurants/1601994/reservations").
                     bodyJson(json).header("USER-ACCESS-TOKEN", token.getToken());

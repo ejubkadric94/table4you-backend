@@ -4,7 +4,9 @@ import com.avaje.ebean.Model;
 import models.*;
 import org.apache.commons.codec.digest.DigestUtils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Ejub on 08/02/16.
@@ -64,22 +66,6 @@ public class PersistenceManager {
         return Restaurant.find.where().eq("restaurantId", id).findUnique();
     }
 
-    public static Coordinates getCoordinatesOfRestaurant(Restaurant restaurant){
-        return Coordinates.find.where().eq("restaurantId", restaurant.getRestaurantId()).findUnique();
-    }
-
-    public static Address getAddressOfRestaurant(Restaurant restaurant){
-        return Address.find.where().eq("restaurantId", restaurant.getRestaurantId()).findUnique();
-    }
-
-    public static List<Restaurant> getAllRestaurantList(){
-        return Restaurant.find.all();
-    }
-
-    public static List<Restaurant> getPagedList(int offset, int limit){
-        return Restaurant.find.findPagedList(offset, limit).getList();
-    }
-
     public static User getUserByEmail(String email) {
         return User.find.where().eq("email", email).findUnique();
     }
@@ -88,14 +74,29 @@ public class PersistenceManager {
         return Token.find.where().eq("token", token).findUnique();
     }
 
-    public static Reservation getReservation(long id){
-        return Reservation.find.where().eq("reservationId", id).findUnique();
-    }
-
     public static List<Restaurant> getAllRestaurants(int offset, int limit, String filter,String order){
         List<Restaurant> list = Restaurant.find.all();
 
-        if(limit != 0 && order != null){
+        if(order != null && filter != null && limit != 0){
+            Map<String, String> filtersMap = RestaurantHelper.getFiltersMap(filter);
+            if(order.contains("-")){
+                order.replace("-", "");
+                list = Restaurant.find.where().allEq((Map)filtersMap).orderBy(order + " desc").findPagedList(offset, limit).getList();
+            } else{
+                list = Restaurant.find.where().allEq((Map)filtersMap).orderBy(order + " asc").findPagedList(offset, limit).getList();
+            }
+        } else if (order != null && filter != null){
+            Map<String, String> filtersMap = RestaurantHelper.getFiltersMap(filter);
+            if(order.contains("-")){
+                order.replace("-", "");
+                list = Restaurant.find.where().allEq((Map)filtersMap).orderBy(order + " desc").findList();
+            } else{
+                list = Restaurant.find.where().allEq((Map)filtersMap).orderBy(order + " asc").findList();
+            }
+        } else if(limit != 0 && filter != null){
+            Map<String, String> filtersMap = RestaurantHelper.getFiltersMap(filter);
+            list = Restaurant.find.where().allEq((Map)filtersMap).findPagedList(offset, limit).getList();
+        } else if(limit != 0 && order != null){
             if(order.contains("-")){
                 order.replace("-", "");
                 list = Restaurant.find.where().orderBy(order + " desc").findPagedList(offset, limit).getList();
@@ -105,12 +106,16 @@ public class PersistenceManager {
         } else if (order != null){
             if(order.contains("-")){
                 order = order.replace("-", "");
-                list = Restaurant.find.where().orderBy(order + " desc").findList();
+                list = Restaurant.find.order(order + " desc").findList();
+
             } else{
-                list = Restaurant.find.where().orderBy(order + " asc").findList();
+                list = Restaurant.find.order(order + " asc").findList();
             }
         } else if (limit != 0) {
             list = Restaurant.find.findPagedList(offset, limit).getList();
+        } else if (filter != null) {
+            Map<String, String> filtersMap = RestaurantHelper.getFiltersMap(filter);
+            list = Restaurant.find.where().allEq((Map)filtersMap).findList();
         }
 
         return list;

@@ -46,7 +46,11 @@ public class Reservation extends Model implements Validation {
 
     @Override
     public boolean isValid() {
-        return dateTime != null;
+        System.out.println(reservationId);
+        System.out.println(restaurantId);
+        System.out.println(dateTime);
+        System.out.println(guestCount);
+        return dateTime == null && restaurantId != 0 && guestCount != 0;
     }
 
 

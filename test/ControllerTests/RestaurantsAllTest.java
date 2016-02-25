@@ -14,7 +14,7 @@ import static play.test.Helpers.*;
  * Created by root on 18/02/16.
  */
 public class RestaurantsAllTest {
-    /*
+
     @BeforeClass
     public static void prepareRestaurant() {
         running(fakeApplication(),()-> {
@@ -54,5 +54,5 @@ public class RestaurantsAllTest {
             token.delete();
         });
     }
-    */
+
 }
