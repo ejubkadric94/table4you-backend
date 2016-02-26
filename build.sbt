@@ -34,3 +34,6 @@ libraryDependencies += "com.fasterxml.jackson.core" % "jackson-core" % "2.7.1"
 // other, legacy style, accesses its actions statically.
 routesGenerator := InjectedRoutesGenerator
 lazy val myProject = (project in file(".")).enablePlugins(PlayJava, PlayEbean)
+
+jacoco.settings
+parallelExecution in jacoco.Config := false
