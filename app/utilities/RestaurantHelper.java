@@ -29,8 +29,6 @@ public class RestaurantHelper {
             }
             Map<String, String> filtersMap = RestaurantHelper.getFiltersMap(filter);
             for(String key : filtersMap.keySet()){
-                System.out.println("KEY IS "+key);
-                System.out.println(key);
                 returnValue = key.contains("name") || key.contains("rating") || key.contains("reservationPrice") ||
                         key.contains("streetName") || key.contains("city") || key.contains("country");
             }
@@ -42,7 +40,6 @@ public class RestaurantHelper {
         } else if(filter != null){
             Map<String, String> filtersMap = RestaurantHelper.getFiltersMap(filter);
             for(String key : filtersMap.keySet()){
-                System.out.println(key);
                 return key.contains("name") || key.contains("rating") || key.contains("reservationPrice") ||
                         key.contains("streetName") || key.contains("city") || key.contains("country");
             }
