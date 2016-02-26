@@ -7,20 +7,29 @@ import play.mvc.Result;
 import play.mvc.Security;
 
 /**
- * Created by test on 02/02/16.
+ * Created by Ejub on 02/02/16.
+ * Class UserAuthenticator can be used to protect specific routes by checking if user is authenticated.
  */
 public class UserAuthenticator extends Security.Authenticator{
+    /**
+     * Retrieves the user out of the http context.
+     * Method firstly checks if authentication token found in context is valid, and whether it matches to a single user.
+     * It also checks if user is confirmed.
+     *
+     * @param ctx the http context
+     * @return the user is returned if token is valid and if user is confirmed
+     */
     @Override
     public String getUsername(Http.Context ctx) {
         String token = getTokenFromHeader(ctx);
         if (token != null) {
-            Token tempToken = Token.find.where().eq("token", token).findUnique();
+            Token tempToken = PersistenceManager.getToken(token);
             if (tempToken == null) {
                 return null;
             }
-            User user = User.find.where().eq("email", tempToken.getEmail()).findUnique();
+            User user = PersistenceManager.getUserByEmail(tempToken.getEmail());
             if (user != null) {
-                return user.getEmail();
+                return user.isConfirmed() ? user.getEmail() : null;
             }
             if(!user.isConfirmed()) {
                 return null;
@@ -34,8 +43,14 @@ public class UserAuthenticator extends Security.Authenticator{
         return super.onUnauthorized(context);
     }
 
+    /**
+     * Retrieves the authentication token from http context.
+     *
+     * @param ctx the http context
+     * @return the authentication token
+     */
     private String getTokenFromHeader(Http.Context ctx) {
-        String[] authTokenHeaderValues = ctx.request().headers().get("X-AUTH-TOKEN");
+        String[] authTokenHeaderValues = ctx.request().headers().get("USER-ACCESS-TOKEN");
         if ((authTokenHeaderValues != null) && (authTokenHeaderValues.length == 1) && (authTokenHeaderValues[0] != null)) {
             return authTokenHeaderValues[0];
         }

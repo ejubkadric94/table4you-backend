@@ -1,6 +1,11 @@
-name := """table4you"""
+import com.github.play2war.plugin._
+
+name := "table4you"
 
 version := "1.0-SNAPSHOT"
+Play2WarPlugin.play2WarSettings
+
+Play2WarKeys.servletVersion := "3.1"
 
 lazy val root = (project in file(".")).enablePlugins(PlayJava)
 
@@ -20,12 +25,12 @@ libraryDependencies += "joda-time" % "joda-time" % "2.9.2"
 libraryDependencies += "commons-codec" % "commons-codec" % "1.10"
 libraryDependencies += "commons-validator" % "commons-validator" % "1.5.0"
 libraryDependencies += "com.google.code.gson" % "gson" % "2.5"
-
+libraryDependencies += "org.mockito" % "mockito-all" % "1.10.19"
+libraryDependencies += "org.apache.commons" % "commons-lang3" % "3.4"
+libraryDependencies += "com.fasterxml.jackson.core" % "jackson-core" % "2.7.1"
 
 
 // Play provides two styles of routers, one expects its actions to be injected, the
 // other, legacy style, accesses its actions statically.
 routesGenerator := InjectedRoutesGenerator
 lazy val myProject = (project in file(".")).enablePlugins(PlayJava, PlayEbean)
-
-jacoco.settings

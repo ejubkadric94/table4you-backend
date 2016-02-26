@@ -1,20 +1,21 @@
 package models;
 
 import com.avaje.ebean.Model;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
 /**
  * Created by Ejub on 04/02/16.
- * Class Address represents abh_user_address table from database.
- * It contains all needed fields and methods needed for their manipulation.
+ * Contains the address manipulation data for users and restaurant.
  */
-
 @Entity
 @Table(name = "abh_user_address")
 public class Address extends Model{
     @Id
     @Column(name="userEmail", columnDefinition = "VARCHAR(80) DEFAULT 'test@test.com'")
+    @JsonIgnore
     private String email;
     @Column(name = "streetName", length = 100)
     private String streetName;
@@ -23,10 +24,17 @@ public class Address extends Model{
     @Column(length = 100)
     private String country;
 
+    @Column(name = "restaurantId", columnDefinition = "BIGINT")
+    private long restaurantId;
+
     public Address(Address address){
         this.streetName = address.streetName;
         this.city = address.city;
         this.country = address.country;
+    }
+
+    public Address() {
+
     }
 
     public static Model.Finder<String, Address> find = new Model.Finder<String, Address>(String.class, Address.class);
@@ -61,6 +69,15 @@ public class Address extends Model{
 
     public void setStreetName(String streetName) {
         this.streetName = streetName;
+    }
+
+    @JsonIgnore
+    public long getRestaurantId() {
+        return restaurantId;
+    }
+
+    public void setRestaurantId(long restaurantId) {
+        this.restaurantId = restaurantId;
     }
 }
 

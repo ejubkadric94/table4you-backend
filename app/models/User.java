@@ -2,17 +2,12 @@ package models;
 
 /**
  * Created by Ejub on 31.1.2016.
- * Class User represents and defines table abh_user in database.
- * It contains multiple instance variable which represent the basic information about the user.
- * Instance variable address references abh_user_address table.
- * Instance variable authToken references abh_user_token table.
+ * Class User can be used to store and manipulate users.
  */
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import org.apache.commons.codec.digest.DigestUtils;
 import play.data.validation.Constraints;
 import utilities.UserHelper;
 import utilities.Validation;
@@ -42,7 +37,8 @@ public class User extends com.avaje.ebean.Model implements Validation {
     @OneToOne
     @PrimaryKeyJoinColumn(referencedColumnName = "userEmail")
     private Address address;
-    private int phone;
+    @Column(columnDefinition = "BIGINT")
+    private long phone;
     @Column(length = 6)
     private String gender;
     @Column(columnDefinition = "date")
@@ -50,13 +46,14 @@ public class User extends com.avaje.ebean.Model implements Validation {
     private Date birthdate;
     @OneToOne
     @PrimaryKeyJoinColumn(referencedColumnName = "userEmail")
+    @JsonIgnore
     private Token authToken;
     @Column(name = "isConfirmed")
     @JsonIgnore
     private boolean isConfirmed;
 
 
-    public User(JsonNode json){
+    public User(){
     }
 
     public User(String decodedToken){
@@ -97,12 +94,9 @@ public class User extends com.avaje.ebean.Model implements Validation {
      * @return true if email and password match, false otherwise
      */
     public boolean isValidLoginInfo(){
-        User user = User.find.where().eq("email", email).eq("password", DigestUtils.md5Hex(password)).findUnique();
-        return user == null;
+        User user = User.find.where().eq("email", email).findUnique();
+        return this.password.equals(user.password);
     }
-
-
-
 
 
     public String getEmail() {
@@ -113,11 +107,11 @@ public class User extends com.avaje.ebean.Model implements Validation {
         this.email = email;
     }
 
-    public int getPhone() {
+    public long getPhone() {
         return phone;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(long phone) {
         this.phone = phone;
     }
 
@@ -193,16 +187,21 @@ public class User extends com.avaje.ebean.Model implements Validation {
         this.passwordConfirmation = passwordConfirmation;
     }
 
+    /**
+     * Validates the user information.
+     *
+     * @return true if everything is valid, and false otherwise
+     */
     @Override
     public boolean isValid() {
-        if(email == null || firstName == null ||  lastName == null || gender == null){
+        if(password == null || passwordConfirmation == null || firstName == null || lastName == null || address == null
+                || phone == 0 || gender == null || birthdate == null){
             return false;
         }
         if(validateEmail(getEmail()) && validateFirstName(getFirstName()) && validateLastName(getLastName())
-                && validateGender(getGender()) && validatePasswords()){
+                && validateGender(getGender()) && validatePasswords() ){
             return true;
         }
-
         return false;
     }
 

@@ -3,15 +3,7 @@ package utilities;
 import com.fasterxml.jackson.databind.JsonNode;
 import models.Token;
 import models.User;
-
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.digest.DigestUtils;
-import play.libs.Json;
-
 
 /**
  * Created by Ejub on 03/02/16.
@@ -19,41 +11,24 @@ import play.libs.Json;
  */
 public class UserHelper {
 
-    private User user;
-    private JsonNode json;
-
-
-    public UserHelper() {
-
-    }
-
     /**
-     * Constructs the class with a JsonNode object.
-     *
-     * @param json the json containing all the info about user
+     * Default constructor for UserHelper class.
      */
-    public UserHelper(JsonNode json){
-        user = Json.fromJson(json, User.class);
-        this.json = json;
+    public UserHelper() {
     }
-
 
     /**
      * Creates a token object and initializes it.
-     * Authentication authToken is created randomly and expiration day is set to one day ahead.
-     *
-     * @return true if successful, false if unsuccessful
+     * Authentication token is created randomly and expiration day is set to one day ahead.
      */
-    public boolean initializeUser(User user){
+    public static void initializeUser(User user){
         if(user != null){
             user.setAuthToken(new Token());
             user.getAuthToken().generateToken();
             user.getAuthToken().setEmail(user.getEmail());
             user.getAddress().setEmail(user.getEmail());
             user.setConfirmed(false);
-            return true;
         }
-        return false;
     }
 
     /**
@@ -62,7 +37,7 @@ public class UserHelper {
      * @return true if user getUserFromSession, and false otherwise
      */
     public boolean ifEmailExists(User user){
-        User oldUser = User.find.where().eq("email", user.getEmail()).findUnique();
+        User oldUser = PersistenceManager.getUserByEmail(user.getEmail());
         return oldUser != null;
     }
 
@@ -88,24 +63,6 @@ public class UserHelper {
         return new String(bytesEncoded );
     }
 
-
-    /**
-     * Gets the user.
-     *
-     * @return the user object
-     */
-    public User getUser() {
-        return user;
-    }
-
-    /**
-     * Sets the user.
-     *
-     * @param user the user object to be set.
-     */
-    public void setUser(User user) {
-        this.user = user;
-    }
 }
 
 

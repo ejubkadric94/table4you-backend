@@ -1,85 +1,73 @@
 package controllers;
 
-/**
- * Created by Ejub on 31.1.2016.
- */
-
-import com.google.gson.Gson;
 import models.User;
-import play.libs.Json;
 import play.mvc.*;
 import utilities.*;
-import utilities.Error;
-import views.html.*;
 import play.mvc.BodyParser;
+import utilities.Error;
 
 /**
- * Controller for User model.
+ * Created by Ejub on 31.1.2016.
+ * Controller for User routes.
+ * Routes specified in this controller do not require authentication.
  */
 public class UserController extends Controller {
-    /**
-     * Registers the user after validating the input.
-     *
-     * @return the authorization authToken in JSON format
-     */
     private PersistenceManager manager = new PersistenceManager();
     private UserHelper userHelper = new UserHelper();
 
-
+    /**
+     * Registers the user after validating the input.
+     * If validation fails, a suitable error will be returned as response.
+     *
+     * @return the authorization authToken of newly registered user in JSON format
+     */
     @BodyParser.Of(BodyParser.Json.class)
     public Result register() {
-        User user = Json.fromJson(request().body().asJson(), User.class);
-
-        if(userHelper.ifEmailExists(user)){
-            return badRequest(new Gson().toJson(new Error(Resources.BAD_REQUEST_EMAIL_EXISTS)));
-        }
-        if(!userHelper.initializeUser(user)){
-            return badRequest(new Gson().toJson(new Error(Resources.BAD_REQUEST_COULD_NOT_INITIALIZE)));
-        }
+        response().setContentType("application/json");
+        User user = (User) JsonSerializer.deserialize(request(), User.class);
         if(!user.isValid()){
-            return badRequest(new Gson().toJson(new Error(Resources.BAD_REQUEST_INVALID_DATA)));
+            return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_INVALID_DATA)));
         }
-
+        if(userHelper.ifEmailExists(user)){
+            return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_EMAIL_EXISTS)));
+        }
         manager.createUser(user);
-        return ok(jsonOutput.render(new Gson().toJson(new TokenHelper(user.getAuthToken().getToken()))));
+        return ok(JsonSerializer.serializeObject(user.getAuthToken()));
     }
 
     /**
      * Confirms the user with specified registration token.
-     * Method checks if specified token is valid, and if it is, the user is confirmed.
+     * Method decodes the token, and checks if specified token is valid, and if it is, the user is confirmed,
+     * and otherwise, a suitable error is returned as response.
      *
      * @param registrationToken The encoded registration token
-     * @return The authorization token in JSON format, or badRequest if token is not valid.
+     * @return the authorization token in JSON format
      */
     public Result confirm(String registrationToken){
+        response().setContentType("application/json");
         User user = new User(registrationToken);
         if(!user.confirmUser(registrationToken)) {
-            return badRequest(new Gson().toJson(new Error(Resources.BAD_REQUEST_WRONG_CONFIRMATION_TOKEN)));
+            return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_WRONG_CONFIRMATION_TOKEN)));
         }
-
-        return ok(jsonOutput.render(new Gson().toJson(new TokenHelper(user.getAuthToken().getToken()))));
+        return ok(JsonSerializer.serializeObject(user.getAuthToken()));
     }
 
     /**
      * Provides the authToken when user logs in.
-     * If the input information are related to existing user, and if information is valid, the authToken will be
-     * returned.
+     * Method validates the input, and if the input is not valid, a suitable error will be returned as response.
      *
-     * @return JSON which contains authToken is returned if successful.
+     * @return the authorization token in JSON format
      */
     public Result login(){
-         UserSession userSession = play.libs.Json.fromJson(request().body().asJson(), UserSession.class);
-
+        response().setContentType("application/json");
+        UserSession userSession = (UserSession) JsonSerializer.deserialize(request(), UserSession.class);
+        if(!userSession.isValid()){
+            return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_INVALID_DATA)));
+        }
         User user = manager.getUserFromSession(userSession);
-
         if(user == null){
-            return unauthorized(new Gson().toJson(new Error(Resources.UNAUTHORIZED_NO_EMAIL)));
+            return unauthorized(JsonSerializer.serializeObject(new Error(Resources.UNAUTHORIZED_INPUT_DOES_NOT_MATCH)));
         }
-        if( !user.isValidLoginInfo()) {
-            return unauthorized(new Gson().toJson(new Error(Resources.UNAUTHORIZED_INPUT_DOES_NOT_MATCH)));
-        }
-
-        return ok(jsonOutput.render(new Gson().toJson(new TokenHelper(user.getAuthToken().getToken()))));
+        return ok(JsonSerializer.serializeObject(user.getAuthToken()));
     }
 }
-

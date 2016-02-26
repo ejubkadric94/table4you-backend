@@ -2,6 +2,7 @@ package models;
 
 import com.avaje.ebean.Model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 import play.data.format.Formats;
 
@@ -12,8 +13,7 @@ import java.util.UUID;
 
 /**
  * Created by Ejub on 04/02/16.
- * Class Token represents abh_user_token table from database.
- * It contains all needed fields and methods needed for their manipulation.
+ * Class Token is used for manipulating and storing tokens which are necessary for authentication.
  */
 @Entity
 @Table(name = "abh_user_token")
@@ -22,7 +22,6 @@ public class Token extends Model {
     @Column(name="userEmail", columnDefinition = "VARCHAR(80) DEFAULT 'test@test.com'")
     @JsonIgnore
     private String email;
-
     @Column(name = "token",length = 200)
     @SerializedName("authToken")
     private String token;
@@ -32,15 +31,11 @@ public class Token extends Model {
 
     public Token(){}
 
-    public Token(Token authToken){
-        token = authToken.token;
-        expirationDate = authToken.expirationDate;
-    }
-
     public static Model.Finder<String, Token> find = new Model.Finder<String, Token>(String.class, Token.class);
 
     /**
-     * Creates a date which is one day ahead of current date
+     * Creates a date which is one day ahead of current date.
+     *
      * @return returns newly created date
      */
     public static Date generateExpirationDate(){
@@ -78,6 +73,7 @@ public class Token extends Model {
         this.email = email;
     }
 
+    @JsonIgnore
     public Date getExpirationDate() {
         return expirationDate;
     }
