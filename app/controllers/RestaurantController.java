@@ -26,6 +26,7 @@ public class RestaurantController extends Controller{
      * @return Returns a response with restaurant details rendered as JSON
      */
     public Result getRestaurantDetails(int id) {
+        response().setContentType("application/json");
         Restaurant restaurant = PersistenceManager.getRestaurantById(id);
         if(restaurant == null){
             return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_NO_RESTAURANT)));
@@ -43,6 +44,7 @@ public class RestaurantController extends Controller{
      * @return the response with all restaurants rendered as JSON
      */
     public Result getAllRestaurants(int offset, int limit, String filter,String order) {
+        response().setContentType("application/json");
         if(!RestaurantHelper.validateRestaurantUrlParameters(filter, order)){
             return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_INVALID_PARAMETERS)));
         }
@@ -61,6 +63,7 @@ public class RestaurantController extends Controller{
      */
     @Security.Authenticated(UserAuthenticator.class)
     public Result makeReservation(int id){
+        response().setContentType("application/json");
         Reservation reservation = (Reservation) JsonSerializer.deserialize(request(), Reservation.class);
         if(reservation == null || !reservation.isValid()) {
             return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_INVALID_DATA)));

@@ -23,8 +23,8 @@ public class UserController extends Controller {
      */
     @BodyParser.Of(BodyParser.Json.class)
     public Result register() {
+        response().setContentType("application/json");
         User user = (User) JsonSerializer.deserialize(request(), User.class);
-
         if(!user.isValid()){
             return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_INVALID_DATA)));
         }
@@ -44,6 +44,7 @@ public class UserController extends Controller {
      * @return the authorization token in JSON format
      */
     public Result confirm(String registrationToken){
+        response().setContentType("application/json");
         User user = new User(registrationToken);
         if(!user.confirmUser(registrationToken)) {
             return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_WRONG_CONFIRMATION_TOKEN)));
@@ -58,8 +59,8 @@ public class UserController extends Controller {
      * @return the authorization token in JSON format
      */
     public Result login(){
+        response().setContentType("application/json");
         UserSession userSession = (UserSession) JsonSerializer.deserialize(request(), UserSession.class);
-
         if(!userSession.isValid()){
             return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_INVALID_DATA)));
         }

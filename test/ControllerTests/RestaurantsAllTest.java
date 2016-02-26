@@ -18,17 +18,31 @@ public class RestaurantsAllTest {
     @BeforeClass
     public static void prepareRestaurant() {
         running(fakeApplication(),()-> {
-            Token token = new Token();
-            token.generateToken();
-            token.setEmail("test@testtest.com");
+            Coordinates coordinates = new Coordinates();
+            coordinates.setRestaurantId(1601994);
+            coordinates.setLatitude(5.5);
+            coordinates.setLongitude(1.1);
+            coordinates.save();
 
-            User user = new User();
-            user.setEmail("test@testtest.com");
-            user.setAuthToken(token);
-            user.setConfirmed(true);
+            Address address = new Address();
+            address.setEmail("test@testtest.com");
+            address.setCity("Test City");
+            address.setCountry("Test Country");
+            address.setStreetName("Test street");
+            address.setRestaurantId(1601994);
+            address.save();
 
-            token.save();
-            user.save();
+            Restaurant restaurant = new Restaurant();
+            restaurant.setRestaurantId(1601994);
+            restaurant.setAddress(address);
+            restaurant.setCoordinates(coordinates);
+            restaurant.setName("Test restaurant");
+            restaurant.setDeals("");
+            restaurant.setPhone(2252);
+            restaurant.setRating(2);
+            restaurant.setReservationPrice(3);
+            restaurant.setWorkingHours("");
+            restaurant.save();
 
         });
     }
@@ -36,9 +50,7 @@ public class RestaurantsAllTest {
     @Test
     public void testGetAllRestaurants(){
         running(fakeApplication(),()-> {
-            Http.RequestBuilder rb = new Http.RequestBuilder().method(GET).uri("/v1/restaurants").
-                    header("USER-ACCESS-TOKEN", Token.find.where().eq("email", "test@testtest.com").findUnique().
-                            getToken());
+            Http.RequestBuilder rb = new Http.RequestBuilder().method(GET).uri("/v1/restaurants");
             Result result = route(rb);
             assertEquals(Http.Status.OK, result.status());
         });
@@ -47,11 +59,10 @@ public class RestaurantsAllTest {
     @AfterClass
     public static void removeRestaurant(){
         running(fakeApplication(),()-> {
-            Token token = Token.find.where().eq("email", "test@testtest.com").findUnique();
-            User user = User.find.where().eq("email", "test@testtest.com").findUnique();
-
-            user.delete();
-            token.delete();
+            Restaurant restaurant = Restaurant.find.where().eq("restaurantId", 1601994).findUnique();
+            restaurant.delete();
+            restaurant.getAddress().delete();
+            restaurant.getCoordinates().delete();
         });
     }
 

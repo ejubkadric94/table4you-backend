@@ -2,23 +2,23 @@
 
 INSERT INTO `abh_coordinates`(`restaurantId`, `latitude`, `longitude`) VALUES (1,43.853590 ,18.436311);
 INSERT INTO `abh_user_address`(`userEmail`, `streetName`, `city`, `country`, `restaurantID`) VALUES ("parkprinceva@restauranttest.com","Iza Hrida","Sarajevo","Bosnia and Herzegovina",1);
-INSERT INTO `abh_restaurant`(`restaurantId`, `name`, `address_userEmail`, `coordinates_restaurantId`, `phone`, `workingHours`, `rating`, `reservationPrice`, `deals`, `image`) VALUES (1,"Park Princeva","parkprinceva@restauranttest.com",1,+38733565454,"08:00 - 23:00",0,0,"We have a nice view on Sarajevo!", "https://www.roadrunnerwm.com/wp-content/uploads/2015/10/restaurant-image.jpg");
+INSERT INTO `abh_restaurant`(`restaurantId`, `name`, `address_userEmail`, `coordinates_restaurantId`, `phone`, `workingHours`, `rating`, `reservationPrice`, `deals`, `image`) VALUES (1,"Park Princeva","parkprinceva@restauranttest.com",1,+38733565454,"08:00 - 23:00",5,4,"We have a nice view on Sarajevo!", "https://www.roadrunnerwm.com/wp-content/uploads/2015/10/restaurant-image.jpg");
 
 
 INSERT INTO `abh_coordinates`(`restaurantId`, `latitude`, `longitude`) VALUES (2,43.858417 ,18.434594);
 INSERT INTO `abh_user_address`(`userEmail`, `streetName`, `city`, `country`, `restaurantID`) VALUES ("inatkuca@restauranttest.com","Veliki Alifakovac","Sarajevo","Bosnia and Herzegovina",2);
-INSERT INTO `abh_restaurant`(`restaurantId`, `name`, `address_userEmail`, `coordinates_restaurantId`, `phone`, `workingHours`, `rating`, `reservationPrice`, `deals`, `image`) VALUES (2,"Inat Kuca","inatkuca@restauranttest.com",2,+38733532154,"08:00 - 23:00",0,0,"Free tea each Saturday!", "https://upload.wikimedia.org/wikipedia/commons/1/1e/Tom's_Restaurant,_NYC.jpg");
+INSERT INTO `abh_restaurant`(`restaurantId`, `name`, `address_userEmail`, `coordinates_restaurantId`, `phone`, `workingHours`, `rating`, `reservationPrice`, `deals`, `image`) VALUES (2,"Inat Kuca","inatkuca@restauranttest.com",2,+38733532154,"08:00 - 23:00",3,3,"Free tea each Saturday!", "https://upload.wikimedia.org/wikipedia/commons/1/1e/Tom's_Restaurant,_NYC.jpg");
 
 
 
 INSERT INTO `abh_coordinates`(`restaurantId`, `latitude`, `longitude`) VALUES (3,43.858553 ,18.427342);
 INSERT INTO `abh_user_address`(`userEmail`, `streetName`, `city`, `country`, `restaurantID`) VALUES ("maroko@restauranttest.com","Vladislava Skarica","Sarajevo","Bosnia and Herzegovina",3);
-INSERT INTO `abh_restaurant`(`restaurantId`, `name`, `address_userEmail`, `coordinates_restaurantId`, `phone`, `workingHours`, `rating`, `reservationPrice`, `deals`, `image`) VALUES (3,"Maroko","maroko@restauranttest.com",3,+38733561214,"08:00 - 23:00",0,0,"No deals currently", "http://www.nandos.com/sites/all/themes/nandos/images/restaurants/restaurant-carousel-1.jpg");
+INSERT INTO `abh_restaurant`(`restaurantId`, `name`, `address_userEmail`, `coordinates_restaurantId`, `phone`, `workingHours`, `rating`, `reservationPrice`, `deals`, `image`) VALUES (3,"Maroko","maroko@restauranttest.com",3,+38733561214,"08:00 - 23:00",4,5,"No deals currently", "http://www.nandos.com/sites/all/themes/nandos/images/restaurants/restaurant-carousel-1.jpg");
 
 
 INSERT INTO `abh_coordinates`(`restaurantId`, `latitude`, `longitude`) VALUES (4,43.859335 ,18.428289);
 INSERT INTO `abh_user_address`(`userEmail`, `streetName`, `city`, `country`, `restaurantID`) VALUES ("aeroplan@restauranttest.com","Saraci 14","Sarajevo","Bosnia and Herzegovina",4);
-INSERT INTO `abh_restaurant`(`restaurantId`, `name`, `address_userEmail`, `coordinates_restaurantId`, `phone`, `workingHours`, `rating`, `reservationPrice`, `deals`, `image`) VALUES (4,"Aeroplan","aeroplan@restauranttest.com",4,+38733987654,"08:00 - 23:00",0,0,"No deals currently", "https://www.roadrunnerwm.com/wp-content/uploads/2015/10/restaurant-image.jpg");
+INSERT INTO `abh_restaurant`(`restaurantId`, `name`, `address_userEmail`, `coordinates_restaurantId`, `phone`, `workingHours`, `rating`, `reservationPrice`, `deals`, `image`) VALUES (4,"Aeroplan","aeroplan@restauranttest.com",4,+38733987654,"08:00 - 23:00",2,2,"No deals currently", "https://www.roadrunnerwm.com/wp-content/uploads/2015/10/restaurant-image.jpg");
 
 
 INSERT INTO `abh_coordinates`(`restaurantId`, `latitude`, `longitude`) VALUES (5,43.859777 ,18.430506);
@@ -28,7 +28,7 @@ INSERT INTO `abh_restaurant`(`restaurantId`, `name`, `address_userEmail`, `coord
 
 INSERT INTO `abh_coordinates`(`restaurantId`, `latitude`, `longitude`) VALUES (6,43.854008 ,18.388211);
 INSERT INTO `abh_user_address`(`userEmail`, `streetName`, `city`, `country`, `restaurantID`) VALUES ("drugakuca@restauranttest.com","Kolodvorska 11A","Sarajevo","Bosnia and Herzegovina",6);
-INSERT INTO `abh_restaurant`(`restaurantId`, `name`, `address_userEmail`, `coordinates_restaurantId`, `phone`, `workingHours`, `rating`, `reservationPrice`, `deals`, `image`) VALUES (6,"Druga Kuca","drugakuca@restauranttest.com",6,+38733666457,"08:00 - 23:00",0,0,"No deals currently", "http://www.nandos.com/sites/all/themes/nandos/images/restaurants/restaurant-carousel-1.jpg");
+INSERT INTO `abh_restaurant`(`restaurantId`, `name`, `address_userEmail`, `coordinates_restaurantId`, `phone`, `workingHours`, `rating`, `reservationPrice`, `deals`, `image`) VALUES (6,"Druga Kuca","drugakuca@restauranttest.com",6,+38733666457,"08:00 - 23:00",4,0,"No deals currently", "http://www.nandos.com/sites/all/themes/nandos/images/restaurants/restaurant-carousel-1.jpg");
 
 
 INSERT INTO `abh_coordinates`(`restaurantId`, `latitude`, `longitude`) VALUES (7,43.858377 ,18.404911);

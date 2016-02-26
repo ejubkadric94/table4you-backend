@@ -58,7 +58,6 @@ public class PersistenceManager {
      * @param reservation the reservation to be saved
      */
     public void createReservation(Reservation reservation) {
-        System.out.println(reservation.getRestaurantId());
         reservation.save();
     }
 

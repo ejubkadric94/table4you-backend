@@ -47,7 +47,7 @@ public class UserRegistrationTest {
                 e.printStackTrace();
             }
 
-            Http.RequestBuilder rb = new Http.RequestBuilder().method(POST).uri("/v1/register").bodyJson(json);
+            Http.RequestBuilder rb = new Http.RequestBuilder().method(POST).uri("/v1/registration").bodyJson(json);
             Result result = route(rb);
             assertEquals(Http.Status.OK, result.status());
             User user = User.find.where().eq("email", "test@test.com").findUnique();
@@ -80,7 +80,7 @@ public class UserRegistrationTest {
                 e.printStackTrace();
             }
 
-            Http.RequestBuilder rb = new Http.RequestBuilder().method(POST).uri("/v1/register").bodyJson(json);
+            Http.RequestBuilder rb = new Http.RequestBuilder().method(POST).uri("/v1/registration").bodyJson(json);
             Result result = route(rb);
             assertEquals(Http.Status.OK, result.status());
 
@@ -106,7 +106,7 @@ public class UserRegistrationTest {
                 e.printStackTrace();
             }
 
-            Http.RequestBuilder rb2 = new Http.RequestBuilder().method(POST).uri("/v1/register").bodyJson(json2);
+            Http.RequestBuilder rb2 = new Http.RequestBuilder().method(POST).uri("/v1/registration").bodyJson(json2);
             Result result2 = route(rb2);
             assertEquals(Http.Status.BAD_REQUEST, result2.status());
             assertTrue(contentAsString(result2).contains("error"));
@@ -139,7 +139,7 @@ public class UserRegistrationTest {
                 e.printStackTrace();
             }
 
-            Http.RequestBuilder rb = new Http.RequestBuilder().method(POST).uri("/v1/register").bodyJson(json);
+            Http.RequestBuilder rb = new Http.RequestBuilder().method(POST).uri("/v1/registration").bodyJson(json);
             Result result = route(rb);
             assertEquals(Http.Status.BAD_REQUEST, result.status());
             assertTrue(contentAsString(result).contains("error"));

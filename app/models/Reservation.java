@@ -35,6 +35,7 @@ public class Reservation extends Model implements Validation {
     @Column(length = 300)
     private String note;
 
+
     public static Reservation.Finder<String, Reservation> find = new Model.Finder<String, Reservation>(String.class, Reservation.class);
 
 
@@ -46,11 +47,7 @@ public class Reservation extends Model implements Validation {
 
     @Override
     public boolean isValid() {
-        System.out.println(reservationId);
-        System.out.println(restaurantId);
-        System.out.println(dateTime);
-        System.out.println(guestCount);
-        return dateTime == null && restaurantId != 0 && guestCount != 0;
+        return  restaurantId != 0 && guestCount != 0;
     }
 
 

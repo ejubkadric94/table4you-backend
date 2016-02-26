@@ -45,47 +45,29 @@ public class RestaurantDetailsTest {
             restaurant.setRating(2);
             restaurant.setReservationPrice(3);
             restaurant.setWorkingHours("");
-
-
-
             restaurant.save();
-
-            Token token = new Token();
-            token.generateToken();
-            token.setEmail("test@testtest.com");
-
-            User user = new User();
-            user.setEmail("test@testtest.com");
-
-
-            user.setAuthToken(token);
-            user.setConfirmed(true);
-
-            token.save();
-            user.save();
-
-        });
-    }
-
-    @Test
-    public void testUnathorizedRequest() {
-        running(fakeApplication(),()-> {
-            Http.RequestBuilder rb = new Http.RequestBuilder().method(GET).uri("/v1/restaurants/33");
-            Result result = route(rb);
-            assertEquals(Http.Status.UNAUTHORIZED, result.status());
         });
     }
 
     @Test
     public void testWrongRestaurantId() {
         running(fakeApplication(), () -> {
-            Http.RequestBuilder rb = new Http.RequestBuilder().method(GET).uri("/v1/restaurants/33").
-                    header("USER-ACCESS-TOKEN", Token.find.where().eq("email", "test@testtest.com").findUnique().
-                            getToken());
+            Http.RequestBuilder rb = new Http.RequestBuilder().method(GET).uri("/v1/restaurants/9999999");
 
             Result result = route(rb);
             assertEquals(Http.Status.BAD_REQUEST, result.status());
             assertTrue(contentAsString(result).contains("error"));
+        });
+    }
+
+    @Test
+    public void testValidRestaurantId() {
+        running(fakeApplication(), () -> {
+            Http.RequestBuilder rb = new Http.RequestBuilder().method(GET).uri("/v1/restaurants/1601994");
+
+            Result result = route(rb);
+            assertEquals(Http.Status.OK, result.status());
+            assertTrue(contentAsString(result).contains("name"));
         });
     }
 
@@ -96,11 +78,6 @@ public class RestaurantDetailsTest {
             restaurant.delete();
             restaurant.getAddress().delete();
             restaurant.getCoordinates().delete();
-
-            Token token = Token.find.where().eq("email", "test@testtest.com").findUnique();
-            User user = User.find.where().eq("email", "test@testtest.com").findUnique();
-
-            user.delete();
         });
     }
 
