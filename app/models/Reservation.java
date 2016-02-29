@@ -1,15 +1,8 @@
 package models;
 
 import com.avaje.ebean.Model;
-import com.avaje.ebean.annotation.Expose;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-
-import play.data.format.Formats;
 import utilities.Validation;
-
-
 import javax.persistence.*;
 import java.sql.Timestamp;
 

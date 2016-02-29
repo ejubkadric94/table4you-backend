@@ -1,9 +1,5 @@
 package utilities;
 
-import models.Reservation;
-
-import java.sql.Timestamp;
-
 /**
  * Created by root on 22/02/16.
  */

@@ -1,10 +1,7 @@
 package utilities;
 
-import com.avaje.ebean.Model;
 import models.*;
 import org.apache.commons.codec.digest.DigestUtils;
-
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

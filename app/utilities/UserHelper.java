@@ -1,6 +1,5 @@
 package utilities;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import models.Token;
 import models.User;
 import org.apache.commons.codec.binary.Base64;
