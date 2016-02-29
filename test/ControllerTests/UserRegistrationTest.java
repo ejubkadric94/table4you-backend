@@ -97,7 +97,7 @@ public class UserRegistrationTest {
             node.put("lastName", "Test");
             node.set("address", child);
             node.put("phone", "062292868");
-            node.put("gender", "male");
+            node.put("gender", "Female");
             node.put("birthdate", "01/01/1990");
             JsonNode json2 = null;
             try {
@@ -129,7 +129,7 @@ public class UserRegistrationTest {
             node.put("lastName", "Test");
             node.set("address", child);
             node.put("phone", "+38762292868");
-            node.put("gender", "male");
+            node.put("gender", "Male");
             node.put("birthdate", "01/01/1990");
 
             JsonNode json = null;

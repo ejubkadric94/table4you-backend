@@ -1,6 +1,5 @@
 package utilities;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import models.Token;
 import models.User;
 import org.apache.commons.codec.binary.Base64;
@@ -62,7 +61,6 @@ public class UserHelper {
         byte[]   bytesEncoded = Base64.encodeBase64(token .getBytes());
         return new String(bytesEncoded );
     }
-
 }
 
 

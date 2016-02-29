@@ -7,10 +7,14 @@ import java.util.*;
  * Class RestaurantHelper is used to manipulate Restaurant objects.
  */
 public class RestaurantHelper {
-
+    /**
+     * Produces HashMap of filter keys and filter values.
+     *
+     * @param rawFilter the String containing unprocessed filters
+     * @return the processed filters in form of HashMap
+     */
     public static HashMap<String, String> getFiltersMap(String rawFilter) {
         HashMap<String, String> map = new HashMap<>();
-
         String[] array = rawFilter.split(",");
         for(String element : array){
             String[] tempElement = element.split(":");
@@ -19,6 +23,13 @@ public class RestaurantHelper {
         return map;
     }
 
+    /**
+     * Validates the Url parameters specified for restaurants.
+     *
+     * @param filter the filter
+     * @param order the order
+     * @return true if parameters are valid
+     */
     public static boolean validateRestaurantUrlParameters(String filter, String order){
         if(order != null && filter != null){
             boolean returnValue = order.contains("name") || order.contains("rating") || order.contains("reservationPrice") ||

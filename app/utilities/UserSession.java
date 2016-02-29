@@ -6,7 +6,7 @@ import models.User;
  * Created by Ejub on 09/02/16.
  * Class UserSession can be used to store temporary information about a user.
  */
-public class UserSession {
+public class UserSession implements Validation{
     private String email;
     private String password;
 

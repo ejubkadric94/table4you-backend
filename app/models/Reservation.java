@@ -1,15 +1,8 @@
 package models;
 
 import com.avaje.ebean.Model;
-import com.avaje.ebean.annotation.Expose;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-
-import play.data.format.Formats;
 import utilities.Validation;
-
-
 import javax.persistence.*;
 import java.sql.Timestamp;
 
@@ -50,7 +43,6 @@ public class Reservation extends Model implements Validation {
         return  restaurantId != 0 && guestCount != 0;
     }
 
-
     public long getReservationId() {
         return reservationId;
     }
@@ -66,7 +58,6 @@ public class Reservation extends Model implements Validation {
     public void setRestaurantId(long restaurantId) {
         this.restaurantId = restaurantId;
     }
-
 
     public Timestamp getDateTime() {
         return dateTime;

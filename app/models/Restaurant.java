@@ -20,7 +20,6 @@ public class Restaurant extends Model{
     @JsonView(RestaurantViews.BasicDetails.class)
     private String name;
 
-
     @OneToOne
     @PrimaryKeyJoinColumn(referencedColumnName = "restaurantId")
     @JsonView(RestaurantViews.BasicDetails.class)

@@ -36,11 +36,14 @@ public class RestaurantController extends Controller{
 
     /**
      * Retrieves all restaurants.
-     * Optionally, offset and limit, as well as one or more filters, can be specified in request.
+     * Multiple parameters might be used, and they are all optional, which means that any parameter does not depend on
+     * others.
      *
      * @param offset the optional offset for pagination
      * @param limit the optional limit for pagination
      * @param filter the optional filter for restaurants
+     * @param order the optional order for restaurants (place minus sign in front of order value to get descending
+     *              results).
      * @return the response with all restaurants rendered as JSON
      */
     public Result getAllRestaurants(int offset, int limit, String filter,String order) {

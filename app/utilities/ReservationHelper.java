@@ -1,11 +1,8 @@
 package utilities;
 
-import models.Reservation;
-
-import java.sql.Timestamp;
-
 /**
- * Created by root on 22/02/16.
+ * Created by Ejub on 22/02/16.
+ * Class ReservationHelper can be used to manipulate Reservation objects.
  */
 public class ReservationHelper {
     private long reservationId;
