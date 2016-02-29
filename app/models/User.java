@@ -1,23 +1,19 @@
 package models;
 
-/**
- * Created by Ejub on 31.1.2016.
- * Class User can be used to store and manipulate users.
- */
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import play.data.validation.Constraints;
 import utilities.UserHelper;
 import utilities.Validation;
-
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.persistence.*;
 
-
+/**
+ * Created by Ejub on 31.1.2016.
+ * Class User can be used to manipulate users.
+ */
 @Entity
 @Table(name = "abh_user")
 public class User extends com.avaje.ebean.Model implements Validation {
@@ -54,6 +50,7 @@ public class User extends com.avaje.ebean.Model implements Validation {
 
 
     public User(){
+
     }
 
     public User(String decodedToken){
@@ -63,39 +60,29 @@ public class User extends com.avaje.ebean.Model implements Validation {
 
     public static Finder<String, User> find = new Finder<String, User>(String.class, User.class);
 
-
+    /**
+     * Extends the token expiration date by one day.
+     */
     public void extendTokenExpiration(){
         this.authToken.setExpirationDate(Token.generateExpirationDate());
     }
 
     /**
-     * Confirms the user after the link in confirmation email is opened.
+     * Confirms the user.
      *
      * @param encodedToken encoded authToken of user
-     * @return returns true
+     * @return returns true if everything is valid
      */
     public static boolean confirmUser(String encodedToken){
         String token = UserHelper.decodeToken(encodedToken);
-
         Token tempToken = Token.find.where().eq("token", token).findUnique();
         if(tempToken == null){
             return false;
         }
-
         User userWithToken = User.find.where().eq("email", tempToken.getEmail()).findUnique();
-
         userWithToken.setConfirmed(true);
         userWithToken.save();
         return true;
-    }
-
-    /**
-     * Check if email and password match
-     * @return true if email and password match, false otherwise
-     */
-    public boolean isValidLoginInfo(){
-        User user = User.find.where().eq("email", email).findUnique();
-        return this.password.equals(user.password);
     }
 
 

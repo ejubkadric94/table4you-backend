@@ -19,14 +19,11 @@ public class PersistenceManager {
      */
     public void createUser(User user){
         if(user != null){
-
             UserHelper.initializeUser(user);
-
             user.setPassword(DigestUtils.md5Hex(user.getPassword()));
             user.setPasswordConfirmation(DigestUtils.md5Hex(user.getPasswordConfirmation()));
             Email.sendConfirmationEmail(user.getEmail(), Resources.SERVER_NAME + "/" + Resources.VERSION
                     + "/registration/confirm/" + UserHelper.encodeToken(user.getAuthToken().getToken()));
-
             user.getAddress().save();
             user.getAuthToken().save();
             user.save();
@@ -35,7 +32,7 @@ public class PersistenceManager {
 
     /**
      * Retrieves the user from UserSession.
-     * Validation is firstly done on UserSession object.
+     * F irstly the validation is done on UserSession object.
      *
      * @param userSession the UserSession object
      * @return The User retrieved
@@ -62,14 +59,34 @@ public class PersistenceManager {
         return Restaurant.find.where().eq("restaurantId", id).findUnique();
     }
 
+    /**
+     * Retrieves the user from database according to specified email address.
+     *
+     * @param email the email address
+     * @return the User, or null if user does not exist
+     */
     public static User getUserByEmail(String email) {
         return User.find.where().eq("email", email).findUnique();
     }
 
+    /**
+     * Retrieves the authentication token from database.
+     * @param token the token to be found
+     * @return token or null if there is no token
+     */
     public static Token getToken(String token){
         return Token.find.where().eq("token", token).findUnique();
     }
 
+    /**
+     * Retrieves all restaurants from database.
+     *
+     * @param offset the offset for pagination
+     * @param limit the limit for pagination
+     * @param filter the filter in format <filterName>:<filterValue> where multiple filters will be separated by comma
+     * @param order the order for restaurants
+     * @return the List of restaurants found according to specified parameters
+     */
     public static List<Restaurant> getAllRestaurants(int offset, int limit, String filter,String order){
         List<Restaurant> list = Restaurant.find.all();
 

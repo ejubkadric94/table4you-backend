@@ -53,7 +53,7 @@ public class UserController extends Controller {
     }
 
     /**
-     * Provides the authToken when user logs in.
+     * Provides the authentication token when user logs in.
      * Method validates the input, and if the input is not valid, a suitable error will be returned as response.
      *
      * @return the authorization token in JSON format

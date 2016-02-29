@@ -2,8 +2,7 @@ package utilities;
 
 /**
  * Created by Ejub on 02/02/16.
- * Class Resources contains all the needed strings for application.
- * It is an utility class and it cannot be instantiated.
+ * Class Resources contains all application outputs.
  */
 public final class Resources {
     public static final String BAD_REQUEST_INVALID_DATA = "Invalid input data";

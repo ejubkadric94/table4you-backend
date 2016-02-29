@@ -1,7 +1,6 @@
 package models;
 
 import com.avaje.ebean.Model;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -27,12 +26,10 @@ public class Address extends Model{
     @Column(name = "restaurantId", columnDefinition = "BIGINT")
     private long restaurantId;
 
-    public Address(Address address){
-        this.streetName = address.streetName;
-        this.city = address.city;
-        this.country = address.country;
-    }
-
+    /**
+     * Default constructor.
+     * Constructs the object with no parameters.
+     */
     public Address() {
 
     }
@@ -71,6 +68,12 @@ public class Address extends Model{
         this.streetName = streetName;
     }
 
+    /**
+     * Returns the restaurantId when used in code, but JsonIgnore annotation makes sure that restaurantId will be
+     * ignored from serialization.
+     *
+     * @return the restaurantId
+     */
     @JsonIgnore
     public long getRestaurantId() {
         return restaurantId;

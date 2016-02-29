@@ -61,7 +61,6 @@ public class UserHelper {
         byte[]   bytesEncoded = Base64.encodeBase64(token .getBytes());
         return new String(bytesEncoded );
     }
-
 }
 
 

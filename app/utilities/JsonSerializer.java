@@ -25,6 +25,12 @@ public class JsonSerializer {
         return Json.fromJson(request.body().asJson(), classname);
     }
 
+    /**
+     * Serializes any object regardless of the type.
+     *
+     * @param object the object to be serialized
+     * @return the JSON representation of the object
+     */
     public static String serializeObject(Object object){
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String json = null;
@@ -36,6 +42,13 @@ public class JsonSerializer {
         return json;
     }
 
+    /**
+     * Serializes basic restaurant details.
+     * JsonView annotation is used to specify which Restaurant property will be included in this serialization.
+     *
+     * @param object the Restaurant object to be serialized
+     * @return the JSON representation of the restaurant
+     */
     public static String serializeBasicRestaurantDetails(Object object) {
         ObjectMapper mapper = new ObjectMapper();
         String result = null;
@@ -48,6 +61,12 @@ public class JsonSerializer {
         return result;
     }
 
+    /**
+     * Serializes all details of a specific restaurant.
+     *
+     * @param object the Restaurant object to be serialized
+     * @return the JSON representation of the restaurant
+     */
     public static String serializeAllRestaurantDetails(Object object) {
         ObjectMapper mapper = new ObjectMapper();
         String result = null;

@@ -2,10 +2,8 @@ package models;
 
 import com.avaje.ebean.Model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 import play.data.format.Formats;
-
 import javax.persistence.*;
 import java.util.Calendar;
 import java.util.Date;
@@ -73,6 +71,12 @@ public class Token extends Model {
         this.email = email;
     }
 
+    /**
+     * Returns the expirationDate when used in code, but JsonIgnore annotation makes sure that expirationDate will be
+     * ignored from serialization.
+     *
+     * @return the expirationDate
+     */
     @JsonIgnore
     public Date getExpirationDate() {
         return expirationDate;
