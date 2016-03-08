@@ -80,4 +80,20 @@ public class RestaurantController extends Controller{
         manager.createReservation(reservation);
         return created(JsonSerializer.serializeObject(new ReservationHelper(reservation.getReservationId())));
     }
+
+    /**
+     * Deletes the restaurants.
+     *
+     * @param id the restaurantId
+     * @return the success information
+     */
+    public Result deleteRestaurant(int id) {
+        response().setContentType("application/json");
+        Restaurant restaurant = PersistenceManager.getRestaurantById(id);
+        if(restaurant == null){
+            return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_NO_RESTAURANT)));
+        }
+        PersistenceManager.deleteRestaurant(restaurant);
+        return ok(JsonSerializer.serializeObject(new Information(Resources.RESTAURANT_DELETED)));
+    }
 }
