@@ -70,4 +70,13 @@ public class UserController extends Controller {
         }
         return ok(JsonSerializer.serializeObject(user.getAuthToken()));
     }
+
+    @Security.Authenticated(UserAuthenticator.class)
+    public Result getCurrentUser(){
+        User user = PersistenceManager.getUserFromRequest(request());
+        if(user == null) {
+            return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_INVALID_DATA)));
+        }
+        return ok(JsonSerializer.serializeUser(user));
+    }
 }

@@ -2,13 +2,16 @@ package models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import play.data.validation.Constraints;
 import utilities.UserHelper;
+import utilities.UserViews;
 import utilities.Validation;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.persistence.*;
+import com.avaje.ebean.Model;
 
 /**
  * Created by Ejub on 31.1.2016.
@@ -16,36 +19,47 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "abh_user")
-public class User extends com.avaje.ebean.Model implements Validation {
+public class User extends Model implements Validation {
     @Id
     @Column(length = 80)
     @Constraints.Required
+    @JsonView(UserViews.BasicDetails.class)
     private String email;
     @Column(length = 100)
     @Constraints.Required
+    @JsonView(UserViews.AllDetails.class)
     private String password;
     @Column(name = "passwordConfirmation", length = 100)
+    @JsonView(UserViews.AllDetails.class)
     private String passwordConfirmation;
     @Column(name = "firstName", length = 25)
+    @JsonView(UserViews.BasicDetails.class)
     private String firstName;
     @Column(name = "lastName", length = 25)
+    @JsonView(UserViews.BasicDetails.class)
     private String lastName;
     @OneToOne
     @PrimaryKeyJoinColumn(referencedColumnName = "userEmail")
+    @JsonView(UserViews.BasicDetails.class)
     private Address address;
     @Column(columnDefinition = "BIGINT")
+    @JsonView(UserViews.BasicDetails.class)
     private long phone;
     @Column(length = 6)
+    @JsonView(UserViews.BasicDetails.class)
     private String gender;
     @Column(columnDefinition = "date")
     @JsonFormat(pattern = "dd/mm/yyyy")
+    @JsonView(UserViews.BasicDetails.class)
     private Date birthdate;
     @OneToOne
     @PrimaryKeyJoinColumn(referencedColumnName = "userEmail")
     @JsonIgnore
+    @JsonView(UserViews.AllDetails.class)
     private Token authToken;
     @Column(name = "isConfirmed")
     @JsonIgnore
+    @JsonView(UserViews.AllDetails.class)
     private boolean isConfirmed;
 
 

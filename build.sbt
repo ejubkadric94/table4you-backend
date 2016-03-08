@@ -38,3 +38,8 @@ lazy val myProject = (project in file(".")).enablePlugins(PlayJava, PlayEbean)
 jacoco.settings
 parallelExecution in jacoco.Config := false
 jacoco.excludes        in jacoco.Config := Seq( "*Routes*", "controllers*routes*", "controllers*Reverse*", "controllers*javascript*", "controller*ref*")
+
+//sources in (Compile, doc) <<= sources in (Compile, doc) map { _.filterNot(_.getName endsWith ".scala") }
+
+
+

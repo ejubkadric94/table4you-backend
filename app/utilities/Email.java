@@ -18,7 +18,7 @@ public final class Email {
      */
     public static void sendConfirmationEmail(String emailAddress, String link){
         String activationMailText = "<h3>Welcome to table4you.<br>" +
-                "Please follow this link to finish your registration:<br> <a href=\"http://" + link + "\">" + link + "</a>" +
+                "Please follow this link to finish your registration:<br> <a href=\"" + link + "\">" + link + "</a>" +
                 "<br>Do not reply on this email. If you have any quesions, please visit our website.</h3>";
 
         org.apache.commons.mail.HtmlEmail email = new HtmlEmail();

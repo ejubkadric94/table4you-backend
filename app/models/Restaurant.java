@@ -47,7 +47,7 @@ public class Restaurant extends Model{
     @JsonView(RestaurantViews.BasicDetails.class)
     private String image;
 
-
+    
     public static Model.Finder<String, Restaurant> find = new Model.Finder<String, Restaurant>(String.class, Restaurant.class);
 
     public long getRestaurantId() {

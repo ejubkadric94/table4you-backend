@@ -2,6 +2,8 @@ package utilities;
 
 import models.*;
 import org.apache.commons.codec.digest.DigestUtils;
+import play.api.Play;
+import play.mvc.*;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +30,12 @@ public class PersistenceManager {
             user.getAuthToken().save();
             user.save();
         }
+    }
+
+    public static User getUserFromRequest(Http.Request request){
+        String tokenString = request.getHeader("USER-ACCESS-TOKEN");
+        Token token = Token.find.where().eq("token", tokenString).findUnique();
+        return User.find.where().eq("email", token.getEmail()).findUnique();
     }
 
     /**

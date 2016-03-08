@@ -2,7 +2,7 @@ package utilities;
 
 /**
  * Created by Ejub on 23/02/16.
- * Class RestaurantViews is used with JsonView annotationt to specify which Restaurant properties will be shown in
+ * Class RestaurantViews is used with JsonView annotation to specify which Restaurant properties will be shown in
  * specific serialization.
  */
 public class RestaurantViews {
