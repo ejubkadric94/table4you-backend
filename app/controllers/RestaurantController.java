@@ -20,7 +20,7 @@ public class RestaurantController extends Controller{
 
     /**
      * Retrieves details of a restaurant specified by Id.
-     * Method checks if restaurant exists, and then proceeds furhter if restaurant is found, or an error is thrown.
+     * Method checks if restaurant exists, and then proceeds further if restaurant is found, or an error is thrown.
      *
      * @param id the restaurantId
      * @return Returns a response with restaurant details rendered as JSON
