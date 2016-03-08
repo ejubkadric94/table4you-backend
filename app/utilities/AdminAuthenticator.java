@@ -8,13 +8,12 @@ import play.mvc.Security;
 
 /**
  * Created by Ejub on 02/02/16.
- * Class AdminAuthenticator can be used to protect specific routes by checking if user is authenticated.
+ * Class AdminAuthenticator can be used to protect specific routes by checking if administrator is authenticated.
  */
 public class AdminAuthenticator extends Security.Authenticator{
     /**
      * Retrieves the user out of the http context.
-     * Method firstly checks if authentication token found in context is valid, and whether it matches to a single user.
-     * It also checks if user is confirmed.
+     * Method firstly checks if authentication token found in context is valid, and whether it matches to a specified administrator.
      *
      * @param ctx the http context
      * @return the user is returned if token is valid and if user is confirmed
@@ -29,7 +28,7 @@ public class AdminAuthenticator extends Security.Authenticator{
             }
             User user = PersistenceManager.getUserByEmail(tempToken.getEmail());
             if (user != null) {
-                return user.getEmail().equals("ejubkadric@gmail.com") ? user.getEmail() : null;
+                return user.getEmail().equals(Resources.ADMINISTRATOR_EMAIL) ? user.getEmail() : null;
             }
         }
         return null;
