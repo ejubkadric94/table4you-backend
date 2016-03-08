@@ -54,6 +54,28 @@ public class PersistenceManager {
         return null;
     }
 
+    public static void editRestaurant(int restaurantId, Restaurant tempRestaurant) {
+        Restaurant restaurant = Restaurant.find.where().eq("restaurantId", restaurantId).findUnique();
+        restaurant.setDeals(tempRestaurant.getDeals());
+        restaurant.setImage(tempRestaurant.getImage());
+        restaurant.setName(tempRestaurant.getName());
+        restaurant.setPhone(tempRestaurant.getPhone());
+        restaurant.setRating(tempRestaurant.getRating());
+        restaurant.setReservationPrice(tempRestaurant.getReservationPrice());
+        restaurant.setWorkingHours(tempRestaurant.getWorkingHours());
+
+        restaurant.getAddress().setStreetName(tempRestaurant.getAddress().getStreetName());
+        restaurant.getAddress().setCity(tempRestaurant.getAddress().getCity());
+        restaurant.getAddress().setCountry(tempRestaurant.getAddress().getCountry());
+
+        restaurant.getCoordinates().setLatitude(tempRestaurant.getCoordinates().getLatitude());
+        restaurant.getCoordinates().setLongitude(tempRestaurant.getCoordinates().getLongitude());
+
+        restaurant.getAddress().save();
+        restaurant.getCoordinates().save();
+        restaurant.save();
+    }
+
     /**
      * Saves the reservation into the database.
      *

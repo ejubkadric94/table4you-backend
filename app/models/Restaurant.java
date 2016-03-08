@@ -3,6 +3,8 @@ package models;
 import com.avaje.ebean.Model;
 import com.fasterxml.jackson.annotation.JsonView;
 import utilities.RestaurantViews;
+import utilities.Validation;
+
 import javax.persistence.*;
 
 /**
@@ -11,7 +13,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "abh_restaurant")
-public class Restaurant extends Model{
+public class Restaurant extends Model implements Validation {
     @Id
     @Column(name = "restaurantId", columnDefinition = "BIGINT")
     @JsonView(RestaurantViews.BasicDetails.class)
@@ -46,9 +48,20 @@ public class Restaurant extends Model{
     private String deals;
     @JsonView(RestaurantViews.BasicDetails.class)
     private String image;
-
     
     public static Model.Finder<String, Restaurant> find = new Model.Finder<String, Restaurant>(String.class, Restaurant.class);
+
+    /**
+     * Validates the restaurant properties.
+     *
+     * @return true if validation is successful
+     */
+    @Override
+    public boolean isValid() {
+        return !name.equals("") && !address.getCity().equals("") && !address.getCountry().equals("") &&
+                !address.getStreetName().equals("") && coordinates.getLatitude() != 0 && coordinates.getLongitude() != 0
+                && phone != 0;
+    }
 
     public long getRestaurantId() {
         return restaurantId;
