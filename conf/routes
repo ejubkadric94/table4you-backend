@@ -14,6 +14,7 @@ GET     /v1/getCurrentUser                                      controllers.User
 # Restaurants
 GET     /v1/restaurants/:id                                     controllers.RestaurantController.getRestaurantDetails(id: Integer)
 GET     /v1/restaurants                                         controllers.RestaurantController.getAllRestaurants(offset: Int ?= 0, limit: Int ?= 0, filter: String ?= null, order: String ?= null)
+POST    /v1/restaurants                                         controllers.RestaurantController.createRestaurant()
 
 # Reservations
 POST    /v1/restaurants/:id/reservations                        controllers.RestaurantController.makeReservation(id: Integer)

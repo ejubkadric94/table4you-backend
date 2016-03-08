@@ -40,7 +40,7 @@ public class PersistenceManager {
 
     /**
      * Retrieves the user from UserSession.
-     * F irstly the validation is done on UserSession object.
+     * Firstly the validation is done on UserSession object.
      *
      * @param userSession the UserSession object
      * @return The User retrieved
@@ -79,11 +79,29 @@ public class PersistenceManager {
 
     /**
      * Retrieves the authentication token from database.
+     *
      * @param token the token to be found
      * @return token or null if there is no token
      */
     public static Token getToken(String token){
         return Token.find.where().eq("token", token).findUnique();
+    }
+
+    /**
+     * Persists restaurant into database.
+     *
+     * @param restaurant the Restaurant to be persisted
+     */
+    public static void saveRestaurant(Restaurant restaurant){
+        restaurant.getAddress().setRestaurantId(Restaurant.find.all().size() + 1);
+        restaurant.getAddress().setEmail(restaurant.getName().replace(" ","").toLowerCase() + "@restauranttest.com");
+        restaurant.getAddress().save();
+
+        restaurant.getCoordinates().setRestaurantId(Restaurant.find.all().size() + 1);
+        restaurant.getCoordinates().save();
+
+        restaurant.setRestaurantId(Restaurant.find.all().size() + 1);
+        restaurant.save();
     }
 
     /**

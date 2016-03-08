@@ -7,6 +7,8 @@ import java.util.*;
  * Class RestaurantHelper is used to manipulate Restaurant objects.
  */
 public class RestaurantHelper {
+    private long restaurantId;
+
     /**
      * Produces HashMap of filter keys and filter values.
      *
@@ -56,5 +58,17 @@ public class RestaurantHelper {
             }
         }
         return true;
+    }
+
+    public long getRestaurantId() {
+        return restaurantId;
+    }
+
+    public void setRestaurantId(long restaurantId) {
+        this.restaurantId = restaurantId;
+    }
+
+    public RestaurantHelper(long restaurantId) {
+        this.restaurantId = restaurantId;
     }
 }
