@@ -55,29 +55,5 @@ public class RestaurantController extends Controller{
         return ok(JsonSerializer.serializeBasicRestaurantDetails(restaurantList));
     }
 
-    /**
-     * Creates a reservation for a specific restaurant with reservation info.
-     * Reservation info should be contained in http request header in JSON form.
-     * Method will validate the request before creating reservation, and if validation fails, suitable error will
-     * be sent as response.
-     *
-     * @param id the restaurantId of a restaurant
-     * @return the response containing reservation Id
-     */
-    @Security.Authenticated(UserAuthenticator.class)
-    public Result makeReservation(int id){
-        response().setContentType("application/json");
-        Reservation reservation = (Reservation) JsonSerializer.deserialize(request(), Reservation.class);
-        if(reservation == null || !reservation.isValid()) {
-            return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_INVALID_DATA)));
-        }
 
-        Restaurant restaurant = PersistenceManager.getRestaurantById(id);
-        if(restaurant == null){
-            return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_NO_RESTAURANT)));
-        }
-
-        manager.createReservation(reservation);
-        return created(JsonSerializer.serializeObject(new ReservationHelper(reservation.getReservationId())));
-    }
 }

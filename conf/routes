@@ -16,7 +16,8 @@ GET     /v1/restaurants/:id                                     controllers.Rest
 GET     /v1/restaurants                                         controllers.RestaurantController.getAllRestaurants(offset: Int ?= 0, limit: Int ?= 0, filter: String ?= null, order: String ?= null)
 
 # Reservations
-POST    /v1/restaurants/:id/reservations                        controllers.RestaurantController.makeReservation(id: Integer)
+POST    /v1/restaurants/:id/reservations                        controllers.ReservationController.makeReservation(id: Integer)
+GET     /v1/restaurants/:id/reservations                        controllers.ReservationController.getAllReservations(id: Integer)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

@@ -2,6 +2,7 @@ package models;
 
 import com.avaje.ebean.Model;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import utilities.Validation;
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -19,6 +20,7 @@ public class Reservation extends Model implements Validation {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long reservationId;
     @Column(name = "restaurantId", columnDefinition = "BIGINT")
+    @JsonIgnore
     private long restaurantId;
     @Column(name = "dateTime" , columnDefinition = "DATETIME")
     @JsonFormat(pattern = "dd/mm/yyyy HH:mm:ss")
@@ -40,7 +42,7 @@ public class Reservation extends Model implements Validation {
 
     @Override
     public boolean isValid() {
-        return  restaurantId != 0 && guestCount != 0;
+        return  guestCount != 0;
     }
 
     public long getReservationId() {
