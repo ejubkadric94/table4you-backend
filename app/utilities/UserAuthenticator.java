@@ -49,7 +49,7 @@ public class UserAuthenticator extends Security.Authenticator{
      * @param ctx the http context
      * @return the authentication token
      */
-    private String getTokenFromHeader(Http.Context ctx) {
+    protected String getTokenFromHeader(Http.Context ctx) {
         String[] authTokenHeaderValues = ctx.request().headers().get("USER-ACCESS-TOKEN");
         if ((authTokenHeaderValues != null) && (authTokenHeaderValues.length == 1) && (authTokenHeaderValues[0] != null)) {
             return authTokenHeaderValues[0];
