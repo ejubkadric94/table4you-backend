@@ -93,14 +93,6 @@ public class PersistenceManager {
      * @param restaurant the Restaurant to be persisted
      */
     public static void saveRestaurant(Restaurant restaurant){
-        restaurant.getAddress().setRestaurantId(Restaurant.find.all().size() + 1);
-        restaurant.getAddress().setEmail(restaurant.getName().replace(" ","").toLowerCase() + "@restauranttest.com");
-        restaurant.getAddress().save();
-
-        restaurant.getCoordinates().setRestaurantId(Restaurant.find.all().size() + 1);
-        restaurant.getCoordinates().save();
-
-        restaurant.setRestaurantId(Restaurant.find.all().size() + 1);
         restaurant.save();
     }
 
