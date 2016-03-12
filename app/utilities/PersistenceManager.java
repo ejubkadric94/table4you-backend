@@ -144,7 +144,5 @@ public class PersistenceManager {
 
     public static void deleteRestaurant(Restaurant restaurant){
         restaurant.delete();
-        restaurant.getAddress().delete();
-        restaurant.getCoordinates().delete();
     }
 }

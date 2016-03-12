@@ -94,6 +94,6 @@ public class RestaurantController extends Controller{
             return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_NO_RESTAURANT)));
         }
         PersistenceManager.deleteRestaurant(restaurant);
-        return ok(JsonSerializer.serializeObject(new Information(Resources.RESTAURANT_DELETED)));
+        return ok();
     }
 }

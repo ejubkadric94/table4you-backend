@@ -15,6 +15,7 @@ public class UserController extends Controller {
     private PersistenceManager manager = new PersistenceManager();
     private UserHelper userHelper = new UserHelper();
 
+
     /**
      * Registers the user after validating the input.
      * If validation fails, a suitable error will be returned as response.

@@ -13,6 +13,9 @@ import javax.persistence.*;
 @Table(name = "abh_user_address")
 public class Address extends Model{
     @Id
+    @JsonIgnore
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long addressId;
     @Column(name="userEmail", columnDefinition = "VARCHAR(80) DEFAULT 'test@test.com'")
     @JsonIgnore
     private String email;
@@ -81,6 +84,14 @@ public class Address extends Model{
 
     public void setRestaurantId(long restaurantId) {
         this.restaurantId = restaurantId;
+    }
+
+    public long getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(long addressId) {
+        this.addressId = addressId;
     }
 }
 

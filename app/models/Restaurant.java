@@ -2,7 +2,8 @@ package models;
 
 import com.avaje.ebean.Model;
 import com.fasterxml.jackson.annotation.JsonView;
-import utilities.RestaurantViews;
+import utilities.View;
+
 import javax.persistence.*;
 
 /**
@@ -14,37 +15,37 @@ import javax.persistence.*;
 public class Restaurant extends Model{
     @Id
     @Column(name = "restaurantId", columnDefinition = "BIGINT")
-    @JsonView(RestaurantViews.BasicDetails.class)
+    @JsonView(View.BasicDetails.class)
     private long restaurantId;
     @Column(length = 100)
-    @JsonView(RestaurantViews.BasicDetails.class)
+    @JsonView(View.BasicDetails.class)
     private String name;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn(referencedColumnName = "restaurantId")
-    @JsonView(RestaurantViews.BasicDetails.class)
+    @JsonView(View.BasicDetails.class)
     private Address address;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn(referencedColumnName = "restaurantId")
-    @JsonView(RestaurantViews.AllDetails.class)
+    @JsonView(View.AllDetails.class)
     private Coordinates coordinates;
 
     @Column(columnDefinition = "BIGINT")
-    @JsonView(RestaurantViews.BasicDetails.class)
+    @JsonView(View.BasicDetails.class)
     private long phone;
     @Column(name = "workingHours",length = 20)
-    @JsonView(RestaurantViews.BasicDetails.class)
+    @JsonView(View.BasicDetails.class)
     private String workingHours;
-    @JsonView(RestaurantViews.BasicDetails.class)
+    @JsonView(View.BasicDetails.class)
     private double rating;
     @Column(name = "reservationPrice")
-    @JsonView(RestaurantViews.AllDetails.class)
+    @JsonView(View.AllDetails.class)
     private double reservationPrice;
     @Column(length = 200)
-    @JsonView(RestaurantViews.AllDetails.class)
+    @JsonView(View.AllDetails.class)
     private String deals;
-    @JsonView(RestaurantViews.BasicDetails.class)
+    @JsonView(View.BasicDetails.class)
     private String image;
 
     
