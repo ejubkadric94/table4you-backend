@@ -29,7 +29,7 @@ public class RestaurantController extends Controller{
         response().setContentType("application/json");
         Restaurant restaurant = PersistenceManager.getRestaurantById(id);
         if(restaurant == null){
-            return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_NO_RESTAURANT)));
+            return badRequest(JsonSerializer.serializeObject(new Error(Resources.NO_RESTAURANT)));
         }
         return ok(JsonSerializer.serializeAllRestaurantDetails(restaurant));
     }
@@ -74,7 +74,7 @@ public class RestaurantController extends Controller{
 
         Restaurant restaurant = PersistenceManager.getRestaurantById(id);
         if(restaurant == null){
-            return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_NO_RESTAURANT)));
+            return notFound(JsonSerializer.serializeObject(new Error(Resources.NO_RESTAURANT)));
         }
 
         manager.createReservation(reservation);
@@ -83,15 +83,15 @@ public class RestaurantController extends Controller{
 
     public Result editRestaurant(int id) {
         response().setContentType("application/json");
-        Restaurant restaurant = (Restaurant) JsonSerializer.deserialize(request(),Restaurant.class);
-        if(restaurant == null){
-            return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_NO_RESTAURANT)));
-        }
-        if(!restaurant.isValid()) {
+        Restaurant newDetails = (Restaurant) JsonSerializer.deserialize(request(),Restaurant.class);
+        if(!newDetails.isValid()) {
             return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_INVALID_DATA)));
         }
-
-        PersistenceManager.editRestaurant(id, restaurant);
-        return ok(JsonSerializer.serializeObject(new Information(Resources.RESTAURANT_MODIFIED)));
+        Restaurant restaurant = PersistenceManager.getRestaurantById(id);
+        if(restaurant == null){
+            return notFound(JsonSerializer.serializeObject(new Error(Resources.NO_RESTAURANT)));
+        }
+        restaurant.updateData(newDetails);
+        return ok();
     }
 }
