@@ -2,10 +2,10 @@ package utilities;
 
 /**
  * Created by Ejub on 23/02/16.
- * Class UserViews is used with JsonView annotation to specify which User properties will be shown in specific
+ * Class View is used with JsonView annotation to specify which User properties will be shown in specific
  * serialization.
  */
-public class UserViews {
+public class View {
     /**
      * Basic details are:
      */
@@ -16,6 +16,10 @@ public class UserViews {
      * Properties added on top of basic details:
      */
     public static class AllDetails extends BasicDetails {
+    }
+
+    public static class AdditionalDetails extends BasicDetails {
+
     }
 }
 /*

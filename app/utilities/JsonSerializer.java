@@ -3,8 +3,7 @@ package utilities;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import models.Reservation;
-import models.User;
+import models.Review;
 import play.libs.Json;
 import play.mvc.Http.Request;
 
@@ -44,18 +43,11 @@ public class JsonSerializer {
         return json;
     }
 
-    /**
-     * Serializes basic restaurant details.
-     * JsonView annotation is used to specify which Restaurant property will be included in this serialization.
-     *
-     * @param object the Restaurant object to be serialized
-     * @return the JSON representation of the restaurant
-     */
-    public static String serializeBasicRestaurantDetails(Object object) {
+    public static String serializeBasicDetails(Object object){
         ObjectMapper mapper = new ObjectMapper();
         String result = null;
         try {
-            result = mapper.writerWithView(RestaurantViews.BasicDetails.class).withDefaultPrettyPrinter().
+            result = mapper.writerWithView(View.BasicDetails.class).withDefaultPrettyPrinter().
                     writeValueAsString(object);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
@@ -63,30 +55,12 @@ public class JsonSerializer {
         return result;
     }
 
-    /**
-     * Serializes all details of a specific restaurant.
-     *
-     * @param object the Restaurant object to be serialized
-     * @return the JSON representation of the restaurant
-     */
-    public static String serializeAllRestaurantDetails(Object object) {
+    public static String serializeAllDetails(Object object){
         ObjectMapper mapper = new ObjectMapper();
         String result = null;
         try {
-            result = mapper.writerWithView(RestaurantViews.AllDetails.class).withDefaultPrettyPrinter().
+            result = mapper.writerWithView(View.AllDetails.class).withDefaultPrettyPrinter().
                     writeValueAsString(object);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
-    public static String serializeUser(Object user){
-        ObjectMapper mapper = new ObjectMapper();
-        String result = null;
-        try {
-            result = mapper.writerWithView(UserViews.BasicDetails.class).withDefaultPrettyPrinter().
-                    writeValueAsString(user);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

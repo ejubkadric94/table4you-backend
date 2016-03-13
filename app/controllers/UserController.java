@@ -77,6 +77,6 @@ public class UserController extends Controller {
         if(user == null) {
             return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_INVALID_DATA)));
         }
-        return ok(JsonSerializer.serializeUser(user));
+        return ok(JsonSerializer.serializeBasicDetails(user));
     }
 }

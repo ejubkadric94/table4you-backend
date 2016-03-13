@@ -1,9 +1,12 @@
 package models;
 
 import com.avaje.ebean.Model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
-import utilities.RestaurantViews;
+import utilities.View;
+
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by Ejub on 15/02/16.
@@ -14,38 +17,54 @@ import javax.persistence.*;
 public class Restaurant extends Model{
     @Id
     @Column(name = "restaurantId", columnDefinition = "BIGINT")
-    @JsonView(RestaurantViews.BasicDetails.class)
+    @JsonView(View.BasicDetails.class)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long restaurantId;
     @Column(length = 100)
-    @JsonView(RestaurantViews.BasicDetails.class)
+    @JsonView(View.BasicDetails.class)
     private String name;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn(referencedColumnName = "restaurantId")
-    @JsonView(RestaurantViews.BasicDetails.class)
+    @JsonView(View.BasicDetails.class)
     private Address address;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn(referencedColumnName = "restaurantId")
-    @JsonView(RestaurantViews.AllDetails.class)
+    @JsonView(View.AllDetails.class)
     private Coordinates coordinates;
 
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+    @JsonView(View.AdditionalDetails.class)
+    @JsonIgnore
+    private List<Review> reviews;
+
     @Column(columnDefinition = "BIGINT")
-    @JsonView(RestaurantViews.BasicDetails.class)
+    @JsonView(View.BasicDetails.class)
     private long phone;
     @Column(name = "workingHours",length = 20)
-    @JsonView(RestaurantViews.BasicDetails.class)
+    @JsonView(View.BasicDetails.class)
     private String workingHours;
-    @JsonView(RestaurantViews.BasicDetails.class)
+
+    @JsonView(View.BasicDetails.class)
     private double rating;
+    @Column(columnDefinition = "BIGINT DEFAULT 0")
+    @JsonIgnore
+    private long numberOfRatings;
+    @Column(columnDefinition = "DOUBLE DEFAULT 0")
+    @JsonIgnore
+    private double ratingsTotal;
+
     @Column(name = "reservationPrice")
-    @JsonView(RestaurantViews.AllDetails.class)
+    @JsonView(View.AllDetails.class)
     private double reservationPrice;
     @Column(length = 200)
-    @JsonView(RestaurantViews.AllDetails.class)
+    @JsonView(View.AllDetails.class)
     private String deals;
-    @JsonView(RestaurantViews.BasicDetails.class)
+    @JsonView(View.BasicDetails.class)
     private String image;
+
+
 
     
     public static Model.Finder<String, Restaurant> find = new Model.Finder<String, Restaurant>(String.class, Restaurant.class);
@@ -128,5 +147,38 @@ public class Restaurant extends Model{
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    @JsonIgnore
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    public void addReview(Review review) {
+        reviews.add(review);
+        this.setNumberOfRatings(getNumberOfRatings() + 1);
+        this.setRatingsTotal(getRatingsTotal() + review.getRating());
+        this.setRating(getRatingsTotal() / getNumberOfRatings());
+        this.save();
+    }
+
+    public long getNumberOfRatings() {
+        return numberOfRatings;
+    }
+
+    public void setNumberOfRatings(long numberOfRatings) {
+        this.numberOfRatings = numberOfRatings;
+    }
+
+    public double getRatingsTotal() {
+        return ratingsTotal;
+    }
+
+    public void setRatingsTotal(double ratingsTotal) {
+        this.ratingsTotal = ratingsTotal;
     }
 }
