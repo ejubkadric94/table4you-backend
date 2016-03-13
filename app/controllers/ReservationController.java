@@ -34,7 +34,7 @@ public class ReservationController extends Controller {
 
         Restaurant restaurant = PersistenceManager.getRestaurantById(id);
         if(restaurant == null){
-            return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_NO_RESTAURANT)));
+            return notFound(JsonSerializer.serializeObject(new Error(Resources.NO_RESTAURANT)));
         }
 
         manager.createReservation(reservation, restaurant);
@@ -44,7 +44,7 @@ public class ReservationController extends Controller {
     public Result getAllReservations(int id) {
         Restaurant restaurant = PersistenceManager.getRestaurantById(id);
         if(restaurant == null){
-            return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_NO_RESTAURANT)));
+            return notFound(JsonSerializer.serializeObject(new Error(Resources.NO_RESTAURANT)));
         }
         List<Reservation> list = PersistenceManager.getAllReservations(id);
         return ok(JsonSerializer.serializeObject(list));

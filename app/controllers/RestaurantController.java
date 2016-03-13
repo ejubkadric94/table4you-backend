@@ -1,10 +1,8 @@
 package controllers;
 
-import models.Reservation;
 import models.Restaurant;
 import play.mvc.Controller;
 import play.mvc.Result;
-import play.mvc.Security;
 import utilities.*;
 import utilities.Error;
 
@@ -29,7 +27,7 @@ public class RestaurantController extends Controller{
         response().setContentType("application/json");
         Restaurant restaurant = PersistenceManager.getRestaurantById(id);
         if(restaurant == null){
-            return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_NO_RESTAURANT)));
+            return badRequest(JsonSerializer.serializeObject(new Error(Resources.NO_RESTAURANT)));
         }
         return ok(JsonSerializer.serializeAllRestaurantDetails(restaurant));
     }
