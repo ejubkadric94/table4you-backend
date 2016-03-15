@@ -80,4 +80,19 @@ public class RestaurantController extends Controller{
         manager.createReservation(reservation);
         return created(JsonSerializer.serializeObject(new ReservationHelper(reservation.getReservationId())));
     }
+
+    /**
+     * Creates a Restaurant and stores it.
+     *
+     * @return the restaurantId
+     */
+    public Result createRestaurant(){
+        response().setContentType("application/json");
+        Restaurant restaurant =(Restaurant) JsonSerializer.deserialize(request(),Restaurant.class);
+        if(!restaurant.isValid()) {
+            return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_INVALID_DATA)));
+        }
+        PersistenceManager.saveRestaurant(restaurant);
+        return ok(JsonSerializer.serializeObject(new RestaurantHelper(restaurant.getRestaurantId())));
+    }
 }

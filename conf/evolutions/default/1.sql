@@ -4,12 +4,13 @@
 # --- !Ups
 
 create table abh_user_address (
-  userEmail                 VARCHAR(80) DEFAULT 'test@test.com' not null,
+  address_id                bigint auto_increment not null,
+  userEmail                 VARCHAR(80) DEFAULT 'test@test.com',
   streetName                varchar(100),
   city                      varchar(100),
   country                   varchar(100),
   restaurantId              BIGINT,
-  constraint pk_abh_user_address primary key (userEmail))
+  constraint pk_abh_user_address primary key (address_id))
 ;
 
 create table abh_coordinates (
@@ -31,7 +32,7 @@ create table abh_reservation (
 create table abh_restaurant (
   restaurantId              BIGINT auto_increment not null,
   name                      varchar(100),
-  address_userEmail         VARCHAR(80) DEFAULT 'test@test.com',
+  address_address_id        bigint,
   coordinates_restaurantId  BIGINT,
   phone                     BIGINT,
   workingHours              varchar(20),
@@ -39,7 +40,7 @@ create table abh_restaurant (
   reservationPrice          double,
   deals                     varchar(200),
   image                     varchar(255),
-  constraint uq_abh_restaurant_address_userEmail unique (address_userEmail),
+  constraint uq_abh_restaurant_address_address_id unique (address_address_id),
   constraint uq_abh_restaurant_coordinates_restaurantId unique (coordinates_restaurantId),
   constraint pk_abh_restaurant primary key (restaurantId))
 ;
@@ -57,24 +58,24 @@ create table abh_user (
   passwordConfirmation      varchar(100),
   firstName                 varchar(25),
   lastName                  varchar(25),
-  address_userEmail         VARCHAR(80) DEFAULT 'test@test.com',
+  address_address_id        bigint,
   phone                     BIGINT,
   gender                    varchar(6),
   birthdate                 date,
   auth_token_userEmail      VARCHAR(80) DEFAULT 'test@test.com',
   isConfirmed               tinyint(1) default 0,
   is_admin                  tinyint(1) default 0,
-  constraint uq_abh_user_address_userEmail unique (address_userEmail),
+  constraint uq_abh_user_address_address_id unique (address_address_id),
   constraint uq_abh_user_auth_token_userEmail unique (auth_token_userEmail),
   constraint pk_abh_user primary key (email))
 ;
 
-alter table abh_restaurant add constraint fk_abh_restaurant_address_1 foreign key (address_userEmail) references abh_user_address (userEmail) on delete restrict on update restrict;
-create index ix_abh_restaurant_address_1 on abh_restaurant (address_userEmail);
+alter table abh_restaurant add constraint fk_abh_restaurant_address_1 foreign key (address_address_id) references abh_user_address (address_id) on delete restrict on update restrict;
+create index ix_abh_restaurant_address_1 on abh_restaurant (address_address_id);
 alter table abh_restaurant add constraint fk_abh_restaurant_coordinates_2 foreign key (coordinates_restaurantId) references abh_coordinates (restaurantId) on delete restrict on update restrict;
 create index ix_abh_restaurant_coordinates_2 on abh_restaurant (coordinates_restaurantId);
-alter table abh_user add constraint fk_abh_user_address_3 foreign key (address_userEmail) references abh_user_address (userEmail) on delete restrict on update restrict;
-create index ix_abh_user_address_3 on abh_user (address_userEmail);
+alter table abh_user add constraint fk_abh_user_address_3 foreign key (address_address_id) references abh_user_address (address_id) on delete restrict on update restrict;
+create index ix_abh_user_address_3 on abh_user (address_address_id);
 alter table abh_user add constraint fk_abh_user_authToken_4 foreign key (auth_token_userEmail) references abh_user_token (userEmail) on delete restrict on update restrict;
 create index ix_abh_user_authToken_4 on abh_user (auth_token_userEmail);
 
