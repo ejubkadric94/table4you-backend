@@ -58,6 +58,7 @@ public class UserController extends Controller {
      *
      * @return the authorization token in JSON format
      */
+    @Security.Authenticated(AdminAuthenticator.class)
     public Result login(){
         response().setContentType("application/json");
         UserSession userSession = (UserSession) JsonSerializer.deserialize(request(), UserSession.class);

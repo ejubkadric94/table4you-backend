@@ -19,8 +19,8 @@ public class AdminAuthenticator extends UserAuthenticator{
      */
     @Override
     public String getUsername(Http.Context ctx) {
-        System.out.println(super.getUsername(ctx));
-        User user = PersistenceManager.getUserByEmail(super.getUsername(ctx));
+        super.getUsername(ctx);
+        User user =(User) ctx.args.get("CurrentUser");
         if(user == null){
             return null;
         }
