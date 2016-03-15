@@ -29,7 +29,12 @@ public class UserAuthenticator extends Security.Authenticator{
             }
             User user = PersistenceManager.getUserByEmail(tempToken.getEmail());
             if (user != null) {
-                return user.isConfirmed() ? user.getEmail() : null;
+                if(user.isConfirmed()){
+                    ctx.args.put("CurrentUser", user);
+                    return user.getEmail();
+                } else{
+                    return null;
+                }
             }
             if(!user.isConfirmed()) {
                 return null;

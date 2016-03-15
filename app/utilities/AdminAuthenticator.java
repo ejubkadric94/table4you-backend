@@ -19,17 +19,11 @@ public class AdminAuthenticator extends UserAuthenticator{
      */
     @Override
     public String getUsername(Http.Context ctx) {
-        String token = getTokenFromHeader(ctx);
-        if (token != null) {
-            Token tempToken = PersistenceManager.getToken(token);
-            if (tempToken == null) {
-                return null;
-            }
-            User user = PersistenceManager.getUserByEmail(tempToken.getEmail());
-            if (user != null) {
-                return user.getEmail().equals(Play.application().configuration().getString("admin_email")) ? user.getEmail() : null;
-            }
+        System.out.println(super.getUsername(ctx));
+        User user = PersistenceManager.getUserByEmail(super.getUsername(ctx));
+        if(user == null){
+            return null;
         }
-        return null;
+        return user.isAdmin() ? user.getEmail() : null;
     }
 }

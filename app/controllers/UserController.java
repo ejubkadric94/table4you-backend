@@ -73,6 +73,7 @@ public class UserController extends Controller {
 
     @Security.Authenticated(UserAuthenticator.class)
     public Result getCurrentUser(){
+        response().setContentType("application/json");
         User user = PersistenceManager.getUserFromRequest(request());
         if(user == null) {
             return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_INVALID_DATA)));
