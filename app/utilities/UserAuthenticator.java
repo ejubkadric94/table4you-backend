@@ -29,7 +29,12 @@ public class UserAuthenticator extends Security.Authenticator{
             }
             User user = PersistenceManager.getUserByEmail(tempToken.getEmail());
             if (user != null) {
-                return user.isConfirmed() ? user.getEmail() : null;
+                if(user.isConfirmed()){
+                    ctx.args.put("CurrentUser", user);
+                    return user.getEmail();
+                } else{
+                    return null;
+                }
             }
             if(!user.isConfirmed()) {
                 return null;
@@ -49,7 +54,7 @@ public class UserAuthenticator extends Security.Authenticator{
      * @param ctx the http context
      * @return the authentication token
      */
-    private String getTokenFromHeader(Http.Context ctx) {
+    protected String getTokenFromHeader(Http.Context ctx) {
         String[] authTokenHeaderValues = ctx.request().headers().get("USER-ACCESS-TOKEN");
         if ((authTokenHeaderValues != null) && (authTokenHeaderValues.length == 1) && (authTokenHeaderValues[0] != null)) {
             return authTokenHeaderValues[0];

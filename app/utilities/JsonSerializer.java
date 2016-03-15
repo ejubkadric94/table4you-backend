@@ -3,8 +3,6 @@ package utilities;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import models.Reservation;
-import models.User;
 import play.libs.Json;
 import play.mvc.Http.Request;
 
@@ -55,7 +53,7 @@ public class JsonSerializer {
         ObjectMapper mapper = new ObjectMapper();
         String result = null;
         try {
-            result = mapper.writerWithView(RestaurantViews.BasicDetails.class).withDefaultPrettyPrinter().
+            result = mapper.writerWithView(View.BasicDetails.class).withDefaultPrettyPrinter().
                     writeValueAsString(object);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
@@ -73,7 +71,7 @@ public class JsonSerializer {
         ObjectMapper mapper = new ObjectMapper();
         String result = null;
         try {
-            result = mapper.writerWithView(RestaurantViews.AllDetails.class).withDefaultPrettyPrinter().
+            result = mapper.writerWithView(View.AllDetails.class).withDefaultPrettyPrinter().
                     writeValueAsString(object);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
@@ -85,7 +83,7 @@ public class JsonSerializer {
         ObjectMapper mapper = new ObjectMapper();
         String result = null;
         try {
-            result = mapper.writerWithView(UserViews.BasicDetails.class).withDefaultPrettyPrinter().
+            result = mapper.writerWithView(View.BasicDetails.class).withDefaultPrettyPrinter().
                     writeValueAsString(user);
         } catch (JsonProcessingException e) {
             e.printStackTrace();

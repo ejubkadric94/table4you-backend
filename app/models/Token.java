@@ -2,10 +2,8 @@ package models;
 
 import com.avaje.ebean.Model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonView;
 import com.google.gson.annotations.SerializedName;
 import play.data.format.Formats;
-import utilities.UserViews;
 
 import javax.persistence.*;
 import java.util.Calendar;
