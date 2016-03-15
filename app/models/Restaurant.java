@@ -6,7 +6,8 @@ import com.fasterxml.jackson.annotation.JsonView;
 import utilities.PersistenceManager;
 import utilities.Validation;
 import utilities.View;
-
+import utilities.Validation;
+import utilities.View;
 import javax.persistence.*;
 
 /**
@@ -15,10 +16,11 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "abh_restaurant")
-public class Restaurant extends Model implements Validation {
+public class Restaurant extends Model implements Validation{
     @Id
     @Column(name = "restaurantId", columnDefinition = "BIGINT")
     @JsonView(View.BasicDetails.class)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long restaurantId;
     @Column(length = 100)
     @JsonView(View.BasicDetails.class)
@@ -50,7 +52,7 @@ public class Restaurant extends Model implements Validation {
     private String deals;
     @JsonView(View.BasicDetails.class)
     private String image;
-    
+
     public static Model.Finder<String, Restaurant> find = new Model.Finder<String, Restaurant>(String.class, Restaurant.class);
 
     /**
