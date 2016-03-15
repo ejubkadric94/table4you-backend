@@ -1,7 +1,9 @@
 package models;
 
 import com.avaje.ebean.Model;
+import com.avaje.ebean.config.PersistBatch;
 import com.fasterxml.jackson.annotation.JsonView;
+import utilities.PersistenceManager;
 import utilities.Validation;
 import utilities.View;
 
@@ -85,7 +87,7 @@ public class Restaurant extends Model implements Validation {
 
         this.updateAddress(restaurant.getAddress());
         this.updateCoordinates(restaurant.getCoordinates());
-        this.save();
+        PersistenceManager.saveRestaurant(this);
     }
 
     public long getRestaurantId() {

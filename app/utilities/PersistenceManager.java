@@ -141,4 +141,10 @@ public class PersistenceManager {
 
         return list;
     }
+
+    public static void saveRestaurant(Restaurant restaurant){
+        if(restaurant != null){
+            restaurant.save();
+        }
+    }
 }
