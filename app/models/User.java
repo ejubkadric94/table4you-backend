@@ -38,7 +38,7 @@ public class User extends Model implements Validation {
     @Column(name = "lastName", length = 25)
     @JsonView(UserViews.BasicDetails.class)
     private String lastName;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn(referencedColumnName = "userEmail")
     @JsonView(UserViews.BasicDetails.class)
     private Address address;
@@ -52,7 +52,7 @@ public class User extends Model implements Validation {
     @JsonFormat(pattern = "dd/mm/yyyy")
     @JsonView(UserViews.BasicDetails.class)
     private Date birthdate;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn(referencedColumnName = "userEmail")
     @JsonIgnore
     @JsonView(UserViews.AllDetails.class)
@@ -61,7 +61,8 @@ public class User extends Model implements Validation {
     @JsonIgnore
     @JsonView(UserViews.AllDetails.class)
     private boolean isConfirmed;
-
+    @JsonIgnore
+    private boolean isAdmin;
 
     public User(){
 
@@ -186,6 +187,15 @@ public class User extends Model implements Validation {
 
     public void setPasswordConfirmation(String passwordConfirmation) {
         this.passwordConfirmation = passwordConfirmation;
+    }
+
+    @JsonIgnore
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
     }
 
     /**
