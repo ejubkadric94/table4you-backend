@@ -12,6 +12,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "abh_user_address")
 public class Address extends Model{
+
 	@Id
 	@JsonIgnore
 	@GeneratedValue(strategy = GenerationType.AUTO)

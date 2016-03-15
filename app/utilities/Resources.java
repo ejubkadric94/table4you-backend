@@ -13,7 +13,8 @@ public final class Resources {
     public static final String BAD_REQUEST_INVALID_PARAMETERS = "Invalid parameters specified";
     public static final String SERVER_NAME = "default-environment.z6gkicxids.us-west-2.elasticbeanstalk.com"; //"api.table4you" when deployed
     public static final String VERSION = "v1";
-	public static final String ADMINISTRATOR_EMAIL = "ejubkadric@gmail.com";
+    public static final String RESTAURANT_DELETED = "Restaurant successfuly deleted";
+
 
     private Resources(){}
 }

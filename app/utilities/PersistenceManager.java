@@ -150,4 +150,8 @@ public class PersistenceManager {
 
         return list;
     }
+
+    public static void deleteRestaurant(Restaurant restaurant){
+        restaurant.delete();
+    }
 }
