@@ -1,10 +1,8 @@
 package controllers;
 
-import models.Reservation;
 import models.Restaurant;
 import play.mvc.Controller;
 import play.mvc.Result;
-import play.mvc.Security;
 import utilities.*;
 import utilities.Error;
 
@@ -55,31 +53,6 @@ public class RestaurantController extends Controller{
         return ok(JsonSerializer.serializeBasicRestaurantDetails(restaurantList));
     }
 
-    /**
-     * Creates a reservation for a specific restaurant with reservation info.
-     * Reservation info should be contained in http request header in JSON form.
-     * Method will validate the request before creating reservation, and if validation fails, suitable error will
-     * be sent as response.
-     *
-     * @param id the restaurantId of a restaurant
-     * @return the response containing reservation Id
-     */
-    @Security.Authenticated(UserAuthenticator.class)
-    public Result makeReservation(int id){
-        response().setContentType("application/json");
-        Reservation reservation = (Reservation) JsonSerializer.deserialize(request(), Reservation.class);
-        if(reservation == null || !reservation.isValid()) {
-            return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_INVALID_DATA)));
-        }
-
-        Restaurant restaurant = PersistenceManager.getRestaurantById(id);
-        if(restaurant == null){
-            return notFound(JsonSerializer.serializeObject(new Error(Resources.NO_RESTAURANT)));
-        }
-
-        manager.createReservation(reservation);
-        return created(JsonSerializer.serializeObject(new ReservationHelper(reservation.getReservationId())));
-    }
 
     public Result editRestaurant(int id) {
         response().setContentType("application/json");
