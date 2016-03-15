@@ -26,8 +26,7 @@ public class PersistenceManager {
             user.setPasswordConfirmation(DigestUtils.md5Hex(user.getPasswordConfirmation()));
             Email.sendConfirmationEmail(user.getEmail(), Resources.SERVER_NAME + "/" + Resources.VERSION
                     + "/registration/confirm/" + UserHelper.encodeToken(user.getAuthToken().getToken()));
-            user.getAddress().save();
-            user.getAuthToken().save();
+            user.setAdmin(false);
             user.save();
         }
     }
