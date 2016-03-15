@@ -1,7 +1,11 @@
 package models;
 
 import com.avaje.ebean.Model;
+import com.avaje.ebean.config.PersistBatch;
 import com.fasterxml.jackson.annotation.JsonView;
+import utilities.PersistenceManager;
+import utilities.Validation;
+import utilities.View;
 import utilities.Validation;
 import utilities.View;
 import javax.persistence.*;
@@ -49,6 +53,8 @@ public class Restaurant extends Model implements Validation{
     @JsonView(View.BasicDetails.class)
     private String image;
 
+    public static Model.Finder<String, Restaurant> find = new Model.Finder<String, Restaurant>(String.class, Restaurant.class);
+
     /**
      * Validates the restaurant properties.
      *
@@ -61,7 +67,30 @@ public class Restaurant extends Model implements Validation{
                 && phone != 0;
     }
 
-    public static Model.Finder<String, Restaurant> find = new Model.Finder<String, Restaurant>(String.class, Restaurant.class);
+    public void updateCoordinates(Coordinates coordinates){
+        this.getCoordinates().setLatitude(coordinates.getLatitude());
+        this.getCoordinates().setLongitude(coordinates.getLongitude());
+    }
+
+    public void updateAddress(Address address) {
+        this.getAddress().setStreetName(address.getStreetName());
+        this.getAddress().setCity(address.getCity());
+        this.getAddress().setCountry(address.getCountry());
+    }
+
+    public void updateData(Restaurant restaurant) {
+        this.setDeals(restaurant.getDeals());
+        this.setImage(restaurant.getImage());
+        this.setName(restaurant.getName());
+        this.setPhone(restaurant.getPhone());
+        this.setRating(restaurant.getRating());
+        this.setReservationPrice(restaurant.getReservationPrice());
+        this.setWorkingHours(restaurant.getWorkingHours());
+
+        this.updateAddress(restaurant.getAddress());
+        this.updateCoordinates(restaurant.getCoordinates());
+        PersistenceManager.saveRestaurant(this);
+    }
 
     public long getRestaurantId() {
         return restaurantId;

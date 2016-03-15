@@ -12,11 +12,10 @@ import javax.persistence.*;
 @Entity
 @Table(name = "abh_user_address")
 public class Address extends Model{
-
-	@Id
-	@JsonIgnore
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long addressId;
+    @Id
+    @JsonIgnore
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long addressId;
     @Column(name="userEmail", columnDefinition = "VARCHAR(80) DEFAULT 'test@test.com'")
     @JsonIgnore
     private String email;
