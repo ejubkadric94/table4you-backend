@@ -20,7 +20,7 @@ public class RestaurantController extends Controller{
 
     /**
      * Retrieves details of a restaurant specified by Id.
-     * Method checks if restaurant exists, and then proceeds furhter if restaurant is found, or an error is thrown.
+     * Method checks if restaurant exists, and then proceeds further if restaurant is found, or an error is thrown.
      *
      * @param id the restaurantId
      * @return Returns a response with restaurant details rendered as JSON
@@ -90,10 +90,24 @@ public class RestaurantController extends Controller{
     public Result deleteRestaurant(int id) {
         response().setContentType("application/json");
         Restaurant restaurant = PersistenceManager.getRestaurantById(id);
-        if(restaurant == null){
+        if (restaurant == null) {
             return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_NO_RESTAURANT)));
         }
         PersistenceManager.deleteRestaurant(restaurant);
         return ok();
+    }
+    /**
+     * Creates a Restaurant and stores it.
+     *
+     * @return the restaurantId
+     */
+    public Result createRestaurant(){
+        response().setContentType("application/json");
+        Restaurant restaurant =(Restaurant) JsonSerializer.deserialize(request(),Restaurant.class);
+        if(!restaurant.isValid()) {
+            return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_INVALID_DATA)));
+        }
+        PersistenceManager.saveRestaurant(restaurant);
+        return ok(JsonSerializer.serializeObject(new RestaurantHelper(restaurant.getRestaurantId())));
     }
 }

@@ -8,6 +8,11 @@ import java.util.*;
  */
 public class RestaurantHelper {
     private long restaurantId;
+
+    public RestaurantHelper(long restaurantId) {
+        this.restaurantId = restaurantId;
+    }
+
     /**
      * Produces HashMap of filter keys and filter values.
      *
@@ -59,10 +64,6 @@ public class RestaurantHelper {
         return true;
     }
 
-    public RestaurantHelper(long restaurantId) {
-        this.restaurantId = restaurantId;
-    }
-
     public long getRestaurantId() {
         return restaurantId;
     }
@@ -70,4 +71,5 @@ public class RestaurantHelper {
     public void setRestaurantId(long restaurantId) {
         this.restaurantId = restaurantId;
     }
+
 }

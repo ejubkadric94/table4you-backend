@@ -26,8 +26,7 @@ public class PersistenceManager {
             user.setPasswordConfirmation(DigestUtils.md5Hex(user.getPasswordConfirmation()));
             Email.sendConfirmationEmail(user.getEmail(), Resources.SERVER_NAME + "/" + Resources.VERSION
                     + "/registration/confirm/" + UserHelper.encodeToken(user.getAuthToken().getToken()));
-            user.getAddress().save();
-            user.getAuthToken().save();
+            user.setAdmin(false);
             user.save();
         }
     }
@@ -40,7 +39,7 @@ public class PersistenceManager {
 
     /**
      * Retrieves the user from UserSession.
-     * F irstly the validation is done on UserSession object.
+     * Firstly the validation is done on UserSession object.
      *
      * @param userSession the UserSession object
      * @return The User retrieved
@@ -79,11 +78,21 @@ public class PersistenceManager {
 
     /**
      * Retrieves the authentication token from database.
+     *
      * @param token the token to be found
      * @return token or null if there is no token
      */
     public static Token getToken(String token){
         return Token.find.where().eq("token", token).findUnique();
+    }
+
+    /**
+     * Persists restaurant into database.
+     *
+     * @param restaurant the Restaurant to be persisted
+     */
+    public static void saveRestaurant(Restaurant restaurant){
+        restaurant.save();
     }
 
     /**

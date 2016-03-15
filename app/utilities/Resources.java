@@ -15,6 +15,7 @@ public final class Resources {
     public static final String VERSION = "v1";
     public static final String RESTAURANT_DELETED = "Restaurant successfuly deleted";
 
+
     private Resources(){}
 }
 
