@@ -42,6 +42,7 @@ public class ReservationController extends Controller {
     }
 
     public Result getAllReservations(int id) {
+        response().setContentType("application/json");
         Restaurant restaurant = PersistenceManager.getRestaurantById(id);
         if(restaurant == null){
             return notFound(JsonSerializer.serializeObject(new Error(Resources.NO_RESTAURANT)));

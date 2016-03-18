@@ -70,14 +70,7 @@ public class Address extends Model{
     public void setStreetName(String streetName) {
         this.streetName = streetName;
     }
-	
-	public long getAddressId() {
-        return addressId;
-    }
 
-    public void setAddressId(long id) {
-        this.addressId = id;
-    }
 
     /**
      * Returns the restaurantId when used in code, but JsonIgnore annotation makes sure that restaurantId will be
@@ -92,6 +85,14 @@ public class Address extends Model{
 
     public void setRestaurantId(long restaurantId) {
         this.restaurantId = restaurantId;
+    }
+
+    public long getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(long addressId) {
+        this.addressId = addressId;
     }
 }
 

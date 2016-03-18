@@ -29,7 +29,7 @@ public class RestaurantController extends Controller{
         if(restaurant == null){
             return badRequest(JsonSerializer.serializeObject(new Error(Resources.NO_RESTAURANT)));
         }
-        return ok(JsonSerializer.serializeAllRestaurantDetails(restaurant));
+        return ok(JsonSerializer.serializeAllDetails(restaurant));
     }
 
     /**
@@ -50,12 +50,11 @@ public class RestaurantController extends Controller{
             return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_INVALID_PARAMETERS)));
         }
         List<Restaurant> restaurantList = PersistenceManager.getAllRestaurants(offset, limit, filter, order);
-        return ok(JsonSerializer.serializeBasicRestaurantDetails(restaurantList));
+        return ok(JsonSerializer.serializeBasicDetails(restaurantList));
     }
 
 
     public Result editRestaurant(int id) {
-        response().setContentType("application/json");
         Restaurant newDetails = (Restaurant) JsonSerializer.deserialize(request(),Restaurant.class);
         if(!newDetails.isValid()) {
             return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_INVALID_DATA)));

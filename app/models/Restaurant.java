@@ -1,6 +1,10 @@
 package models;
 
 import com.avaje.ebean.Model;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+import utilities.View;
 import com.avaje.ebean.config.PersistBatch;
 import com.fasterxml.jackson.annotation.JsonView;
 import utilities.PersistenceManager;
@@ -9,6 +13,7 @@ import utilities.View;
 import utilities.Validation;
 import utilities.View;
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by Ejub on 15/02/16.
@@ -36,6 +41,11 @@ public class Restaurant extends Model implements Validation{
     @JsonView(View.AllDetails.class)
     private Coordinates coordinates;
 
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+    @JsonView(View.AdditionalDetails.class)
+    @JsonIgnore
+    private List<Review> reviews;
+
     @Column(columnDefinition = "BIGINT")
     @JsonView(View.BasicDetails.class)
     private long phone;
@@ -44,6 +54,13 @@ public class Restaurant extends Model implements Validation{
     private String workingHours;
     @JsonView(View.BasicDetails.class)
     private double rating;
+    @Column(columnDefinition = "BIGINT DEFAULT 0")
+    @JsonIgnore
+    private long numberOfRatings;
+    @Column(columnDefinition = "DOUBLE DEFAULT 0")
+    @JsonIgnore
+    private double ratingsTotal;
+
     @Column(name = "reservationPrice")
     @JsonView(View.AllDetails.class)
     private double reservationPrice;
@@ -52,6 +69,7 @@ public class Restaurant extends Model implements Validation{
     private String deals;
     @JsonView(View.BasicDetails.class)
     private String image;
+
 
     public static Model.Finder<String, Restaurant> find = new Model.Finder<String, Restaurant>(String.class, Restaurant.class);
 
@@ -170,5 +188,38 @@ public class Restaurant extends Model implements Validation{
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    @JsonIgnore
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    public void addReview(Review review) {
+        reviews.add(review);
+        this.setNumberOfRatings(getNumberOfRatings() + 1);
+        this.setRatingsTotal(getRatingsTotal() + review.getRating());
+        this.setRating(getRatingsTotal() / getNumberOfRatings());
+        this.save();
+    }
+
+    public long getNumberOfRatings() {
+        return numberOfRatings;
+    }
+
+    public void setNumberOfRatings(long numberOfRatings) {
+        this.numberOfRatings = numberOfRatings;
+    }
+
+    public double getRatingsTotal() {
+        return ratingsTotal;
+    }
+
+    public void setRatingsTotal(double ratingsTotal) {
+        this.ratingsTotal = ratingsTotal;
     }
 }

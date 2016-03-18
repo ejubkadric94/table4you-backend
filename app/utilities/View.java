@@ -17,6 +17,10 @@ public class View {
      */
     public static class AllDetails extends BasicDetails {
     }
+
+    public static class AdditionalDetails extends BasicDetails {
+
+    }
 }
 /*
 scp -i /Users/test/Documents/Ejub/praksa/aws_key.pem /Users/test/Documents/Ejub/praksa/target/scala-2.11/api ec2-user@ec2-54-191-24-106.us-west-2.compute.amazonaws.com:/api
