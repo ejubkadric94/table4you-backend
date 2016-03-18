@@ -15,6 +15,7 @@ public class UserController extends Controller {
     private PersistenceManager manager = new PersistenceManager();
     private UserHelper userHelper = new UserHelper();
 
+
     /**
      * Registers the user after validating the input.
      * If validation fails, a suitable error will be returned as response.
@@ -73,6 +74,7 @@ public class UserController extends Controller {
 
     @Security.Authenticated(UserAuthenticator.class)
     public Result getCurrentUser(){
+        response().setContentType("application/json");
         User user = PersistenceManager.getUserFromRequest(request());
         if(user == null) {
             return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_INVALID_DATA)));

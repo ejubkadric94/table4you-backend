@@ -74,6 +74,7 @@ create table abh_user (
   birthdate                 date,
   auth_token_userEmail      VARCHAR(80) DEFAULT 'test@test.com',
   isConfirmed               tinyint(1) default 0,
+  is_admin                  tinyint(1) default 0,
   constraint uq_abh_user_address_address_id unique (address_address_id),
   constraint uq_abh_user_auth_token_userEmail unique (auth_token_userEmail),
   constraint pk_abh_user primary key (email))

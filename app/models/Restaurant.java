@@ -1,10 +1,17 @@
 package models;
 
 import com.avaje.ebean.Model;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import utilities.View;
-
+import com.avaje.ebean.config.PersistBatch;
+import com.fasterxml.jackson.annotation.JsonView;
+import utilities.PersistenceManager;
+import utilities.Validation;
+import utilities.View;
+import utilities.Validation;
+import utilities.View;
 import javax.persistence.*;
 import java.util.List;
 
@@ -14,7 +21,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "abh_restaurant")
-public class Restaurant extends Model{
+public class Restaurant extends Model implements Validation{
     @Id
     @Column(name = "restaurantId", columnDefinition = "BIGINT")
     @JsonView(View.BasicDetails.class)
@@ -45,7 +52,6 @@ public class Restaurant extends Model{
     @Column(name = "workingHours",length = 20)
     @JsonView(View.BasicDetails.class)
     private String workingHours;
-
     @JsonView(View.BasicDetails.class)
     private double rating;
     @Column(columnDefinition = "BIGINT DEFAULT 0")
@@ -65,9 +71,44 @@ public class Restaurant extends Model{
     private String image;
 
 
-
-    
     public static Model.Finder<String, Restaurant> find = new Model.Finder<String, Restaurant>(String.class, Restaurant.class);
+
+    /**
+     * Validates the restaurant properties.
+     *
+     * @return true if validation is successful
+     */
+    @Override
+    public boolean isValid() {
+        return !name.equals("") && !address.getCity().equals("") && !address.getCountry().equals("") &&
+                !address.getStreetName().equals("") && coordinates.getLatitude() != 0 && coordinates.getLongitude() != 0
+                && phone != 0;
+    }
+
+    public void updateCoordinates(Coordinates coordinates){
+        this.getCoordinates().setLatitude(coordinates.getLatitude());
+        this.getCoordinates().setLongitude(coordinates.getLongitude());
+    }
+
+    public void updateAddress(Address address) {
+        this.getAddress().setStreetName(address.getStreetName());
+        this.getAddress().setCity(address.getCity());
+        this.getAddress().setCountry(address.getCountry());
+    }
+
+    public void updateData(Restaurant restaurant) {
+        this.setDeals(restaurant.getDeals());
+        this.setImage(restaurant.getImage());
+        this.setName(restaurant.getName());
+        this.setPhone(restaurant.getPhone());
+        this.setRating(restaurant.getRating());
+        this.setReservationPrice(restaurant.getReservationPrice());
+        this.setWorkingHours(restaurant.getWorkingHours());
+
+        this.updateAddress(restaurant.getAddress());
+        this.updateCoordinates(restaurant.getCoordinates());
+        PersistenceManager.saveRestaurant(this);
+    }
 
     public long getRestaurantId() {
         return restaurantId;

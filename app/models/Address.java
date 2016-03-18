@@ -71,6 +71,7 @@ public class Address extends Model{
         this.streetName = streetName;
     }
 
+
     /**
      * Returns the restaurantId when used in code, but JsonIgnore annotation makes sure that restaurantId will be
      * ignored from serialization.
