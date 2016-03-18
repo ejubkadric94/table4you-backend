@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import play.data.validation.Constraints;
+import utilities.PersistenceManager;
 import utilities.UserHelper;
 import utilities.View;
 import utilities.Validation;

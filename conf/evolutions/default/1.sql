@@ -20,6 +20,16 @@ create table abh_coordinates (
   constraint pk_abh_coordinates primary key (restaurantId))
 ;
 
+create table abh_photo (
+  id                        bigint auto_increment not null,
+  bucket                    varchar(255),
+  name                      varchar(255),
+  size_type                 varchar(255),
+  is_default                tinyint(1) default 0,
+  restaurant_id             bigint,
+  constraint pk_abh_photo primary key (id))
+;
+
 create table abh_reservation (
   reservationId             BIGINT auto_increment not null,
   restaurantId              BIGINT,
@@ -100,6 +110,8 @@ SET FOREIGN_KEY_CHECKS=0;
 drop table abh_user_address;
 
 drop table abh_coordinates;
+
+drop table abh_photo;
 
 drop table abh_reservation;
 
