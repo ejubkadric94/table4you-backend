@@ -31,8 +31,6 @@ public class S3Plugin extends Plugin {
         String secretKey = application.configuration().getString(AWS_SECRET_KEY);
         s3Bucket = application.configuration().getString(AWS_S3_BUCKET);
 
-        System.out.println("ACCESSKEY "+accessKey);
-        System.out.println("ACCESSKEY "+secretKey);
         if ((accessKey != null) && (secretKey != null)) {
             AWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
             amazonS3 = new AmazonS3Client(awsCredentials);
@@ -43,8 +41,6 @@ public class S3Plugin extends Plugin {
 
     @Override
     public boolean enabled() {
-        System.out.println("ACCESSKEY "+System.getenv(AWS_ACCESS_KEY));
-
         return (application.configuration().keys().contains(AWS_ACCESS_KEY) &&
                 application.configuration().keys().contains(AWS_SECRET_KEY) &&
                 application.configuration().keys().contains(AWS_S3_BUCKET));

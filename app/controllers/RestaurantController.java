@@ -82,6 +82,7 @@ public class RestaurantController extends Controller{
         PersistenceManager.deleteRestaurant(restaurant);
         return ok();
     }
+
     /**
      * Creates a Restaurant and stores it.
      *

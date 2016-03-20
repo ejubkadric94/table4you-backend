@@ -45,6 +45,10 @@ public class Restaurant extends Model implements Validation{
     @JsonView(View.AdditionalDetails.class)
     @JsonIgnore
     private List<Review> reviews;
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+    @JsonView(View.AdditionalDetails.class)
+    @JsonIgnore
+    private List<Photo> photos;
 
     @Column(columnDefinition = "BIGINT")
     @JsonView(View.BasicDetails.class)
@@ -79,6 +83,7 @@ public class Restaurant extends Model implements Validation{
      * @return true if validation is successful
      */
     @Override
+    @JsonView(View.AdditionalDetails.class)
     public boolean isValid() {
         return !name.equals("") && !address.getCity().equals("") && !address.getCountry().equals("") &&
                 !address.getStreetName().equals("") && coordinates.getLatitude() != 0 && coordinates.getLongitude() != 0
@@ -191,12 +196,23 @@ public class Restaurant extends Model implements Validation{
     }
 
     @JsonIgnore
+    @JsonView(View.AdditionalDetails.class)
     public List<Review> getReviews() {
         return reviews;
     }
 
     public void setReviews(List<Review> reviews) {
         this.reviews = reviews;
+    }
+
+    @JsonView(View.AdditionalDetails.class)
+    @JsonIgnore
+    public List<Photo> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<Photo> photos) {
+        this.photos = photos;
     }
 
     public void addReview(Review review) {

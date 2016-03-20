@@ -9,6 +9,8 @@ import play.Logger;
 import com.avaje.ebean.Model;
 import play.mvc.Http;
 import plugins.S3Plugin;
+import utilities.PersistenceManager;
+import utilities.Validation;
 import utilities.View;
 
 import javax.persistence.*;
@@ -26,11 +28,11 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "abh_photo")
-public class Photo extends Model{
+public class Photo extends Model implements Validation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @JsonView(View.BasicDetails.class)
-    private long id;
+    private long photoId;
     @JsonView(View.AdditionalDetails.class)
     private String bucket;
     @JsonView(View.AllDetails.class)
@@ -43,35 +45,29 @@ public class Photo extends Model{
     @JsonView(View.AllDetails.class)
     private boolean isDefault;
     @JsonView(View.AllDetails.class)
-    private long restaurantId;
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Restaurant restaurant;
 
-    public Photo() {
-
-    }
-
-    public void preparePhoto(Http.MultipartFormData.FilePart upload, int restaurantId){
+    public Photo(Http.MultipartFormData.FilePart upload, int restaurantId) {
         sizeType = "original";
         String fileExtension = FilenameUtils.getExtension(upload.getFilename());
         name = UUID.randomUUID().toString() + "." + fileExtension;
         file = upload.getFile();
-        this.restaurantId = restaurantId;
-
-        //TODO is_only photo implementation
-        isDefault = false;
+        this.restaurant = PersistenceManager.getRestaurantById(restaurantId);
+        isDefault = restaurant.getPhotos().size() == 0 ? true : false;
     }
 
+	@JsonView(View.AllDetails.class)
     public URL getUrl() throws MalformedURLException {
         return new URL("https://s3.amazonaws.com/" + bucket + "/" + getActualFileName());
     }
 
     private String getActualFileName() {
-        return "photos/restaurants/" + restaurantId + "/" + id + "/" + sizeType + "/" + name;
+        return "photos/restaurants/" + restaurant.getRestaurantId() + "/" + photoId + "/" + sizeType + "/" + name;
     }
 
     @Override
     public void save() {
-
-
         if (S3Plugin.amazonS3 == null) {
             Logger.error("Could not save because amazonS3 was null");
             throw new RuntimeException("Could not save");
@@ -79,7 +75,7 @@ public class Photo extends Model{
         else {
             this.bucket = S3Plugin.s3Bucket;
 
-            super.save(); // assigns an id
+            super.save(); // assigns an photoId
 
             PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, getActualFileName(), file);
             putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead); // public for all
@@ -99,15 +95,16 @@ public class Photo extends Model{
         }
     }
 
-
-    public long getId() {
-        return id;
+	@JsonView(View.BasicDetails.class)
+    public long getPhotoId() {
+        return photoId;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setPhotoId(long photoId) {
+        this.photoId = photoId;
     }
-
+	
+	@JsonView(View.AdditionalDetails.class)
     public String getBucket() {
         return bucket;
     }
@@ -116,6 +113,7 @@ public class Photo extends Model{
         this.bucket = bucket;
     }
 
+	@JsonView(View.AllDetails.class)
     public String getName() {
         return name;
     }
@@ -124,6 +122,7 @@ public class Photo extends Model{
         this.name = name;
     }
 
+	@JsonView(View.AllDetails.class)
     public String getSizeType() {
         return sizeType;
     }
@@ -140,19 +139,27 @@ public class Photo extends Model{
         this.file = file;
     }
 
+	@JsonView(View.AllDetails.class)
     public boolean isDefault() {
         return isDefault;
     }
-
+	
     public void setDefault(boolean aDefault) {
         isDefault = aDefault;
     }
 
-    public long getRestaurantId() {
-        return restaurantId;
+	@JsonView(View.AllDetails.class)
+    public Restaurant getRestaurant() {
+        return restaurant;
     }
 
-    public void setRestaurantId(long restaurantId) {
-        this.restaurantId = restaurantId;
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
+    }
+
+    @Override
+    @JsonView(View.AdditionalDetails.class)
+    public boolean isValid() {
+        return file.length() < 1048576;
     }
 }

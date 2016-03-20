@@ -65,6 +65,7 @@ public class Review extends Model  implements Validation {
     }
 
     @Override
+    @JsonView(View.AdditionalDetails.class)
     public boolean isValid() {
         return rating != 0;
     }
