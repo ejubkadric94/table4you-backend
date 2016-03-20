@@ -36,4 +36,19 @@ public class PhotoController extends Controller {
         PersistenceManager.savePhoto(photo);
         return ok(JsonSerializer.serializeBasicDetails(photo));
     }
+
+    public Result markAsDefault(int registrationId, int photoId) {
+        Restaurant restaurant = PersistenceManager.getRestaurantById(registrationId);
+        if(restaurant == null){
+            return notFound(JsonSerializer.serializeObject(new Error(Resources.NO_RESTAURANT)));
+        }
+
+        Photo photo = PersistenceManager.getPhotoFromId(photoId);
+        if(photo == null) {
+            return notFound(JsonSerializer.serializeObject(new Error(Resources.NO_PHOTO)));
+        }
+
+        PersistenceManager.saveNewDefaultPhoto(restaurant, photo);
+        return ok();
+    }
 }

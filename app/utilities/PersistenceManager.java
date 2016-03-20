@@ -3,6 +3,8 @@ package utilities;
 import models.*;
 import org.apache.commons.codec.digest.DigestUtils;
 import play.mvc.*;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +38,18 @@ public class PersistenceManager {
         return User.find.where().eq("email", token.getEmail()).findUnique();
     }
 
+    public static void saveNewDefaultPhoto(Restaurant restaurant,Photo photo) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("isDefault","true");
+        map.put("restaurant.restaurantId", Long.toString(restaurant.getRestaurantId()));
+        Photo oldDefault = Photo.find.where().allEq((Map) map).findUnique();
+        oldDefault.setDefault(false);
+
+        photo.setDefault(true);
+
+        restaurant.save();
+    }
+
     /**
      * Retrieves the user from UserSession.
      * Firstly the validation is done on UserSession object.
@@ -50,6 +64,10 @@ public class PersistenceManager {
             return user;
         }
         return null;
+    }
+
+    public static Photo getPhotoFromId(int photoId) {
+        return Photo.find.where().eq("photoId", photoId).findUnique();
     }
 
     /**

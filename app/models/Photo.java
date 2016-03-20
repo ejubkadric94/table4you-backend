@@ -48,6 +48,8 @@ public class Photo extends Model implements Validation {
     @ManyToOne(cascade = CascadeType.ALL)
     private Restaurant restaurant;
 
+    public static Finder<String, Photo> find = new Finder<String, Photo>(String.class, Photo.class);
+
     public Photo(Http.MultipartFormData.FilePart upload, int restaurantId) {
         sizeType = "original";
         String fileExtension = FilenameUtils.getExtension(upload.getFilename());
