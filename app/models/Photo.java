@@ -70,8 +70,6 @@ public class Photo extends Model{
 
     @Override
     public void save() {
-
-
         if (S3Plugin.amazonS3 == null) {
             Logger.error("Could not save because amazonS3 was null");
             throw new RuntimeException("Could not save");
