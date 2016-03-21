@@ -3,7 +3,10 @@ package models;
 import com.avaje.ebean.Model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import utilities.Validation;
+import utilities.View;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
@@ -41,6 +44,7 @@ public class Reservation extends Model implements Validation {
      */
 
     @Override
+    @JsonView(View.AdditionalDetails.class)
     public boolean isValid() {
         return  guestCount != 0;
     }

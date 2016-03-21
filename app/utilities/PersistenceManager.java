@@ -159,8 +159,7 @@ public class PersistenceManager {
         restaurant.delete();
     }
 
-    public static void savePhoto(Photo photo, Http.MultipartFormData.FilePart upload, int restaurantId){
-        photo.preparePhoto(upload, restaurantId);
+    public static void savePhoto(Photo photo){
         photo.save();
     }
 }
