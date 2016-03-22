@@ -1,8 +1,10 @@
 package controllers;
 
 import models.Restaurant;
+import models.Review;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Security;
 import utilities.*;
 import utilities.Error;
 
@@ -53,8 +55,9 @@ public class RestaurantController extends Controller{
         return ok(JsonSerializer.serializeBasicDetails(restaurantList));
     }
 
-
+    @Security.Authenticated(AdminAuthenticator.class)
     public Result editRestaurant(int id) {
+        response().setContentType("application/json");
         Restaurant newDetails = (Restaurant) JsonSerializer.deserialize(request(),Restaurant.class);
         if(!newDetails.isValid()) {
             return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_INVALID_DATA)));
@@ -73,6 +76,7 @@ public class RestaurantController extends Controller{
      * @param id the restaurantId
      * @return the success information
      */
+    @Security.Authenticated(AdminAuthenticator.class)
     public Result deleteRestaurant(int id) {
         response().setContentType("application/json");
         Restaurant restaurant = PersistenceManager.getRestaurantById(id);
@@ -88,6 +92,7 @@ public class RestaurantController extends Controller{
      *
      * @return the restaurantId
      */
+    @Security.Authenticated(AdminAuthenticator.class)
     public Result createRestaurant(){
         response().setContentType("application/json");
         Restaurant restaurant =(Restaurant) JsonSerializer.deserialize(request(),Restaurant.class);
@@ -96,5 +101,31 @@ public class RestaurantController extends Controller{
         }
         PersistenceManager.saveRestaurant(restaurant);
         return ok(JsonSerializer.serializeObject(new RestaurantHelper(restaurant.getRestaurantId())));
+    }
+
+    @Security.Authenticated(UserAuthenticator.class)
+    public Result addReview(int restaurantId) {
+        response().setContentType("application/json");
+        Review review = (Review) JsonSerializer.deserialize(request(), Review.class);
+        if(!review.isValid()){
+            return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_INVALID_DATA)));
+        }
+
+        Restaurant restaurant = PersistenceManager.getRestaurantById(restaurantId);
+        if(restaurant == null) {
+            return notFound(JsonSerializer.serializeObject(new Error(Resources.NO_RESTAURANT)));
+        }
+        restaurant.addReview(review);
+        return ok();
+    }
+
+    public Result getReviews(int restaurantId){
+        response().setContentType("application/json");
+        Restaurant restaurant = PersistenceManager.getRestaurantById(restaurantId);
+        if(restaurant == null) {
+            return notFound(JsonSerializer.serializeObject(new Error(Resources.NO_RESTAURANT)));
+        }
+        List<Review> list = restaurant.getReviews();
+        return ok(JsonSerializer.serializeBasicDetails(list));
     }
 }

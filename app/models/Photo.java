@@ -76,13 +76,14 @@ public class Photo extends Model implements Validation {
         }
         else {
             this.bucket = S3Plugin.s3Bucket;
-
             super.save(); // assigns an photoId
-
-            PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, getActualFileName(), file);
-            putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead); // public for all
-            S3Plugin.amazonS3.putObject(putObjectRequest); // upload file
         }
+    }
+
+    public void saveToS3(){
+        PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, getActualFileName(), file);
+        putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead); // public for all
+        S3Plugin.amazonS3.putObject(putObjectRequest); // upload file
     }
 
     @Override
@@ -162,6 +163,7 @@ public class Photo extends Model implements Validation {
     @Override
     @JsonView(View.AdditionalDetails.class)
     public boolean isValid() {
+        System.out.println("VELICINA "+file.length());
         return file.length() < 1048576;
     }
 }

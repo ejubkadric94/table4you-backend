@@ -115,6 +115,10 @@ public class Restaurant extends Model implements Validation{
         PersistenceManager.saveRestaurant(this);
     }
 
+    public boolean containsPhoto(Photo photo) {
+        return this.getRestaurantId() == photo.getRestaurant().getRestaurantId();
+    }
+
     public long getRestaurantId() {
         return restaurantId;
     }

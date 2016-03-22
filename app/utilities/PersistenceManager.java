@@ -40,14 +40,15 @@ public class PersistenceManager {
 
     public static void saveNewDefaultPhoto(Restaurant restaurant,Photo photo) {
         HashMap<String, String> map = new HashMap<>();
-        map.put("isDefault","true");
+        map.put("isDefault","1");
         map.put("restaurant.restaurantId", Long.toString(restaurant.getRestaurantId()));
-        Photo oldDefault = Photo.find.where().allEq((Map) map).findUnique();
+
+        Photo oldDefault = (Photo) Photo.find.where().allEq((Map) map).findUnique();
         oldDefault.setDefault(false);
 
         photo.setDefault(true);
-
-        restaurant.save();
+        oldDefault.save();
+        photo.save();
     }
 
     /**
@@ -179,5 +180,6 @@ public class PersistenceManager {
 
     public static void savePhoto(Photo photo){
         photo.save();
+        photo.saveToS3();
     }
 }
