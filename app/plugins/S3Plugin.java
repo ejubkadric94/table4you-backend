@@ -41,9 +41,6 @@ public class S3Plugin extends Plugin {
 
     @Override
     public boolean enabled() {
-
-        System.out.println("ACCESSKEY "+ application.configuration().keys().contains(AWS_ACCESS_KEY));
-
         return (application.configuration().keys().contains(AWS_ACCESS_KEY) &&
                 application.configuration().keys().contains(AWS_SECRET_KEY) &&
                 application.configuration().keys().contains(AWS_S3_BUCKET));
