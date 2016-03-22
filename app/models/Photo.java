@@ -13,8 +13,12 @@ import utilities.PersistenceManager;
 import utilities.Validation;
 import utilities.View;
 
+import javax.imageio.ImageIO;
 import javax.persistence.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.UUID;
@@ -37,8 +41,6 @@ public class Photo extends Model implements Validation {
     private String bucket;
     @JsonView(View.AllDetails.class)
     private String name;
-    @JsonView(View.AllDetails.class)
-    private String sizeType;
     @Transient
     @JsonView(View.AdditionalDetails.class)
     private File file;
@@ -49,7 +51,6 @@ public class Photo extends Model implements Validation {
     private Restaurant restaurant;
 
     public Photo(Http.MultipartFormData.FilePart upload, int restaurantId) {
-        sizeType = "original";
         String fileExtension = FilenameUtils.getExtension(upload.getFilename());
         name = UUID.randomUUID().toString() + "." + fileExtension;
         file = upload.getFile();
@@ -59,11 +60,21 @@ public class Photo extends Model implements Validation {
 
 	@JsonView(View.AllDetails.class)
     public URL getUrl() throws MalformedURLException {
-        return new URL("https://s3.amazonaws.com/" + bucket + "/" + getActualFileName());
+        return new URL("https://s3.amazonaws.com/" + bucket + "/" + getNameOriginal());
     }
 
-    private String getActualFileName() {
-        return "photos/restaurants/" + restaurant.getRestaurantId() + "/" + photoId + "/" + sizeType + "/" + name;
+    @Override
+    public void delete() {
+        if (S3Plugin.amazonS3 == null) {
+            Logger.error("Could not delete because amazonS3 was null");
+            throw new RuntimeException("Could not delete");
+        }
+        else {
+            S3Plugin.amazonS3.deleteObject(bucket, getNameOriginal());
+            S3Plugin.amazonS3.deleteObject(bucket, getNameForMedium());
+            S3Plugin.amazonS3.deleteObject(bucket, getNameForThumbnail());
+            super.delete();
+        }
     }
 
     @Override
@@ -74,25 +85,73 @@ public class Photo extends Model implements Validation {
         }
         else {
             this.bucket = S3Plugin.s3Bucket;
-
             super.save(); // assigns an photoId
 
-            PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, getActualFileName(), file);
-            putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead); // public for all
-            S3Plugin.amazonS3.putObject(putObjectRequest); // upload file
+            uploadPhotoToS3(bucket, getNameOriginal(), this.file);
+            uploadPhotoToS3(bucket, getNameForThumbnail(), getThumbnail());
+            uploadPhotoToS3(bucket, getNameForMedium(), getMediumPhoto());
         }
     }
 
-    @Override
-    public void delete() {
-        if (S3Plugin.amazonS3 == null) {
-            Logger.error("Could not delete because amazonS3 was null");
-            throw new RuntimeException("Could not delete");
+    private void uploadPhotoToS3(String bucket, String name, File file){
+        PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, name, file);
+        putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead); // public for all
+        S3Plugin.amazonS3.putObject(putObjectRequest); // upload file
+    }
+
+    private File getMediumPhoto(){
+        BufferedImage in = null;
+        File temp = new File(name);
+        try {
+            in = ImageIO.read(file);
+            if(in != null){
+                in = resize(in, 500, 500);
+            }
+            ImageIO.write(in, FilenameUtils.getExtension(name).toUpperCase(), temp);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        else {
-            S3Plugin.amazonS3.deleteObject(bucket, getActualFileName());
-            super.delete();
+
+        return temp;
+    }
+
+    private File getThumbnail(){
+        BufferedImage in = null;
+        File temp = new File(name);
+        try {
+            in = ImageIO.read(file);
+            if(in != null){
+                in = resize(in, 50, 50);
+            }
+            ImageIO.write(in, FilenameUtils.getExtension(name).toUpperCase(), temp);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+        return temp;
+    }
+
+    public static BufferedImage resize(BufferedImage img, int newW, int newH) {
+        Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
+        BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_RGB);
+
+        Graphics2D g2d = dimg.createGraphics();
+        g2d.drawImage(tmp, 0, 0, null);
+        g2d.dispose();
+
+        return dimg;
+    }
+
+    private String getNameOriginal() {
+        return "photos/restaurants/" + restaurant.getRestaurantId() + "/" + photoId + "/original/" + name;
+    }
+
+    private String getNameForThumbnail(){
+        return "photos/restaurants/" + restaurant.getRestaurantId() + "/" + photoId + "/thumbnail/" + name;
+    }
+
+    private String getNameForMedium(){
+        return "photos/restaurants/" + restaurant.getRestaurantId() + "/" + photoId + "/medium/" + name;
     }
 
 	@JsonView(View.BasicDetails.class)
@@ -120,15 +179,6 @@ public class Photo extends Model implements Validation {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-	@JsonView(View.AllDetails.class)
-    public String getSizeType() {
-        return sizeType;
-    }
-
-    public void setSizeType(String sizeType) {
-        this.sizeType = sizeType;
     }
 
     public File getFile() {

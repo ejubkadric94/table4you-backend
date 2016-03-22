@@ -24,7 +24,6 @@ create table abh_photo (
   photo_id                  bigint auto_increment not null,
   bucket                    varchar(255),
   name                      varchar(255),
-  size_type                 varchar(255),
   is_default                tinyint(1) default 0,
   restaurant_restaurantId   BIGINT,
   constraint pk_abh_photo primary key (photo_id))
