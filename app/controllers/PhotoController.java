@@ -15,9 +15,9 @@ import utilities.Resources;
  */
 public class PhotoController extends Controller {
 
-    public Result addPhoto(int registrationId) {
+    public Result addPhoto(int restaurantId) {
         response().setContentType("application/json");
-        Restaurant restaurant = PersistenceManager.getRestaurantById(registrationId);
+        Restaurant restaurant = PersistenceManager.getRestaurantById(restaurantId);
         if(restaurant == null){
             return notFound(JsonSerializer.serializeObject(new Error(Resources.NO_RESTAURANT)));
         }
@@ -28,11 +28,11 @@ public class PhotoController extends Controller {
             return badRequest(JsonSerializer.serializeObject(new Error(Resources.NO_UPLOAD_HEADER)));
         }
 
-        Photo photo = new Photo(upload, registrationId);
-  /*      if(!photo.isValid()){
+        Photo photo = new Photo(upload, restaurantId);
+        if(!photo.isValid()){
             return badRequest(JsonSerializer.serializeObject(new Error(Resources.TOO_LARGE_FILE)));
         }
-*/
+
         PersistenceManager.savePhoto(photo);
         return ok(JsonSerializer.serializeBasicDetails(photo));
     }

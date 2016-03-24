@@ -85,9 +85,9 @@ public class Restaurant extends Model implements Validation{
     @Override
     @JsonView(View.AdditionalDetails.class)
     public boolean isValid() {
-        return !name.equals("") && !address.getCity().equals("") && !address.getCountry().equals("") &&
-                !address.getStreetName().equals("") && coordinates.getLatitude() != 0 && coordinates.getLongitude() != 0
-                && phone != 0;
+        return name != null && address != null && coordinates != null && !name.isEmpty() && !address.getCity().isEmpty()
+                && !address.getCountry().isEmpty() && !address.getStreetName().isEmpty() &&
+                coordinates.getLatitude() != 0 && coordinates.getLongitude() != 0 && phone != 0;
     }
 
     public void updateCoordinates(Coordinates coordinates){

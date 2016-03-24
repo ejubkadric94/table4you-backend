@@ -12,10 +12,10 @@ POST    /v1/login                                               controllers.User
 GET     /v1/getCurrentUser                                      controllers.UserController.getCurrentUser()
 
 # Restaurants
-GET     /v1/restaurants/:photoId                                controllers.RestaurantController.getRestaurantDetails(photoId: Integer)
+GET     /v1/restaurants/:restaurantId                           controllers.RestaurantController.getRestaurantDetails(restaurantId: Integer)
 GET     /v1/restaurants                                         controllers.RestaurantController.getAllRestaurants(offset: Int ?= 0, limit: Int ?= 0, filter: String ?= null, order: String ?= null)
-PUT     /v1/restaurants/:photoId                                controllers.RestaurantController.editRestaurant(photoId: Integer)
-DELETE  /v1/restaurants/:photoId                                controllers.RestaurantController.deleteRestaurant(photoId: Integer)
+PUT     /v1/restaurants/:restaurantId                           controllers.RestaurantController.editRestaurant(restaurantId: Integer)
+DELETE  /v1/restaurants/:restaurantId                           controllers.RestaurantController.deleteRestaurant(restaurantId: Integer)
 POST    /v1/restaurants                                         controllers.RestaurantController.createRestaurant()
 
 
