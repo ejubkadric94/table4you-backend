@@ -30,7 +30,8 @@ libraryDependencies += "org.apache.commons" % "commons-lang3" % "3.4"
 libraryDependencies += "com.fasterxml.jackson.core" % "jackson-core" % "2.7.1"
 libraryDependencies += "com.amazonaws" % "aws-java-sdk" % "1.10.62"
 libraryDependencies += "commons-io" % "commons-io" % "2.4"
-
+libraryDependencies += "org.apache.tika" % "tika-core" % "1.12"
+libraryDependencies += "org.jboss.resteasy" % "resteasy-jaxrs" % "3.0.16.Final"
 
 // Play provides two styles of routers, one expects its actions to be injected, the
 // other, legacy style, accesses its actions statically.
