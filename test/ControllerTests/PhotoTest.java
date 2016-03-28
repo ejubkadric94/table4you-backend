@@ -36,4 +36,30 @@ public class PhotoTest {
             assertEquals(restaurant.getPhotos().size(),1);
         });
     }
+
+    @Test
+    public void uploadPhotoToInvalidRestaurant() {
+        running(fakeApplication(),()-> {
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("upload", "D:\\Programiranje\\table4you\\restaurant.jpg");
+
+            Http.RequestBuilder rb = new Http.RequestBuilder().method(POST).uri("/v1/restaurants/444/photos").bodyForm(map);
+            Result result = route(rb);
+
+            assertEquals(Http.Status.NOT_FOUND, result.status());
+        });
+    }
+
+    @Test
+    public void uploadPhotoToWithNoUploadForm() {
+        running(fakeApplication(),()-> {
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("something", "D:\\Programiranje\\table4you\\restaurant.jpg");
+
+            Http.RequestBuilder rb = new Http.RequestBuilder().method(POST).uri("/v1/restaurants/444/photos").bodyForm(map);
+            Result result = route(rb);
+
+            assertEquals(Http.Status.BAD_REQUEST, result.status());
+        });
+    }
 }
