@@ -88,8 +88,8 @@ public class Photo extends Model implements Validation {
             super.save(); // assigns an photoId
 
             uploadPhotoToS3(bucket, getNameOriginal(), this.file);
-            uploadPhotoToS3(bucket, getNameForThumbnail(), getThumbnail());
-            uploadPhotoToS3(bucket, getNameForMedium(), getMediumPhoto());
+            uploadPhotoToS3(bucket, getNameForThumbnail(), getAnotherSize(50, 50));
+            uploadPhotoToS3(bucket, getNameForMedium(), getAnotherSize(500,500));
         }
     }
 
@@ -98,30 +98,15 @@ public class Photo extends Model implements Validation {
         putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead); // public for all
         S3Plugin.amazonS3.putObject(putObjectRequest); // upload file
     }
+    
 
-    private File getMediumPhoto(){
+    private File getAnotherSize(int x, int y){
         BufferedImage in = null;
         File temp = new File(name);
         try {
             in = ImageIO.read(file);
             if(in != null){
-                in = resize(in, 500, 500);
-            }
-            ImageIO.write(in, FilenameUtils.getExtension(name).toUpperCase(), temp);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return temp;
-    }
-
-    private File getThumbnail(){
-        BufferedImage in = null;
-        File temp = new File(name);
-        try {
-            in = ImageIO.read(file);
-            if(in != null){
-                in = resize(in, 50, 50);
+                in = resize(in, x, y);
             }
             ImageIO.write(in, FilenameUtils.getExtension(name).toUpperCase(), temp);
         } catch (IOException e) {
