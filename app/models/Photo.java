@@ -3,6 +3,7 @@ package models;
 
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.apache.commons.io.FilenameUtils;
 import play.Logger;
@@ -56,13 +57,24 @@ public class Photo extends Model implements Validation {
         name = UUID.randomUUID().toString() + "." + fileExtension;
         file = upload.getFile();
         this.restaurant = PersistenceManager.getRestaurantById(restaurantId);
-        isDefault = restaurant.getPhotos().size() == 0 ? true : false;
+        if(restaurant.getPhotos().size() == 0){
+            try {
+                restaurant.setImage(getUrl().toString());
+                isDefault = true;
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        } else {
+            isDefault = false;
+        }
     }
 
 	@JsonView(View.AllDetails.class)
     public URL getUrl() throws MalformedURLException {
         return new URL("https://s3.amazonaws.com/" + bucket + "/" + getActualFileName());
     }
+
+
 
     private String getActualFileName() {
         return "photos/restaurants/" + restaurant.getRestaurantId() + "/" + photoId + "/" + sizeType + "/" + name;

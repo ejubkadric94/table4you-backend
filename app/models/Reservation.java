@@ -42,7 +42,6 @@ public class Reservation extends Model implements Validation {
      *
      * @return true if everything is valid
      */
-
     @Override
     @JsonView(View.AdditionalDetails.class)
     public boolean isValid() {

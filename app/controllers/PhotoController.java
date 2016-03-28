@@ -27,9 +27,6 @@ public class PhotoController extends Controller {
         }
 
         Photo photo = new Photo(upload, registrationId);
-        if(!photo.isValid()){
-            return badRequest(JsonSerializer.serializeObject(new Error(Resources.TOO_LARGE_FILE)));
-        }
 
         PersistenceManager.savePhoto(photo);
         return ok(JsonSerializer.serializeBasicDetails(photo));
