@@ -46,7 +46,7 @@ public class Review extends Model  implements Validation {
         this.rating = rating;
     }
 
-    @JsonView(View.AdditionalDetails.class)
+    @JsonIgnore
     public long getReviewId() {
         return reviewId;
     }
@@ -55,7 +55,7 @@ public class Review extends Model  implements Validation {
         this.reviewId = reviewId;
     }
 
-    @JsonView(View.AdditionalDetails.class)
+    @JsonIgnore
     public Restaurant getRestaurant() {
         return restaurant;
     }
@@ -65,7 +65,7 @@ public class Review extends Model  implements Validation {
     }
 
     @Override
-    @JsonView(View.AdditionalDetails.class)
+    @JsonIgnore
     public boolean isValid() {
         return rating != 0;
     }

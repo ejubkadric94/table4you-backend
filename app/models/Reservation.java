@@ -44,7 +44,7 @@ public class Reservation extends Model implements Validation {
      */
 
     @Override
-    @JsonView(View.AdditionalDetails.class)
+    @JsonIgnore
     public boolean isValid() {
         return  guestCount != 0;
     }

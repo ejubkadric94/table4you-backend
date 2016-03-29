@@ -1,10 +1,6 @@
 package models;
 
 
-
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.apache.commons.io.FilenameUtils;
@@ -63,7 +59,6 @@ public class Photo extends Model implements Validation {
             isDefault = false;
         }
         file = request.body().asMultipartFormData().getFile("upload").getFile();
-
     }
 
 	@JsonView(View.AllDetails.class)
@@ -158,9 +153,8 @@ public class Photo extends Model implements Validation {
     }
 
     @Override
-    @JsonView(View.AdditionalDetails.class)
+    @JsonIgnore
     public boolean isValid() {
-        //return stream. < 1048576;
-        return true;
+        return file.length() < 1048576;
     }
 }

@@ -196,7 +196,6 @@ public class Restaurant extends Model implements Validation{
     }
 
     @JsonIgnore
-    @JsonView(View.AdditionalDetails.class)
     public List<Review> getReviews() {
         return reviews;
     }
@@ -205,7 +204,6 @@ public class Restaurant extends Model implements Validation{
         this.reviews = reviews;
     }
 
-    @JsonView(View.AdditionalDetails.class)
     @JsonIgnore
     public List<Photo> getPhotos() {
         return photos;
