@@ -99,6 +99,6 @@ public class RestaurantController extends Controller{
             return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_INVALID_DATA)));
         }
         PersistenceManager.saveRestaurant(restaurant);
-        return ok(JsonSerializer.serializeObject(new RestaurantHelper(restaurant.getRestaurantId())));
+        return created(JsonSerializer.serializeObject(new RestaurantHelper(restaurant.getRestaurantId())));
     }
 }
