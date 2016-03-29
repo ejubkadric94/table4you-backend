@@ -16,6 +16,7 @@ import utilities.Resources;
 public class PhotoController extends Controller {
 
     public Result addPhoto(int restaurantId) {
+        System.out.println("EEEEE");
         response().setContentType("application/json");
         Restaurant restaurant = PersistenceManager.getRestaurantById(restaurantId);
         if(restaurant == null){
@@ -24,14 +25,17 @@ public class PhotoController extends Controller {
 
         Http.MultipartFormData body = request().body().asMultipartFormData();
         Http.MultipartFormData.FilePart upload = body.getFile("upload");
+
         if (upload == null) {
             return badRequest(JsonSerializer.serializeObject(new Error(Resources.NO_UPLOAD_HEADER)));
         }
 
-        Photo photo = new Photo(upload, restaurantId);
+        Photo photo = new Photo(request(), restaurantId);
+        /*
         if(!photo.isValid()){
             return badRequest(JsonSerializer.serializeObject(new Error(Resources.TOO_LARGE_FILE)));
         }
+*/
 
         PersistenceManager.savePhoto(photo);
         return ok(JsonSerializer.serializeBasicDetails(photo));

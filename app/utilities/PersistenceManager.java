@@ -63,6 +63,7 @@ public class PersistenceManager {
     }
 
     public static Restaurant getRestaurantById(long id){
+
         return Restaurant.find.where().eq("restaurantId", id).findUnique();
     }
 

@@ -3,6 +3,7 @@ package models;
 
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.apache.commons.io.FilenameUtils;
 import play.Logger;
@@ -14,7 +15,7 @@ import utilities.Validation;
 import utilities.View;
 
 import javax.persistence.*;
-import java.io.File;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.UUID;
@@ -47,14 +48,38 @@ public class Photo extends Model implements Validation {
     @JsonView(View.AllDetails.class)
     @ManyToOne(cascade = CascadeType.ALL)
     private Restaurant restaurant;
+    @Transient
+    @JsonIgnore
+    private long length;
+    @Transient
+    @JsonIgnore
+    private BufferedInputStream stream;
 
-    public Photo(Http.MultipartFormData.FilePart upload, int restaurantId) {
+
+
+    public Photo(Http.Request request, int restaurantId) {
+        /*
+        Http.MultipartFormData body = request.body().asMultipartFormData();
+        Http.MultipartFormData.FilePart upload = body.getFile("upload");
+
+        FileInputStream fs = null;
+        BufferedInputStream stream = null;
+        try {
+            fs = new FileInputStream(upload.getFile());
+            stream = new BufferedInputStream(fs);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+*/
+        Http.MultipartFormData body = request.body().asMultipartFormData();
+        Http.MultipartFormData.FilePart upload = body.getFile("upload");
         sizeType = "original";
         String fileExtension = FilenameUtils.getExtension(upload.getFilename());
         name = UUID.randomUUID().toString() + "." + fileExtension;
         file = upload.getFile();
         this.restaurant = PersistenceManager.getRestaurantById(restaurantId);
         isDefault = restaurant.getPhotos().size() == 0 ? true : false;
+
     }
 
 	@JsonView(View.AllDetails.class)
@@ -78,8 +103,13 @@ public class Photo extends Model implements Validation {
             super.save(); // assigns an photoId
 
             PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, getActualFileName(), file);
+            //putObjectRequest = new PutObjectRequest()
             putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead); // public for all
             S3Plugin.amazonS3.putObject(putObjectRequest); // upload file
+
+
+            //PutObjectRequest(String bucketName, String key, InputStream input, ObjectMetadata metadata)
+
         }
     }
 
@@ -161,5 +191,13 @@ public class Photo extends Model implements Validation {
     @JsonView(View.AdditionalDetails.class)
     public boolean isValid() {
         return file.length() < 1048576;
+    }
+
+    public long getLength() {
+        return length;
+    }
+
+    public void setLength(long length) {
+        this.length = length;
     }
 }
