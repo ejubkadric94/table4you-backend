@@ -31,6 +31,18 @@ public class PersistenceManager {
         }
     }
 
+    public static void makeFavourite(User user, Restaurant restaurant){
+        for(Restaurant temp : user.getFavouriteRestaurants()) {
+            if(temp.getRestaurantId() == restaurant.getRestaurantId()) {
+                return;
+            }
+        }
+        //user.getFavouriteRestaurants().add(restaurant);
+        //user.save();
+        restaurant.setUser(user);
+        restaurant.save();
+    }
+
     public static User getUserFromRequest(Http.Request request){
         String tokenString = request.getHeader("USER-ACCESS-TOKEN");
         Token token = Token.find.where().eq("token", tokenString).findUnique();

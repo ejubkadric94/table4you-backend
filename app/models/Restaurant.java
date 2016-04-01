@@ -51,6 +51,11 @@ public class Restaurant extends Model implements Validation{
     @JsonIgnore
     private List<Reservation> reservations;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonView(View.AllDetails.class)
+    @JsonIgnore
+    public User user;
+
     @Column(columnDefinition = "BIGINT")
     @JsonView(View.BasicDetails.class)
     private long phone;
@@ -84,6 +89,7 @@ public class Restaurant extends Model implements Validation{
      * @return true if validation is successful
      */
     @Override
+    @JsonIgnore
     public boolean isValid() {
         return !name.equals("") && !address.getCity().equals("") && !address.getCountry().equals("") &&
                 !address.getStreetName().equals("") && coordinates.getLatitude() != 0 && coordinates.getLongitude() != 0
@@ -113,6 +119,15 @@ public class Restaurant extends Model implements Validation{
         this.updateAddress(restaurant.getAddress());
         this.updateCoordinates(restaurant.getCoordinates());
         PersistenceManager.saveRestaurant(this);
+    }
+
+    @JsonIgnore
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public long getRestaurantId() {

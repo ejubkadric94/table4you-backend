@@ -8,6 +8,7 @@ import utilities.UserHelper;
 import utilities.View;
 import utilities.Validation;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.persistence.*;
@@ -64,6 +65,11 @@ public class User extends Model implements Validation {
     @JsonIgnore
     private boolean isAdmin;
 
+    @Column(name = "favouriteRestaurant")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Restaurant> favouriteRestaurants;
+
     public User(){
 
     }
@@ -100,6 +106,14 @@ public class User extends Model implements Validation {
         return true;
     }
 
+    @JsonIgnore
+    public List<Restaurant> getFavouriteRestaurants() {
+        return favouriteRestaurants;
+    }
+
+    public void setFavouriteRestaurants(List<Restaurant> favouriteRestaurants) {
+        this.favouriteRestaurants = favouriteRestaurants;
+    }
 
     public String getEmail() {
         return email;

@@ -81,4 +81,11 @@ public class UserController extends Controller {
         }
         return ok(JsonSerializer.serializeBasicDetails(user));
     }
+
+    @Security.Authenticated(UserAuthenticator.class)
+    public Result getFavouriteRestaurants(){
+        User user =(User) Http.Context.current().args.get("CurrentUser");
+        System.out.println("IMA IH "+user.getFavouriteRestaurants().size());
+        return ok(JsonSerializer.serializeObject(user.getFavouriteRestaurants()));
+    }
 }

@@ -17,7 +17,8 @@ GET     /v1/restaurants                                         controllers.Rest
 PUT     /v1/restaurants/:id                                     controllers.RestaurantController.editRestaurant(id: Integer)
 DELETE  /v1/restaurants/:id                                     controllers.RestaurantController.deleteRestaurant(id: Integer)
 POST    /v1/restaurants                                         controllers.RestaurantController.createRestaurant()
-
+POST    /v1/restaurants/:restaurantId/favourite                 controllers.RestaurantController.makeFavourite(restaurantId: Integer)
+GET     /v1/favouriteRestaurants                                controllers.UserController.getFavouriteRestaurants()
 
 # Reservations
 POST    /v1/restaurants/:id/reservations                        controllers.ReservationController.makeReservation(id: Integer)

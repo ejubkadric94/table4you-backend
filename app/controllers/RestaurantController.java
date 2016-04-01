@@ -1,7 +1,9 @@
 package controllers;
 
 import models.Restaurant;
+import models.User;
 import play.mvc.Controller;
+import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
 import utilities.*;
@@ -100,5 +102,16 @@ public class RestaurantController extends Controller{
         }
         PersistenceManager.saveRestaurant(restaurant);
         return created(JsonSerializer.serializeObject(new RestaurantHelper(restaurant.getRestaurantId())));
+    }
+
+    @Security.Authenticated(UserAuthenticator.class)
+    public Result makeFavourite(int restaurantId){
+        User user =(User) Http.Context.current().args.get("CurrentUser");
+        Restaurant restaurant = PersistenceManager.getRestaurantById(restaurantId);
+        if(restaurant == null) {
+            return badRequest(JsonSerializer.serializeObject(new Error(Resources.NO_RESTAURANT)));
+        }
+        PersistenceManager.makeFavourite(user, restaurant);
+        return ok();
     }
 }

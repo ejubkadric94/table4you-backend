@@ -1,8 +1,6 @@
 package utilities;
 
-import models.Token;
 import models.User;
-import play.Play;
 import play.mvc.Http;
 
 /**
