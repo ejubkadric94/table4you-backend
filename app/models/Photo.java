@@ -90,6 +90,7 @@ public class Photo extends Model implements Validation {
             uploadPhotoToS3(bucket, getName("original"), this.file);
             uploadPhotoToS3(bucket, getName("thumbnail"), getPhotoInOtherSize(50, 50));
             uploadPhotoToS3(bucket, getName("medium"), getPhotoInOtherSize(500, 500));
+
         }
     }
 
@@ -109,23 +110,7 @@ public class Photo extends Model implements Validation {
         try {
             in = ImageIO.read(file);
             if(in != null){
-                in = resize(in, 500, 500);
-            }
-            ImageIO.write(in, FilenameUtils.getExtension(name).toUpperCase(), temp);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return temp;
-    }
-
-    private File getThumbnail(){
-        BufferedImage in = null;
-        File temp = new File(name);
-        try {
-            in = ImageIO.read(file);
-            if(in != null){
-                in = resize(in, 50, 50);
+                in = resize(in, x, y);
             }
             ImageIO.write(in, FilenameUtils.getExtension(name).toUpperCase(), temp);
         } catch (IOException e) {
