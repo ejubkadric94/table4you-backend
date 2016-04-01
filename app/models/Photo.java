@@ -60,7 +60,7 @@ public class Photo extends Model implements Validation {
 
 	@JsonView(View.AllDetails.class)
     public URL getUrl() throws MalformedURLException {
-        return new URL("https://s3.amazonaws.com/" + bucket + "/" + getNameOriginal());
+        return new URL("https://s3.amazonaws.com/" + bucket + "/" + getName("original"));
     }
 
     @Override
@@ -70,9 +70,9 @@ public class Photo extends Model implements Validation {
             throw new RuntimeException("Could not delete");
         }
         else {
-            S3Plugin.amazonS3.deleteObject(bucket, getNameOriginal());
-            S3Plugin.amazonS3.deleteObject(bucket, getNameForMedium());
-            S3Plugin.amazonS3.deleteObject(bucket, getNameForThumbnail());
+            S3Plugin.amazonS3.deleteObject(bucket, getName("original"));
+            S3Plugin.amazonS3.deleteObject(bucket, getName("medium"));
+            S3Plugin.amazonS3.deleteObject(bucket, getName("thumbnail"));
             super.delete();
         }
     }
@@ -87,10 +87,14 @@ public class Photo extends Model implements Validation {
             this.bucket = S3Plugin.s3Bucket;
             super.save(); // assigns an photoId
 
-            uploadPhotoToS3(bucket, getNameOriginal(), this.file);
-            uploadPhotoToS3(bucket, getNameForThumbnail(), getThumbnail());
-            uploadPhotoToS3(bucket, getNameForMedium(), getMediumPhoto());
+            uploadPhotoToS3(bucket, getName("original"), this.file);
+            uploadPhotoToS3(bucket, getName("thumbnail"), getPhotoInOtherSize(50, 50));
+            uploadPhotoToS3(bucket, getName("medium"), getPhotoInOtherSize(500, 500));
         }
+    }
+
+    private String getName(String size) {
+        return "photos/restaurants/" + restaurant.getRestaurantId() + "/" + photoId + "/" + size + "/" + name;
     }
 
     private void uploadPhotoToS3(String bucket, String name, File file){
@@ -99,7 +103,7 @@ public class Photo extends Model implements Validation {
         S3Plugin.amazonS3.putObject(putObjectRequest); // upload file
     }
 
-    private File getMediumPhoto(){
+    private File getPhotoInOtherSize(int x, int y){
         BufferedImage in = null;
         File temp = new File(name);
         try {
@@ -142,17 +146,6 @@ public class Photo extends Model implements Validation {
         return dimg;
     }
 
-    private String getNameOriginal() {
-        return "photos/restaurants/" + restaurant.getRestaurantId() + "/" + photoId + "/original/" + name;
-    }
-
-    private String getNameForThumbnail(){
-        return "photos/restaurants/" + restaurant.getRestaurantId() + "/" + photoId + "/thumbnail/" + name;
-    }
-
-    private String getNameForMedium(){
-        return "photos/restaurants/" + restaurant.getRestaurantId() + "/" + photoId + "/medium/" + name;
-    }
 
 	@JsonView(View.BasicDetails.class)
     public long getPhotoId() {
