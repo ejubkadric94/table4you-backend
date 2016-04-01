@@ -25,7 +25,7 @@ public class RestaurantsAllTest {
             coordinates.save();
 
             Address address = new Address();
-            address.setEmail("test@testtest.com");
+            address.setEmail("user@testtest.com");
             address.setCity("Test City");
             address.setCountry("Test Country");
             address.setStreetName("Test street");
@@ -163,6 +163,8 @@ public class RestaurantsAllTest {
             assertEquals(Http.Status.OK, result.status());
         });
     }
+
+
 /*
     @Test
     public void testGetAllRestaurantsWithParamete(){
@@ -173,13 +175,13 @@ public class RestaurantsAllTest {
         });
     }
 */
+
+
     @AfterClass
     public static void removeRestaurant(){
         running(fakeApplication(),()-> {
             Restaurant restaurant = Restaurant.find.where().eq("restaurantId", 1601994).findUnique();
             restaurant.delete();
-            restaurant.getAddress().delete();
-            restaurant.getCoordinates().delete();
         });
     }
 

@@ -22,10 +22,10 @@ create table abh_coordinates (
 
 create table abh_reservation (
   reservationId             BIGINT auto_increment not null,
-  restaurantId              BIGINT,
   dateTime                  DATETIME,
   guestCount                integer,
   note                      varchar(300),
+  restaurant_restaurantId   BIGINT,
   constraint pk_abh_reservation primary key (reservationId))
 ;
 
@@ -80,16 +80,18 @@ create table abh_user (
   constraint pk_abh_user primary key (email))
 ;
 
-alter table abh_restaurant add constraint fk_abh_restaurant_address_1 foreign key (address_address_id) references abh_user_address (address_id) on delete restrict on update restrict;
-create index ix_abh_restaurant_address_1 on abh_restaurant (address_address_id);
-alter table abh_restaurant add constraint fk_abh_restaurant_coordinates_2 foreign key (coordinates_restaurantId) references abh_coordinates (restaurantId) on delete restrict on update restrict;
-create index ix_abh_restaurant_coordinates_2 on abh_restaurant (coordinates_restaurantId);
-alter table abh_review add constraint fk_abh_review_restaurant_3 foreign key (restaurant_restaurantId) references abh_restaurant (restaurantId) on delete restrict on update restrict;
-create index ix_abh_review_restaurant_3 on abh_review (restaurant_restaurantId);
-alter table abh_user add constraint fk_abh_user_address_4 foreign key (address_address_id) references abh_user_address (address_id) on delete restrict on update restrict;
-create index ix_abh_user_address_4 on abh_user (address_address_id);
-alter table abh_user add constraint fk_abh_user_authToken_5 foreign key (auth_token_userEmail) references abh_user_token (userEmail) on delete restrict on update restrict;
-create index ix_abh_user_authToken_5 on abh_user (auth_token_userEmail);
+alter table abh_reservation add constraint fk_abh_reservation_restaurant_1 foreign key (restaurant_restaurantId) references abh_restaurant (restaurantId) on delete restrict on update restrict;
+create index ix_abh_reservation_restaurant_1 on abh_reservation (restaurant_restaurantId);
+alter table abh_restaurant add constraint fk_abh_restaurant_address_2 foreign key (address_address_id) references abh_user_address (address_id) on delete restrict on update restrict;
+create index ix_abh_restaurant_address_2 on abh_restaurant (address_address_id);
+alter table abh_restaurant add constraint fk_abh_restaurant_coordinates_3 foreign key (coordinates_restaurantId) references abh_coordinates (restaurantId) on delete restrict on update restrict;
+create index ix_abh_restaurant_coordinates_3 on abh_restaurant (coordinates_restaurantId);
+alter table abh_review add constraint fk_abh_review_restaurant_4 foreign key (restaurant_restaurantId) references abh_restaurant (restaurantId) on delete restrict on update restrict;
+create index ix_abh_review_restaurant_4 on abh_review (restaurant_restaurantId);
+alter table abh_user add constraint fk_abh_user_address_5 foreign key (address_address_id) references abh_user_address (address_id) on delete restrict on update restrict;
+create index ix_abh_user_address_5 on abh_user (address_address_id);
+alter table abh_user add constraint fk_abh_user_authToken_6 foreign key (auth_token_userEmail) references abh_user_token (userEmail) on delete restrict on update restrict;
+create index ix_abh_user_authToken_6 on abh_user (auth_token_userEmail);
 
 
 

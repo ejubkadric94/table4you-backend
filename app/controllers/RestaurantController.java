@@ -57,13 +57,13 @@ public class RestaurantController extends Controller{
     @Security.Authenticated(AdminAuthenticator.class)
     public Result editRestaurant(int id) {
         response().setContentType("application/json");
-        Restaurant newDetails = (Restaurant) JsonSerializer.deserialize(request(),Restaurant.class);
-        if(!newDetails.isValid()) {
-            return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_INVALID_DATA)));
-        }
         Restaurant restaurant = PersistenceManager.getRestaurantById(id);
         if(restaurant == null){
             return notFound(JsonSerializer.serializeObject(new Error(Resources.NO_RESTAURANT)));
+        }
+        Restaurant newDetails = (Restaurant) JsonSerializer.deserialize(request(),Restaurant.class);
+        if(!newDetails.isValid()) {
+            return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_INVALID_DATA)));
         }
         restaurant.updateData(newDetails);
         return ok();

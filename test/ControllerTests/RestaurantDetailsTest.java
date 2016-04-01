@@ -76,8 +76,6 @@ public class RestaurantDetailsTest {
         running(fakeApplication(),()-> {
             Restaurant restaurant = Restaurant.find.where().eq("restaurantId", 1601994).findUnique();
             restaurant.delete();
-            restaurant.getAddress().delete();
-            restaurant.getCoordinates().delete();
         });
     }
 

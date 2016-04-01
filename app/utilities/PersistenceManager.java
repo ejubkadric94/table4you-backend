@@ -59,7 +59,7 @@ public class PersistenceManager {
      * @param reservation the reservation to be saved
      */
     public void createReservation(Reservation reservation, Restaurant restaurant) {
-        reservation.setRestaurantId(restaurant.getRestaurantId());
+        reservation.setRestaurant(restaurant);
         reservation.save();
     }
 
@@ -152,8 +152,8 @@ public class PersistenceManager {
         return list;
     }
 
-    public static List<Reservation> getAllReservations(int id) {
-        return Reservation.find.where().eq("restaurantId", id).findList();
+    public static List<Reservation> getAllReservations(Restaurant restaurant) {
+        return restaurant.getReservations();
     }
 
     public static void deleteRestaurant(Restaurant restaurant){

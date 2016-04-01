@@ -41,13 +41,13 @@ public class ReservationController extends Controller {
         return created(JsonSerializer.serializeObject(new ReservationHelper(reservation.getReservationId())));
     }
 
-    public Result getAllReservations(int id) {
+    public Result getAllReservations(int restaurantId) {
         response().setContentType("application/json");
-        Restaurant restaurant = PersistenceManager.getRestaurantById(id);
+        Restaurant restaurant = PersistenceManager.getRestaurantById(restaurantId);
         if(restaurant == null){
             return notFound(JsonSerializer.serializeObject(new Error(Resources.NO_RESTAURANT)));
         }
-        List<Reservation> list = PersistenceManager.getAllReservations(id);
+        List<Reservation> list = PersistenceManager.getAllReservations(restaurant);
         return ok(JsonSerializer.serializeObject(list));
     }
 }

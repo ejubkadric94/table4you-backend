@@ -25,18 +25,18 @@ public class UserConfirmTest {
     public static void prepareUser() {
         running(fakeApplication(),()-> {
             User user = new User();
-            user.setEmail("test@test.com");
+            user.setEmail("user@test.com");
             user.setPassword(DigestUtils.md5Hex("test"));
 
             Address address = new Address();
             address.setCity("Test City");
             address.setCountry("Test Country");
-            address.setEmail("test@test.com");
+            address.setEmail("user@test.com");
             address.setStreetName("Test Street");
             address.save();
 
             Token token = new Token();
-            token.setEmail("test@test.com");
+            token.setEmail("user@test.com");
             token.setExpirationDate(Token.generateExpirationDate());
             token.setToken("TESTtestTESTtest");
             token.save();
@@ -51,7 +51,7 @@ public class UserConfirmTest {
     @Test
     public void testConfirmationWithValidToken() {
         running(fakeApplication(),()-> {
-            User user = User.find.where().eq("email", "test@test.com").findUnique();
+            User user = User.find.where().eq("email", "user@test.com").findUnique();
             assertFalse(user.isConfirmed());
 
             String link = "/v1/registration/confirm/" + UserHelper.encodeToken(user.getAuthToken().getToken());
@@ -59,7 +59,7 @@ public class UserConfirmTest {
 
             Result result = route(rb);
             assertEquals(Http.Status.OK, result.status());
-            user = User.find.where().eq("email", "test@test.com").findUnique();
+            user = User.find.where().eq("email", "user@test.com").findUnique();
             assertTrue( user.isConfirmed());
         });
     }
@@ -80,10 +80,8 @@ public class UserConfirmTest {
     @AfterClass
     public static void removeUser() {
         running(fakeApplication(),()-> {
-            User user = User.find.where().eq("email", "test@test.com").findUnique();
+            User user = User.find.where().eq("email", "user@test.com").findUnique();
             user.delete();
-            user.getAddress().delete();
-            user.getAuthToken().delete();
         });
     }
 
