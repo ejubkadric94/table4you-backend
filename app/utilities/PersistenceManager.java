@@ -45,8 +45,7 @@ public class PersistenceManager {
             tempPhoto.save();
         }
 
-        photo.setDefault(true);
-        photo.save();
+
 
         try {
             restaurant.setImage(photo.getUrl().toString());
@@ -54,6 +53,8 @@ public class PersistenceManager {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+        photo.setDefault(true);
+        photo.save();
     }
 
     /**

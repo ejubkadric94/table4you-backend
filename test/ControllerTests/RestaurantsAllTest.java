@@ -14,7 +14,7 @@ import static play.test.Helpers.*;
  * Created by root on 18/02/16.
  */
 public class RestaurantsAllTest {
-
+/*
     @BeforeClass
     public static void prepareRestaurant() {
         running(fakeApplication(),()-> {
@@ -163,6 +163,7 @@ public class RestaurantsAllTest {
             assertEquals(Http.Status.OK, result.status());
         });
     }
+    */
 /*
     @Test
     public void testGetAllRestaurantsWithParamete(){
@@ -173,6 +174,7 @@ public class RestaurantsAllTest {
         });
     }
 */
+    /*
     @AfterClass
     public static void removeRestaurant(){
         running(fakeApplication(),()-> {
@@ -182,5 +184,5 @@ public class RestaurantsAllTest {
             restaurant.getCoordinates().delete();
         });
     }
-
+*/
 }
