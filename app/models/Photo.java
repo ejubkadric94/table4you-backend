@@ -92,6 +92,18 @@ public class Photo extends Model implements Validation {
         }
     }
 
+    public void saveRestaurantLink(){
+        Restaurant restaurant = PersistenceManager.getRestaurantById(getRestaurant().getRestaurantId());
+        if(restaurant.getPhotos().size() == 1){
+            try {
+                restaurant.setImage(getUrl().toString());
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            PersistenceManager.saveRestaurant(restaurant);
+        }
+    }
+
     public void saveToS3(){
         PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, getActualFileName(), file);
         putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead); // public for all

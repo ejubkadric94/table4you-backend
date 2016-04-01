@@ -40,22 +40,20 @@ public class PersistenceManager {
     }
 
     public static void saveNewDefaultPhoto(Restaurant restaurant,Photo photo){
-        HashMap<String, String> map = new HashMap<>();
-        map.put("isDefault","1");
-        map.put("restaurant.restaurantId", Long.toString(restaurant.getRestaurantId()));
+        for(Photo tempPhoto : restaurant.getPhotos()){
+            tempPhoto.setDefault(false);
+            tempPhoto.save();
+        }
 
-        Photo oldDefault = (Photo) Photo.find.where().allEq((Map) map).findUnique();
-        oldDefault.setDefault(false);
         photo.setDefault(true);
+        photo.save();
 
         try {
             restaurant.setImage(photo.getUrl().toString());
+            restaurant.save();
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-
-        oldDefault.save();
-        photo.save();
     }
 
     /**
@@ -187,6 +185,7 @@ public class PersistenceManager {
 
     public static void savePhoto(Photo photo){
         photo.save();
+        photo.saveRestaurantLink();
         photo.saveToS3();
     }
 }
