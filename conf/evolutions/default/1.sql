@@ -20,6 +20,13 @@ create table abh_coordinates (
   constraint pk_abh_coordinates primary key (restaurantId))
 ;
 
+create table abh_menu (
+  menu_id                   bigint auto_increment not null,
+  restaurant_restaurantId   BIGINT,
+  name                      varchar(255),
+  constraint pk_abh_menu primary key (menu_id))
+;
+
 create table abh_photo (
   photo_id                  bigint auto_increment not null,
   bucket                    varchar(255),
@@ -90,18 +97,20 @@ create table abh_user (
   constraint pk_abh_user primary key (email))
 ;
 
-alter table abh_photo add constraint fk_abh_photo_restaurant_1 foreign key (restaurant_restaurantId) references abh_restaurant (restaurantId) on delete restrict on update restrict;
-create index ix_abh_photo_restaurant_1 on abh_photo (restaurant_restaurantId);
-alter table abh_restaurant add constraint fk_abh_restaurant_address_2 foreign key (address_address_id) references abh_user_address (address_id) on delete restrict on update restrict;
-create index ix_abh_restaurant_address_2 on abh_restaurant (address_address_id);
-alter table abh_restaurant add constraint fk_abh_restaurant_coordinates_3 foreign key (coordinates_restaurantId) references abh_coordinates (restaurantId) on delete restrict on update restrict;
-create index ix_abh_restaurant_coordinates_3 on abh_restaurant (coordinates_restaurantId);
-alter table abh_review add constraint fk_abh_review_restaurant_4 foreign key (restaurant_restaurantId) references abh_restaurant (restaurantId) on delete restrict on update restrict;
-create index ix_abh_review_restaurant_4 on abh_review (restaurant_restaurantId);
-alter table abh_user add constraint fk_abh_user_address_5 foreign key (address_address_id) references abh_user_address (address_id) on delete restrict on update restrict;
-create index ix_abh_user_address_5 on abh_user (address_address_id);
-alter table abh_user add constraint fk_abh_user_authToken_6 foreign key (auth_token_userEmail) references abh_user_token (userEmail) on delete restrict on update restrict;
-create index ix_abh_user_authToken_6 on abh_user (auth_token_userEmail);
+alter table abh_menu add constraint fk_abh_menu_restaurant_1 foreign key (restaurant_restaurantId) references abh_restaurant (restaurantId) on delete restrict on update restrict;
+create index ix_abh_menu_restaurant_1 on abh_menu (restaurant_restaurantId);
+alter table abh_photo add constraint fk_abh_photo_restaurant_2 foreign key (restaurant_restaurantId) references abh_restaurant (restaurantId) on delete restrict on update restrict;
+create index ix_abh_photo_restaurant_2 on abh_photo (restaurant_restaurantId);
+alter table abh_restaurant add constraint fk_abh_restaurant_address_3 foreign key (address_address_id) references abh_user_address (address_id) on delete restrict on update restrict;
+create index ix_abh_restaurant_address_3 on abh_restaurant (address_address_id);
+alter table abh_restaurant add constraint fk_abh_restaurant_coordinates_4 foreign key (coordinates_restaurantId) references abh_coordinates (restaurantId) on delete restrict on update restrict;
+create index ix_abh_restaurant_coordinates_4 on abh_restaurant (coordinates_restaurantId);
+alter table abh_review add constraint fk_abh_review_restaurant_5 foreign key (restaurant_restaurantId) references abh_restaurant (restaurantId) on delete restrict on update restrict;
+create index ix_abh_review_restaurant_5 on abh_review (restaurant_restaurantId);
+alter table abh_user add constraint fk_abh_user_address_6 foreign key (address_address_id) references abh_user_address (address_id) on delete restrict on update restrict;
+create index ix_abh_user_address_6 on abh_user (address_address_id);
+alter table abh_user add constraint fk_abh_user_authToken_7 foreign key (auth_token_userEmail) references abh_user_token (userEmail) on delete restrict on update restrict;
+create index ix_abh_user_authToken_7 on abh_user (auth_token_userEmail);
 
 
 
@@ -112,6 +121,8 @@ SET FOREIGN_KEY_CHECKS=0;
 drop table abh_user_address;
 
 drop table abh_coordinates;
+
+drop table abh_menu;
 
 drop table abh_photo;
 

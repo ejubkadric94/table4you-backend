@@ -25,6 +25,16 @@ public class AWSManager {
         S3Plugin.amazonS3.putObject(putObjectRequest); // upload file
     }
 
+    public static void saveMenu(String name, File file){
+        PutObjectRequest putObjectRequest = new PutObjectRequest(getBucket(), name, file);
+        putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead); // public for all
+        S3Plugin.amazonS3.putObject(putObjectRequest); // upload file
+    }
+
+    public static void deleteMenu(String name){
+        S3Plugin.amazonS3.deleteObject(getBucket(), name);
+    }
+
     public static void deletePhoto(String bucket, String name){
         S3Plugin.amazonS3.deleteObject(bucket, name);
     }

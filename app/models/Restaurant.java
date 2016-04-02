@@ -49,6 +49,11 @@ public class Restaurant extends Model implements Validation{
     @JsonView(View.AdditionalDetails.class)
     @JsonIgnore
     private List<Photo> photos;
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+    @JsonView(View.AdditionalDetails.class)
+    @JsonIgnore
+    private List<Menu> menus;
+
 
     @Column(columnDefinition = "BIGINT")
     @JsonView(View.BasicDetails.class)

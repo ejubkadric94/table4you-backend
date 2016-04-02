@@ -66,6 +66,11 @@ public class PersistenceManager {
         return Restaurant.find.where().eq("restaurantId", id).findUnique();
     }
 
+    public static void saveMenu(Menu menu) {
+        menu.save();
+        AWSManager.saveMenu(menu.getFileName(),menu.getFile() );
+    }
+
     /**
      * Retrieves the user from database according to specified email address.
      *

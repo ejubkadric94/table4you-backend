@@ -1,10 +1,6 @@
 package ControllerTests;
 
-
-import com.fasterxml.jackson.databind.JsonNode;
-import models.*;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import models.Restaurant;
 import org.junit.Test;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -14,20 +10,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static play.test.Helpers.*;
+import static play.test.Helpers.POST;
+import static play.test.Helpers.route;
 
 /**
- * Created by Ejub on 28.3.2016.
+ * Created by Ejub on 2.4.2016.
  */
-public class PhotoTest {
+public class uploadMenuTest {
     @Test
-    public void uploadPhotoTest() {
+    public void uploadMenuTest() {
         running(fakeApplication(),()-> {
             Map<String, String> map = new HashMap<String, String>();
             map.put("upload", "D:\\Programiranje\\table4you\\restaurant.jpg");
 
-            Http.RequestBuilder rb = new Http.RequestBuilder().method(POST).uri("/v1/restaurants/7/photos").bodyForm(map);
+            Http.RequestBuilder rb = new Http.RequestBuilder().method(POST).uri("/v1/restaurants/7/menu").bodyForm(map);
             Result result = route(rb);
 
             Restaurant restaurant = PersistenceManager.getRestaurantById(7);
@@ -43,7 +40,7 @@ public class PhotoTest {
             Map<String, String> map = new HashMap<String, String>();
             map.put("upload", "D:\\Programiranje\\table4you\\restaurant.jpg");
 
-            Http.RequestBuilder rb = new Http.RequestBuilder().method(POST).uri("/v1/restaurants/444/photos").bodyForm(map);
+            Http.RequestBuilder rb = new Http.RequestBuilder().method(POST).uri("/v1/restaurants/444/menu").bodyForm(map);
             Result result = route(rb);
 
             assertEquals(Http.Status.NOT_FOUND, result.status());
@@ -56,10 +53,10 @@ public class PhotoTest {
             Map<String, String> map = new HashMap<String, String>();
             map.put("something", "D:\\Programiranje\\table4you\\restaurant.jpg");
 
-            Http.RequestBuilder rb = new Http.RequestBuilder().method(POST).uri("/v1/restaurants/5/photos").bodyForm(map);
+            Http.RequestBuilder rb = new Http.RequestBuilder().method(POST).uri("/v1/restaurants/6/menu").bodyForm(map);
             Result result = route(rb);
 
-            assertEquals(Http.Status.NOT_FOUND, result.status());
+            assertEquals(Http.Status.BAD_REQUEST, result.status());
         });
     }
 }

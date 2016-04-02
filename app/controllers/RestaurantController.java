@@ -1,5 +1,7 @@
 package controllers;
 
+import models.Menu;
+import models.Photo;
 import models.Restaurant;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -96,5 +98,26 @@ public class RestaurantController extends Controller{
         }
         PersistenceManager.saveRestaurant(restaurant);
         return ok(JsonSerializer.serializeObject(new RestaurantHelper(restaurant.getRestaurantId())));
+    }
+
+    public Result addMenu(int restaurantId) {
+        response().setContentType("application/json");
+        Restaurant restaurant = PersistenceManager.getRestaurantById(restaurantId);
+        if(restaurant == null){
+            return notFound(JsonSerializer.serializeObject(new Error(Resources.NO_RESTAURANT)));
+        }
+
+        if (request().body().asMultipartFormData() == null || request().body().asMultipartFormData()
+                .getFile("upload") == null) {
+            return badRequest(JsonSerializer.serializeObject(new Error(Resources.NO_UPLOAD_HEADER)));
+        }
+
+        Menu menu = new Menu(request(), restaurant);
+        if(!menu.isValid()){
+            return badRequest(JsonSerializer.serializeObject(new Error(Resources.TOO_LARGE_FILE)));
+        }
+
+        PersistenceManager.saveMenu(menu);
+        return ok(JsonSerializer.serializeBasicDetails(menu));
     }
 }
