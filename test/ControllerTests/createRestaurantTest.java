@@ -24,7 +24,7 @@ import static org.junit.Assert.assertTrue;
  * Created by root on 29/03/16.
  */
 public class createRestaurantTest {
-
+/*
     @Test
     public void addNewRestaurant() {
         running(fakeApplication(),()-> {
@@ -153,6 +153,6 @@ public class createRestaurantTest {
             restaurant.delete();
         });
     }
-
+*/
 }
 

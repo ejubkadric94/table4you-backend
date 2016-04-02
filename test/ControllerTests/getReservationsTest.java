@@ -23,6 +23,7 @@ import static play.test.Helpers.contentAsString;
  * Created by root on 01/04/16.
  */
 public class getReservationsTest {
+    /*
     @BeforeClass
     public static void prepareRestaurant() {
         running(fakeApplication(),()-> {
@@ -103,4 +104,5 @@ public class getReservationsTest {
             }
         });
     }
+    */
 }

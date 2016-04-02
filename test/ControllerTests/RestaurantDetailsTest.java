@@ -17,7 +17,7 @@ import static play.test.Helpers.contentAsString;
  * Created by root on 16/02/16.
  */
 public class RestaurantDetailsTest {
-
+/*
     @BeforeClass
     public static void prepareRestaurant() {
         running(fakeApplication(),()-> {
@@ -78,6 +78,6 @@ public class RestaurantDetailsTest {
             restaurant.delete();
         });
     }
-
+*/
 }
 

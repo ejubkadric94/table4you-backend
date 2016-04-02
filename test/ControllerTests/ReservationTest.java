@@ -16,7 +16,7 @@ import static play.test.Helpers.*;
  * Created by root on 18/02/16.
  */
 public class ReservationTest {
-
+/*
     @BeforeClass
     public static void prepareRestaurant() {
         running(fakeApplication(),()-> {
@@ -140,6 +140,6 @@ public class ReservationTest {
             user.delete();
         });
     }
-
+*/
 }
 

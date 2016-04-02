@@ -25,6 +25,7 @@ import static play.test.Helpers.*;
  * Created by root on 01/04/16.
  */
 public class editRestaurantTest {
+    /*
     @BeforeClass
     public static void prepareRestaurant() {
         running(fakeApplication(),()-> {
@@ -140,4 +141,5 @@ public class editRestaurantTest {
             }
         });
     }
+    */
 }

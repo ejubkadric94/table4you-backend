@@ -51,7 +51,7 @@ public class Restaurant extends Model implements Validation{
     @JsonIgnore
     private List<Reservation> reservations;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JsonView(View.AllDetails.class)
     @JsonIgnore
     public User user;
