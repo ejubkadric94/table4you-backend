@@ -52,10 +52,10 @@ public class ReservationTest {
 
             Token token = new Token();
             token.generateToken();
-            token.setEmail("test@testtest.com");
+            token.setEmail("user@testtest.com");
 
             User user = new User();
-            user.setEmail("test@testtest.com");
+            user.setEmail("user@testtest.com");
 
 
             user.setAuthToken(token);
@@ -70,12 +70,11 @@ public class ReservationTest {
     public void testMakingReservationWithInvalidJson() {
         running(fakeApplication(),()-> {
             JsonNode json = play.libs.Json.newObject()
-                    .put("restaurantId", 1601994)
                     .put("dateTime", "10/04/2015 20:30:00")
                     .put("note", "None");
 
             Http.RequestBuilder rb = new Http.RequestBuilder().method(POST).uri("/v1/restaurants/1601994/reservations").
-                    header("USER-ACCESS-TOKEN", Token.find.where().eq("email", "test@testtest.com").findUnique().
+                    header("USER-ACCESS-TOKEN", Token.find.where().eq("email", "user@testtest.com").findUnique().
                             getToken()).bodyJson(json);
             Result result = route(rb);
 
@@ -91,20 +90,19 @@ public class ReservationTest {
     public void testMakingReservationWithInvalidRestaurant() {
         running(fakeApplication(),()-> {
             JsonNode json = play.libs.Json.newObject()
-                    .put("restaurantId", 9999)
                     .put("dateTime", "10/04/2015 20:30:00")
                     .put("guestCount",2)
                     .put("note", "None");
 
             Http.RequestBuilder rb = new Http.RequestBuilder().method(POST).uri("/v1/restaurants/9999/reservations").
-                    header("USER-ACCESS-TOKEN", Token.find.where().eq("email", "test@testtest.com").findUnique().
+                    header("USER-ACCESS-TOKEN", Token.find.where().eq("email", "user@testtest.com").findUnique().
                             getToken()).bodyJson(json);
             Result result = route(rb);
 
             Restaurant restaurant = Restaurant.find.where().eq("restaurantId", 1601994).findUnique();
             String restaurantId = Long.toString(restaurant.getRestaurantId());
 
-            assertEquals(Http.Status.BAD_REQUEST, result.status());
+            assertEquals(Http.Status.NOT_FOUND, result.status());
             assertTrue(contentAsString(result).contains("error"));
         });
     }
@@ -113,13 +111,12 @@ public class ReservationTest {
     public void testMakingReservationWithValidData() {
         running(fakeApplication(),()-> {
             JsonNode json = play.libs.Json.newObject()
-                    .put("restaurantId", 1601994)
                     .put("dateTime", "10/04/2015 20:30:00")
                     .put("guestCount",2)
                     .put("note", "None");
 
             Http.RequestBuilder rb = new Http.RequestBuilder().method(POST).uri("/v1/restaurants/1601994/reservations").
-                    header("USER-ACCESS-TOKEN", Token.find.where().eq("email", "test@testtest.com").findUnique().
+                    header("USER-ACCESS-TOKEN", Token.find.where().eq("email", "user@testtest.com").findUnique().
                             getToken()).bodyJson(json);
             Result result = route(rb);
 
@@ -134,19 +131,16 @@ public class ReservationTest {
     @AfterClass
     public static void removeRestaurant(){
         running(fakeApplication(),()-> {
-            Reservation.find.where().eq("restaurantId", 1601994).findUnique().delete();
             Restaurant restaurant = Restaurant.find.where().eq("restaurantId", 1601994).findUnique();
             restaurant.delete();
-            restaurant.getAddress().delete();
-            restaurant.getCoordinates().delete();
 
-            Token token = Token.find.where().eq("email", "test@testtest.com").findUnique();
-            User user = User.find.where().eq("email", "test@testtest.com").findUnique();
+
+            User user = User.find.where().eq("email", "user@testtest.com").findUnique();
 
             user.delete();
-            token.delete();
         });
     }
     */
+
 }
 

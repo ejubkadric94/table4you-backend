@@ -50,6 +50,11 @@ public class Restaurant extends Model implements Validation{
     @JsonIgnore
     private List<Photo> photos;
 
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+    @JsonView(View.AdditionalDetails.class)
+    @JsonIgnore
+    private List<Reservation> reservations;
+
     @Column(columnDefinition = "BIGINT")
     @JsonView(View.BasicDetails.class)
     private long phone;
@@ -219,6 +224,15 @@ public class Restaurant extends Model implements Validation{
         this.setRatingsTotal(getRatingsTotal() + review.getRating());
         this.setRating(getRatingsTotal() / getNumberOfRatings());
         this.save();
+    }
+
+    @JsonIgnore
+    public List<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
     }
 
     public long getNumberOfRatings() {

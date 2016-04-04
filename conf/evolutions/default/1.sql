@@ -32,10 +32,10 @@ create table abh_photo (
 
 create table abh_reservation (
   reservationId             BIGINT auto_increment not null,
-  restaurantId              BIGINT,
   dateTime                  DATETIME,
   guestCount                integer,
   note                      varchar(300),
+  restaurant_restaurantId   BIGINT,
   constraint pk_abh_reservation primary key (reservationId))
 ;
 
@@ -92,6 +92,8 @@ create table abh_user (
 
 alter table abh_photo add constraint fk_abh_photo_restaurant_1 foreign key (restaurant_restaurantId) references abh_restaurant (restaurantId) on delete restrict on update restrict;
 create index ix_abh_photo_restaurant_1 on abh_photo (restaurant_restaurantId);
+alter table abh_reservation add constraint fk_abh_reservation_restaurant_1 foreign key (restaurant_restaurantId) references abh_restaurant (restaurantId) on delete restrict on update restrict;
+create index ix_abh_reservation_restaurant_1 on abh_reservation (restaurant_restaurantId);
 alter table abh_restaurant add constraint fk_abh_restaurant_address_2 foreign key (address_address_id) references abh_user_address (address_id) on delete restrict on update restrict;
 create index ix_abh_restaurant_address_2 on abh_restaurant (address_address_id);
 alter table abh_restaurant add constraint fk_abh_restaurant_coordinates_3 foreign key (coordinates_restaurantId) references abh_coordinates (restaurantId) on delete restrict on update restrict;

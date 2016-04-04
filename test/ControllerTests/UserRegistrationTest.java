@@ -30,7 +30,7 @@ public class UserRegistrationTest {
             child.put("streetName", "Test Street");
             child.put("city", "Test City");
             child.put("country", "Test Country");
-            node.put("email", "test@test.com");
+            node.put("email", "user@test.com");
             node.put("password", "test");
             node.put("passwordConfirmation", "test");
             node.put("firstName", "Test");
@@ -50,7 +50,7 @@ public class UserRegistrationTest {
             Http.RequestBuilder rb = new Http.RequestBuilder().method(POST).uri("/v1/registration").bodyJson(json);
             Result result = route(rb);
             assertEquals(Http.Status.OK, result.status());
-            User user = User.find.where().eq("email", "test@test.com").findUnique();
+            User user = User.find.where().eq("email", "user@test.com").findUnique();
             assertTrue(contentAsString(result).contains(user.getAuthToken().getToken()));
         });
     }
@@ -64,7 +64,7 @@ public class UserRegistrationTest {
             child.put("streetName", "Test Street");
             child.put("city", "Test City");
             child.put("country", "Test Country");
-            node.put("email", "test@test.com");
+            node.put("email", "user@test.com");
             node.put("password", "test");
             node.put("passwordConfirmation", "test");
             node.put("firstName", "Test");
@@ -90,7 +90,7 @@ public class UserRegistrationTest {
             child.put("streetName", "Test Street");
             child.put("city", "Test City");
             child.put("country", "Test Country");
-            node.put("email", "test@test.com");
+            node.put("email", "user@test.com");
             node.put("password", "test");
             node.put("passwordConfirmation", "test");
             node.put("firstName", "Test");
@@ -122,7 +122,7 @@ public class UserRegistrationTest {
             child.put("streetName", "Test Street");
             child.put("city", "Test City");
             child.put("country", "Test Country");
-            node.put("email", "test@test.com");
+            node.put("email", "user@test.com");
             node.put("password", "test");
             node.put("passwordConfirmation", "test");
             node.put("firstName", "test");
@@ -149,11 +149,9 @@ public class UserRegistrationTest {
     @After
     public void deleteRegisteredUser() {
         running(fakeApplication(), () -> {
-            User user = User.find.where().eq("email", "test@test.com").findUnique();
+            User user = User.find.where().eq("email", "user@test.com").findUnique();
             if(user != null){
                 user.delete();
-                user.getAddress().delete();
-                user.getAuthToken().delete();
             }
         });
     }

@@ -16,6 +16,7 @@ import java.util.List;
  */
 public class ReviewController extends Controller {
     public Result addReview(int restaurantId) {
+        response().setContentType("application/json");
         Review review = (Review) JsonSerializer.deserialize(request(), Review.class);
         if(!review.isValid()){
             return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_INVALID_DATA)));

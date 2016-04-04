@@ -3,6 +3,7 @@ package controllers;
 import models.Restaurant;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Security;
 import utilities.*;
 import utilities.Error;
 
@@ -53,15 +54,16 @@ public class RestaurantController extends Controller{
         return ok(JsonSerializer.serializeBasicDetails(restaurantList));
     }
 
-
+    @Security.Authenticated(AdminAuthenticator.class)
     public Result editRestaurant(int id) {
-        Restaurant newDetails = (Restaurant) JsonSerializer.deserialize(request(),Restaurant.class);
-        if(!newDetails.isValid()) {
-            return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_INVALID_DATA)));
-        }
+        response().setContentType("application/json");
         Restaurant restaurant = PersistenceManager.getRestaurantById(id);
         if(restaurant == null){
             return notFound(JsonSerializer.serializeObject(new Error(Resources.NO_RESTAURANT)));
+        }
+        Restaurant newDetails = (Restaurant) JsonSerializer.deserialize(request(),Restaurant.class);
+        if(!newDetails.isValid()) {
+            return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_INVALID_DATA)));
         }
         restaurant.updateData(newDetails);
         return ok();
@@ -73,6 +75,7 @@ public class RestaurantController extends Controller{
      * @param id the restaurantId
      * @return the success information
      */
+    @Security.Authenticated(AdminAuthenticator.class)
     public Result deleteRestaurant(int id) {
         response().setContentType("application/json");
         Restaurant restaurant = PersistenceManager.getRestaurantById(id);
@@ -88,6 +91,7 @@ public class RestaurantController extends Controller{
      *
      * @return the restaurantId
      */
+    @Security.Authenticated(AdminAuthenticator.class)
     public Result createRestaurant(){
         response().setContentType("application/json");
         Restaurant restaurant =(Restaurant) JsonSerializer.deserialize(request(),Restaurant.class);
@@ -95,6 +99,6 @@ public class RestaurantController extends Controller{
             return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_INVALID_DATA)));
         }
         PersistenceManager.saveRestaurant(restaurant);
-        return ok(JsonSerializer.serializeObject(new RestaurantHelper(restaurant.getRestaurantId())));
+        return created(JsonSerializer.serializeObject(new RestaurantHelper(restaurant.getRestaurantId())));
     }
 }

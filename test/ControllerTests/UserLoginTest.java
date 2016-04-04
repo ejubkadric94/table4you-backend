@@ -23,7 +23,7 @@ public class UserLoginTest {
     public static void prepareUser() {
         running(fakeApplication(),()-> {
             User user = new User();
-            user.setEmail("test@test.com");
+            user.setEmail("user@test.com");
             user.setPassword(DigestUtils.md5Hex("test"));
 
             Address address = new Address();
@@ -34,7 +34,7 @@ public class UserLoginTest {
             address.save();
 
             Token token = new Token();
-            token.setEmail("test@test.com");
+            token.setEmail("user@test.com");
             token.setExpirationDate(Token.generateExpirationDate());
             token.setToken("TESTtestTESTtest");
             token.save();
@@ -49,7 +49,7 @@ public class UserLoginTest {
     public void testLoginWithValidInfo(){
         running(fakeApplication(),()-> {
             JsonNode json = play.libs.Json.newObject()
-                    .put("email", "test@test.com")
+                    .put("email", "user@test.com")
                     .put("password", "test");
 
             Http.RequestBuilder rb = new Http.RequestBuilder().method(POST).uri("/v1/login").bodyJson(json);
@@ -57,7 +57,7 @@ public class UserLoginTest {
             Result result = route(rb);
             assertEquals(Http.Status.OK, result.status());
 
-            User user = User.find.where().eq("email", "test@test.com").findUnique();
+            User user = User.find.where().eq("email", "user@test.com").findUnique();
             assertEquals(user.getPassword(), DigestUtils.md5Hex("test"));
 
             assertTrue(contentAsString(result).contains(user.getAuthToken().getToken()));
@@ -83,7 +83,7 @@ public class UserLoginTest {
     public void testLoginWithWrongPassword(){
         running(fakeApplication(), ()-> {
             JsonNode json = play.libs.Json.newObject()
-                    .put("email", "test@test.com")
+                    .put("email", "user@test.com")
                     .put("password", "eee");
             Http.RequestBuilder rb = new Http.RequestBuilder().method(POST).uri("/v1/login").bodyJson(json);
 
@@ -97,14 +97,14 @@ public class UserLoginTest {
     public void testLoginWithInsufficientParameter(){
         running(fakeApplication(), ()-> {
             JsonNode json = play.libs.Json.newObject()
-                    .put("email", "test@test.com");
+                    .put("email", "user@test.com");
             Http.RequestBuilder rb = new Http.RequestBuilder().method(POST).uri("/v1/login").bodyJson(json);
             Result result = route(rb);
             assertEquals(Http.Status.BAD_REQUEST, result.status());
 
 
             json = play.libs.Json.newObject()
-                    .put("password", "test@test.com");
+                    .put("password", "user@test.com");
             rb = new Http.RequestBuilder().method(POST).uri("/v1/login").bodyJson(json);
             result = route(rb);
             assertEquals(Http.Status.BAD_REQUEST, result.status());
@@ -115,10 +115,8 @@ public class UserLoginTest {
     @AfterClass
     public static void removeUser() {
         running(fakeApplication(),()-> {
-            User user = User.find.where().eq("email", "test@test.com").findUnique();
+            User user = User.find.where().eq("email", "user@test.com").findUnique();
             user.delete();
-            user.getAddress().delete();
-            user.getAuthToken().delete();
         });
     }
 */
