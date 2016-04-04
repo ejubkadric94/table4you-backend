@@ -28,6 +28,10 @@ public class PhotoController extends Controller {
             return badRequest(JsonSerializer.serializeObject(new Error(Resources.NO_UPLOAD_HEADER)));
         }
 
+        if(!request().body().asMultipartFormData().getFile("upload").getContentType().equals("image/jpeg")){
+            return badRequest(JsonSerializer.serializeObject(new Error(Resources.NOT_JPEG)));
+        }
+
         Photo photo = new Photo(upload, registrationId);
         if(!photo.isValid()){
             return badRequest(JsonSerializer.serializeObject(new Error(Resources.TOO_LARGE_FILE)));

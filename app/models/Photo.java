@@ -3,6 +3,7 @@ package models;
 
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.apache.commons.io.FilenameUtils;
 import play.Logger;
@@ -50,9 +51,14 @@ public class Photo extends Model implements Validation {
     @ManyToOne(cascade = CascadeType.ALL)
     private Restaurant restaurant;
 
+    @Transient
+    @JsonIgnore
+    private String extension;
+
     public Photo(Http.MultipartFormData.FilePart upload, int restaurantId) {
-        String fileExtension = FilenameUtils.getExtension(upload.getFilename());
-        name = UUID.randomUUID().toString() + "." + fileExtension;
+        extension = "jpg";
+
+        name = UUID.randomUUID().toString() + "." + extension;
         file = upload.getFile();
         this.restaurant = PersistenceManager.getRestaurantById(restaurantId);
         isDefault = restaurant.getPhotos().size() == 0 ? true : false;
@@ -85,7 +91,7 @@ public class Photo extends Model implements Validation {
         }
         else {
             this.bucket = S3Plugin.s3Bucket;
-            super.save(); // assigns an photoId
+            super.save(); // assigns a photoId
 
             uploadPhotoToS3(bucket, getName("original"), this.file);
             uploadPhotoToS3(bucket, getName("thumbnail"), getPhotoInOtherSize(50, 50));
@@ -112,7 +118,7 @@ public class Photo extends Model implements Validation {
             if(in != null){
                 in = resize(in, x, y);
             }
-            ImageIO.write(in, FilenameUtils.getExtension(name).toUpperCase(), temp);
+            ImageIO.write(in, extension, temp);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -131,8 +137,17 @@ public class Photo extends Model implements Validation {
         return dimg;
     }
 
+    @Transient
+    @JsonIgnore
+    public String getExtension() {
+        return extension;
+    }
 
-	@JsonView(View.BasicDetails.class)
+    public void setExtension(String extension) {
+        this.extension = extension;
+    }
+
+    @JsonView(View.BasicDetails.class)
     public long getPhotoId() {
         return photoId;
     }
