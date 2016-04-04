@@ -83,7 +83,7 @@ public class Restaurant extends Model implements Validation{
      * @return true if validation is successful
      */
     @Override
-    @JsonView(View.AdditionalDetails.class)
+    @JsonIgnore
     public boolean isValid() {
         return !name.equals("") && !address.getCity().equals("") && !address.getCountry().equals("") &&
                 !address.getStreetName().equals("") && coordinates.getLatitude() != 0 && coordinates.getLongitude() != 0
@@ -200,7 +200,6 @@ public class Restaurant extends Model implements Validation{
     }
 
     @JsonIgnore
-    @JsonView(View.AdditionalDetails.class)
     public List<Review> getReviews() {
         return reviews;
     }
@@ -209,7 +208,6 @@ public class Restaurant extends Model implements Validation{
         this.reviews = reviews;
     }
 
-    @JsonView(View.AdditionalDetails.class)
     @JsonIgnore
     public List<Photo> getPhotos() {
         return photos;

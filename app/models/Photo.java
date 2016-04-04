@@ -69,7 +69,7 @@ public class Photo extends Model implements Validation {
         }
     }
 
-	@JsonView(View.AllDetails.class)
+	@JsonIgnore
     public URL getUrl() throws MalformedURLException {
         return new URL("https://s3.amazonaws.com/" + bucket + "/" + getActualFileName());
     }
@@ -185,7 +185,7 @@ public class Photo extends Model implements Validation {
     }
 
     @Override
-    @JsonView(View.AdditionalDetails.class)
+    @JsonIgnore
     public boolean isValid() {
         System.out.println("VELICINA "+file.length());
         return file.length() < 1048576;

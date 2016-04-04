@@ -191,7 +191,6 @@ public class User extends Model implements Validation {
     }
 
     @JsonIgnore
-    @JsonView(View.AdditionalDetails.class)
     public boolean isAdmin() {
         return isAdmin;
     }
@@ -206,7 +205,7 @@ public class User extends Model implements Validation {
      * @return true if everything is valid, and false otherwise
      */
     @Override
-    @JsonView(View.AdditionalDetails.class)
+    @JsonIgnore
     public boolean isValid() {
         if(password == null || passwordConfirmation == null || firstName == null || lastName == null || address == null
                 || phone == 0 || gender == null || birthdate == null){
