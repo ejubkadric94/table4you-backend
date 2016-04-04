@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import play.data.validation.Constraints;
+import utilities.PersistenceManager;
 import utilities.UserHelper;
 import utilities.View;
 import utilities.Validation;
@@ -204,6 +205,7 @@ public class User extends Model implements Validation {
      * @return true if everything is valid, and false otherwise
      */
     @Override
+    @JsonIgnore
     public boolean isValid() {
         if(password == null || passwordConfirmation == null || firstName == null || lastName == null || address == null
                 || phone == 0 || gender == null || birthdate == null){

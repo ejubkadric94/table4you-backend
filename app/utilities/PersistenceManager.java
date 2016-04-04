@@ -2,7 +2,6 @@ package utilities;
 
 import models.*;
 import org.apache.commons.codec.digest.DigestUtils;
-import play.api.Play;
 import play.mvc.*;
 import java.util.List;
 import java.util.Map;
@@ -64,6 +63,7 @@ public class PersistenceManager {
     }
 
     public static Restaurant getRestaurantById(long id){
+
         return Restaurant.find.where().eq("restaurantId", id).findUnique();
     }
 
@@ -158,5 +158,9 @@ public class PersistenceManager {
 
     public static void deleteRestaurant(Restaurant restaurant){
         restaurant.delete();
+    }
+
+    public static void savePhoto(Photo photo){
+        photo.save();
     }
 }

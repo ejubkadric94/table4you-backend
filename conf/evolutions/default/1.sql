@@ -20,6 +20,16 @@ create table abh_coordinates (
   constraint pk_abh_coordinates primary key (restaurantId))
 ;
 
+create table abh_photo (
+  photo_id                  bigint auto_increment not null,
+  bucket                    varchar(255),
+  name                      varchar(255),
+  size_type                 varchar(255),
+  is_default                tinyint(1) default 0,
+  restaurant_restaurantId   BIGINT,
+  constraint pk_abh_photo primary key (photo_id))
+;
+
 create table abh_reservation (
   reservationId             BIGINT auto_increment not null,
   dateTime                  DATETIME,
@@ -80,6 +90,8 @@ create table abh_user (
   constraint pk_abh_user primary key (email))
 ;
 
+alter table abh_photo add constraint fk_abh_photo_restaurant_1 foreign key (restaurant_restaurantId) references abh_restaurant (restaurantId) on delete restrict on update restrict;
+create index ix_abh_photo_restaurant_1 on abh_photo (restaurant_restaurantId);
 alter table abh_reservation add constraint fk_abh_reservation_restaurant_1 foreign key (restaurant_restaurantId) references abh_restaurant (restaurantId) on delete restrict on update restrict;
 create index ix_abh_reservation_restaurant_1 on abh_reservation (restaurant_restaurantId);
 alter table abh_restaurant add constraint fk_abh_restaurant_address_2 foreign key (address_address_id) references abh_user_address (address_id) on delete restrict on update restrict;
@@ -102,6 +114,8 @@ SET FOREIGN_KEY_CHECKS=0;
 drop table abh_user_address;
 
 drop table abh_coordinates;
+
+drop table abh_photo;
 
 drop table abh_reservation;
 
