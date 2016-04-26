@@ -12,6 +12,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.persistence.*;
 import com.avaje.ebean.Model;
+import java.util.List;
+
 
 /**
  * Created by Ejub on 31.1.2016.
@@ -63,11 +65,22 @@ public class User extends Model implements Validation {
     private boolean isConfirmed;
     @JsonIgnore
     private boolean isAdmin;
+	
+	@Column(name = "favouriteRestaurant")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Restaurant> favouriteRestaurants;
 
     public User(){
 
     }
 
+    /**
+     * Constructs the user with specified token.
+     * Method decodes the token and saves if afterwards.
+     *
+     * @param decodedToken the decoded token
+     */
     public User(String decodedToken){
         authToken = new Token();
         authToken.setToken(UserHelper.decodeToken(decodedToken));
@@ -100,6 +113,32 @@ public class User extends Model implements Validation {
         return true;
     }
 
+    /**
+     * Validates the user information.
+     *
+     * @return true if everything is valid, and false otherwise
+     */
+    @Override
+    public boolean isValid() {
+        if(password == null || passwordConfirmation == null || firstName == null || lastName == null || address == null
+                || phone == 0 || gender == null || birthdate == null){
+            return false;
+        }
+        if(validateEmail(getEmail()) && validateFirstName(getFirstName()) && validateLastName(getLastName())
+                && validateGender(getGender()) && validatePasswords() ){
+            return true;
+        }
+        return false;
+    }
+
+	@JsonIgnore
+    public List<Restaurant> getFavouriteRestaurants() {
+        return favouriteRestaurants;
+    }
+
+    public void setFavouriteRestaurants(List<Restaurant> favouriteRestaurants) {
+        this.favouriteRestaurants = favouriteRestaurants;
+    }
 
     public String getEmail() {
         return email;
@@ -196,24 +235,6 @@ public class User extends Model implements Validation {
 
     public void setAdmin(boolean admin) {
         isAdmin = admin;
-    }
-
-    /**
-     * Validates the user information.
-     *
-     * @return true if everything is valid, and false otherwise
-     */
-    @Override
-    public boolean isValid() {
-        if(password == null || passwordConfirmation == null || firstName == null || lastName == null || address == null
-                || phone == 0 || gender == null || birthdate == null){
-            return false;
-        }
-        if(validateEmail(getEmail()) && validateFirstName(getFirstName()) && validateLastName(getLastName())
-                && validateGender(getGender()) && validatePasswords() ){
-            return true;
-        }
-        return false;
     }
 
     private boolean validateFirstName( String firstName ){

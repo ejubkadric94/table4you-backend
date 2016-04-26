@@ -21,13 +21,17 @@ public class Reservation extends Model implements Validation {
     @Id
     @Column(name = "reservationId", columnDefinition = "BIGINT")
     @GeneratedValue(strategy = GenerationType.AUTO)
+	@JsonView(View.BasicDetails.class)
     private long reservationId;
     @Column(name = "dateTime" , columnDefinition = "DATETIME")
     @JsonFormat(pattern = "dd/mm/yyyy HH:mm:ss")
+	@JsonView(View.BasicDetails.class)
     private Timestamp dateTime;
     @Column(name = "guestCount")
+	@JsonView(View.BasicDetails.class)
     private int guestCount;
     @Column(length = 300)
+	@JsonView(View.BasicDetails.class)
     private String note;
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonView(View.AllDetails.class)
@@ -42,7 +46,6 @@ public class Reservation extends Model implements Validation {
      *
      * @return true if everything is valid
      */
-
     @Override
     @JsonIgnore
     public boolean isValid() {
@@ -58,6 +61,7 @@ public class Reservation extends Model implements Validation {
         this.restaurant = restaurant;
     }
 
+	@JsonView(View.BasicDetails.class)
     public long getReservationId() {
         return reservationId;
     }
@@ -66,6 +70,7 @@ public class Reservation extends Model implements Validation {
         this.reservationId = reservationId;
     }
 
+	@JsonView(View.BasicDetails.class)
     public Timestamp getDateTime() {
         return dateTime;
     }
@@ -74,6 +79,7 @@ public class Reservation extends Model implements Validation {
         this.dateTime = dateTime;
     }
 
+	@JsonView(View.BasicDetails.class)
     public int getGuestCount() {
         return guestCount;
     }
@@ -82,6 +88,7 @@ public class Reservation extends Model implements Validation {
         this.guestCount = guestCount;
     }
 
+	@JsonView(View.BasicDetails.class)
     public String getNote() {
         return note;
     }

@@ -44,6 +44,12 @@ public class JsonSerializer {
         return json;
     }
 
+    /**
+     * Serializes only those details of any class which are marked as basic details with JsonView annotation.
+     *
+     * @param object the object to be serialized
+     * @return object serialized in form of JSON
+     */
     public static String serializeBasicDetails(Object object){
         ObjectMapper mapper = new ObjectMapper();
         String result = null;
@@ -56,6 +62,12 @@ public class JsonSerializer {
         return result;
     }
 
+    /**
+     * Serializes only those details of any class which are marked as all details with JsonView annotation.
+     *
+     * @param object the object to be serialized
+     * @return object serialized in form of JSON
+     */
     public static String serializeAllDetails(Object object){
         ObjectMapper mapper = new ObjectMapper();
         String result = null;
@@ -67,5 +79,4 @@ public class JsonSerializer {
         }
         return result;
     }
-
 }

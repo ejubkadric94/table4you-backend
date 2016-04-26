@@ -13,8 +13,15 @@ import java.util.List;
 
 /**
  * Created by Ejub on 13.3.2016.
+ * Controller for review routes.
  */
 public class ReviewController extends Controller {
+    /**
+     * Adds a review for a restaurant.
+     *
+     * @param restaurantId the id of the restaurant
+     * @return ok status or a suitable error if operation is unsuccessful
+     */
     public Result addReview(int restaurantId) {
         response().setContentType("application/json");
         Review review = (Review) JsonSerializer.deserialize(request(), Review.class);
@@ -30,6 +37,12 @@ public class ReviewController extends Controller {
         return ok();
     }
 
+    /**
+     * Retrieves all reviews of a restaurant.
+     *
+     * @param restaurantId the id of the restaurant
+     * @return reviews of the restaurant serialized in form of JSON or a suitable error if operation is unsuccessful
+     */
     public Result getReviews(int restaurantId){
         response().setContentType("application/json");
         Restaurant restaurant = PersistenceManager.getRestaurantById(restaurantId);

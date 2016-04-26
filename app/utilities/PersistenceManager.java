@@ -2,8 +2,10 @@ package utilities;
 
 import models.*;
 import org.apache.commons.codec.digest.DigestUtils;
-import play.api.Play;
 import play.mvc.*;
+
+import java.net.MalformedURLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -152,11 +154,93 @@ public class PersistenceManager {
         return list;
     }
 
+    /**
+     * Retrieves all reservations for the specified restaurant.
+     *
+     * @param restaurant the restaurant
+     * @return all reservations
+     */
     public static List<Reservation> getAllReservations(Restaurant restaurant) {
         return restaurant.getReservations();
     }
 
+    /**
+     * Removes a restaurant from database.
+     *
+     * @param restaurant the restaurant
+     */
     public static void deleteRestaurant(Restaurant restaurant){
         restaurant.delete();
     }
+
+    /**
+     * Retrieves the photo.
+     *
+     * @param photoId the id of the photo
+     * @return the photo
+     */
+	public static Photo getPhotoFromId(int photoId) {
+        return Photo.find.byId(Integer.toString(photoId));
+    }
+
+    /**
+     * Saves the specified photo as default for the specific restaurant.
+     * Old photos are marked as non default.
+     *
+     * @param restaurant the restaurant
+     * @param photo the new default photo
+     */
+	public static void saveNewDefaultPhoto(Restaurant restaurant,Photo photo){
+        for(Photo tempPhoto : restaurant.getPhotos()){
+            tempPhoto.setDefault(false);
+            tempPhoto.save();
+        }
+
+        try {
+            restaurant.setImage(photo.getUrl().toString());
+            restaurant.save();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        photo.setDefault(true);
+        photo.save();
+    }
+
+    /**
+     * Saves the photo.
+     *
+     * @param photo the photo
+     */
+	public static void savePhoto(Photo photo){
+        photo.save();
+        photo.saveRestaurantLink();
+        photo.saveToS3();
+    }
+
+    /**
+     * Makes the restaurant favourite for the specified user.
+     *
+     * @param user the user
+     * @param restaurant the restaurant
+     */
+	public static void makeFavourite(User user, Restaurant restaurant){
+        for(Restaurant temp : user.getFavouriteRestaurants()) {
+            if(temp.getRestaurantId() == restaurant.getRestaurantId()) {
+                return;
+            }
+        }
+        restaurant.setUser(user);
+        restaurant.save();
+    }
+
+    /**
+     * Saves the menu.
+     *
+     * @param menu the menu
+     */
+	public static void saveMenu(Menu menu) {
+        menu.save();
+        AWSManager.saveMenu(menu.getFileName(),menu.getFile() );
+    }
+
 }

@@ -10,12 +10,11 @@ import javax.persistence.*;
 
 /**
  * Created by Ejub on 13.3.2016.
+ * Class Review can be used to store review objects.
  */
-
 @Entity
 @Table(name = "abh_review")
 public class Review extends Model  implements Validation {
-
     @Id
     @Column(columnDefinition = "BIGINT")
     @JsonIgnore
@@ -64,7 +63,13 @@ public class Review extends Model  implements Validation {
         this.restaurant = restaurant;
     }
 
+    /**
+     * Validates the review properties.
+     *
+     * @return true if validation is successful
+     */
     @Override
+    @JsonIgnore
     public boolean isValid() {
         return rating != 0;
     }

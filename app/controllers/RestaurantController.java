@@ -1,13 +1,15 @@
 package controllers;
 
+import models.Menu;
 import models.Restaurant;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import utilities.*;
 import utilities.Error;
-
+import models.User;
 import java.util.List;
+import play.mvc.Http;
 
 /**
  * Created by Ejub on 15/02/16.
@@ -54,6 +56,13 @@ public class RestaurantController extends Controller{
         return ok(JsonSerializer.serializeBasicDetails(restaurantList));
     }
 
+    /**
+     * Edits a restaurant.
+     * Requires admin to be logged in.
+     *
+     * @param id the id of a restaurant
+     * @return ok status or a suitable error if operation is unsuccessful
+     */
     @Security.Authenticated(AdminAuthenticator.class)
     public Result editRestaurant(int id) {
         response().setContentType("application/json");
@@ -71,9 +80,10 @@ public class RestaurantController extends Controller{
 
     /**
      * Deletes the restaurants.
+     * Requires admin to be logged in.
      *
      * @param id the restaurantId
-     * @return the success information
+     * @return the success information or a suitable error if operation is unsuccessful
      */
     @Security.Authenticated(AdminAuthenticator.class)
     public Result deleteRestaurant(int id) {
@@ -88,8 +98,9 @@ public class RestaurantController extends Controller{
 
     /**
      * Creates a Restaurant and stores it.
+     * Requires admin to be logged in.
      *
-     * @return the restaurantId
+     * @return the restaurantId or a suitable error if operation is unsuccessful
      */
     @Security.Authenticated(AdminAuthenticator.class)
     public Result createRestaurant(){
@@ -101,4 +112,49 @@ public class RestaurantController extends Controller{
         PersistenceManager.saveRestaurant(restaurant);
         return created(JsonSerializer.serializeObject(new RestaurantHelper(restaurant.getRestaurantId())));
     }
+
+    /**
+     * Makes a restaurant favourite for the logged user.
+     *
+     * @param restaurantId the id of a restaurant
+     * @return ok status or a suitable error if operation is unsuccessful
+     */
+	@Security.Authenticated(UserAuthenticator.class)
+    public Result makeFavourite(int restaurantId){
+        User user =(User) Http.Context.current().args.get("CurrentUser");
+        Restaurant restaurant = PersistenceManager.getRestaurantById(restaurantId);
+        if(restaurant == null) {
+            return badRequest(JsonSerializer.serializeObject(new Error(Resources.NO_RESTAURANT)));
+        }
+        PersistenceManager.makeFavourite(user, restaurant);
+        return ok();
+    }
+
+    /**
+     * Adds a menu for a restaurant.
+     *
+     * @param restaurantId the id of the restaurant
+     * @return the menu id or a suitable error if operation is unsuccessful
+     */
+	public Result addMenu(int restaurantId) {
+        response().setContentType("application/json");
+        Restaurant restaurant = PersistenceManager.getRestaurantById(restaurantId);
+        if(restaurant == null){
+            return notFound(JsonSerializer.serializeObject(new Error(Resources.NO_RESTAURANT)));
+        }
+
+        if (request().body().asMultipartFormData() == null || request().body().asMultipartFormData()
+                .getFile("upload") == null) {
+            return badRequest(JsonSerializer.serializeObject(new Error(Resources.NO_UPLOAD_HEADER)));
+        }
+
+        Menu menu = new Menu(request(), restaurant);
+        if(!menu.isValid()){
+            return badRequest(JsonSerializer.serializeObject(new Error(Resources.TOO_LARGE_FILE)));
+        }
+
+        PersistenceManager.saveMenu(menu);
+        return ok(JsonSerializer.serializeBasicDetails(menu));
+    }
+
 }

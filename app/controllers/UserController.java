@@ -72,6 +72,11 @@ public class UserController extends Controller {
         return ok(JsonSerializer.serializeObject(user.getAuthToken()));
     }
 
+    /**
+     * Retrieves information about the logged user.
+     *
+     * @return user information in JSON format or a suitable error if operation is unsuccessful
+     */
     @Security.Authenticated(UserAuthenticator.class)
     public Result getCurrentUser(){
         response().setContentType("application/json");
@@ -80,5 +85,16 @@ public class UserController extends Controller {
             return badRequest(JsonSerializer.serializeObject(new Error(Resources.BAD_REQUEST_INVALID_DATA)));
         }
         return ok(JsonSerializer.serializeBasicDetails(user));
+    }
+
+    /**
+     * Retrieves favourite restaurants of the logged user.
+     *
+     * @return Favourite restaurants in JSON form or a suitable error if operation is unsuccessful
+     */
+    @Security.Authenticated(UserAuthenticator.class)
+    public Result getFavouriteRestaurants(){
+        User user =(User) Http.Context.current().args.get("CurrentUser");
+        return ok(JsonSerializer.serializeObject(user.getFavouriteRestaurants()));
     }
 }

@@ -51,6 +51,11 @@ public class Restaurant extends Model implements Validation{
     @JsonIgnore
     private List<Reservation> reservations;
 
+	@OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+    @JsonView(View.AdditionalDetails.class)
+    @JsonIgnore
+    private List<Photo> photos;
+
     @Column(columnDefinition = "BIGINT")
     @JsonView(View.BasicDetails.class)
     private long phone;
@@ -74,6 +79,16 @@ public class Restaurant extends Model implements Validation{
     private String deals;
     @JsonView(View.BasicDetails.class)
     private String image;
+	
+	@ManyToOne()
+    @JsonView(View.AllDetails.class)
+    @JsonIgnore
+    public User user;
+
+	@OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+    @JsonView(View.AdditionalDetails.class)
+    @JsonIgnore
+    private List<Menu> menus;
 
 
     public static Model.Finder<String, Restaurant> find = new Model.Finder<String, Restaurant>(String.class, Restaurant.class);
@@ -84,23 +99,49 @@ public class Restaurant extends Model implements Validation{
      * @return true if validation is successful
      */
     @Override
+	@JsonIgnore
     public boolean isValid() {
         return !name.equals("") && !address.getCity().equals("") && !address.getCountry().equals("") &&
                 !address.getStreetName().equals("") && coordinates.getLatitude() != 0 && coordinates.getLongitude() != 0
                 && phone != 0;
     }
 
+    /**
+     * Checks if photo belongs to the restaurant.
+     *
+     * @param photo photo to be checked
+     * @return true or false respectively
+     */
+	public boolean containsPhoto(Photo photo) {
+        return this.getRestaurantId() == photo.getRestaurant().getRestaurantId();
+    }
+
+    /**
+     * Updates the coordinates of the restaurant.
+     *
+     * @param coordinates the new coordinates
+     */
     public void updateCoordinates(Coordinates coordinates){
         this.getCoordinates().setLatitude(coordinates.getLatitude());
         this.getCoordinates().setLongitude(coordinates.getLongitude());
     }
 
+    /**
+     * Updates the address of the restaurant.
+     *
+     * @param address the new address
+     */
     public void updateAddress(Address address) {
         this.getAddress().setStreetName(address.getStreetName());
         this.getAddress().setCity(address.getCity());
         this.getAddress().setCountry(address.getCountry());
     }
 
+    /**
+     * Updates the restaurant information.
+     *
+     * @param restaurant the restaurant holding the new information
+     */
     public void updateData(Restaurant restaurant) {
         this.setDeals(restaurant.getDeals());
         this.setImage(restaurant.getImage());
@@ -115,8 +156,39 @@ public class Restaurant extends Model implements Validation{
         PersistenceManager.saveRestaurant(this);
     }
 
+    /**
+     * Adds a review for the restaurant.
+     *
+     * @param review review to be added
+     */
+    public void addReview(Review review) {
+        reviews.add(review);
+        this.setNumberOfRatings(getNumberOfRatings() + 1);
+        this.setRatingsTotal(getRatingsTotal() + review.getRating());
+        this.setRating(getRatingsTotal() / getNumberOfRatings());
+        this.save();
+    }
+
     public long getRestaurantId() {
         return restaurantId;
+    }
+	
+	@JsonIgnore
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+	@JsonIgnore
+    public List<Photo> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<Photo> photos) {
+        this.photos = photos;
     }
 
     public void setRestaurantId(long restaurantId) {
@@ -202,14 +274,6 @@ public class Restaurant extends Model implements Validation{
 
     public void setReviews(List<Review> reviews) {
         this.reviews = reviews;
-    }
-
-    public void addReview(Review review) {
-        reviews.add(review);
-        this.setNumberOfRatings(getNumberOfRatings() + 1);
-        this.setRatingsTotal(getRatingsTotal() + review.getRating());
-        this.setRating(getRatingsTotal() / getNumberOfRatings());
-        this.save();
     }
 
     @JsonIgnore

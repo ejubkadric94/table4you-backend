@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * Created by Ejub on 9.3.2016.
+ * Controller for resrvation routes.
  */
 public class ReservationController extends Controller {
     PersistenceManager manager = new PersistenceManager();
@@ -41,6 +42,12 @@ public class ReservationController extends Controller {
         return created(JsonSerializer.serializeObject(new ReservationHelper(reservation.getReservationId())));
     }
 
+    /**
+     * Retrieves all reservations made for a certain restaurant.
+     *
+     * @param restaurantId the id of the restaurant
+     * @return all reservations serialized as JSON
+     */
     public Result getAllReservations(int restaurantId) {
         response().setContentType("application/json");
         Restaurant restaurant = PersistenceManager.getRestaurantById(restaurantId);
@@ -48,6 +55,6 @@ public class ReservationController extends Controller {
             return notFound(JsonSerializer.serializeObject(new Error(Resources.NO_RESTAURANT)));
         }
         List<Reservation> list = PersistenceManager.getAllReservations(restaurant);
-        return ok(JsonSerializer.serializeObject(list));
+        return ok(JsonSerializer.serializeBasicDetails(list));
     }
 }

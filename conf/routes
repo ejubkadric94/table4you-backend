@@ -17,7 +17,12 @@ GET     /v1/restaurants                                         controllers.Rest
 PUT     /v1/restaurants/:id                                     controllers.RestaurantController.editRestaurant(id: Integer)
 DELETE  /v1/restaurants/:id                                     controllers.RestaurantController.deleteRestaurant(id: Integer)
 POST    /v1/restaurants                                         controllers.RestaurantController.createRestaurant()
+POST    /v1/restaurants/:restaurantId/favourite                 controllers.RestaurantController.makeFavourite(restaurantId: Integer)
+GET     /v1/favouriteRestaurants                                controllers.UserController.getFavouriteRestaurants()
 
+# Photo
+POST    /v1/restaurants/:restaurantId/photos                    controllers.PhotoController.addPhoto(restaurantId: Integer)
+PUT 	/v1/restaurants/:restaurantId/photos/:photoId/default 	controllers.PhotoController.markAsDefault(restaurantId: Integer, photoId: Integer)
 
 # Reservations
 POST    /v1/restaurants/:id/reservations                        controllers.ReservationController.makeReservation(id: Integer)
@@ -26,6 +31,9 @@ GET     /v1/restaurants/:id/reservations                        controllers.Rese
 # Reviews
 POST    /v1/restaurants/:restaurantId/reviews                   controllers.ReviewController.addReview(restaurantId: Integer)
 GET     /v1/restaurants/:restaurantId/reviews                   controllers.ReviewController.getReviews(restaurantId: Integer)
+
+# Menu
+POST    /v1/restaurants/:restaurantId/menu                      controllers.RestaurantController.addMenu(restaurantId: Integer)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

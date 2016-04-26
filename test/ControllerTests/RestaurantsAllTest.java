@@ -165,7 +165,7 @@ public class RestaurantsAllTest {
     }
 
 
-/*
+
     @Test
     public void testGetAllRestaurantsWithParamete(){
         running(fakeApplication(),()-> {
@@ -174,7 +174,7 @@ public class RestaurantsAllTest {
             assertEquals(Http.Status.BAD_REQUEST, result.status());
         });
     }
-*/
+
 
 
     @AfterClass
