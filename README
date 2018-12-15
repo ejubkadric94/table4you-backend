@@ -1,4 +1,2 @@
-This is your new Play application
-=================================
-
-This file will be packaged with your application, when using `activator dist`.
+This repo contains a REST API back end for table4you application (a restaurant reservation system web application).
+It is built in Play Java.
